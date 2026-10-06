@@ -264,7 +264,7 @@ function trackPage(type){
  data.forEach(function(s,i){
   var key=type+'-'+i, seen=!!visited[key];
   cards+='<article class="session-card"><div class="session-top"><div class="session-no">'+fa(i+1)+'</div><span class="status '+(seen?'viewed':'')+'">'+(seen?'مرور شده':'آماده برای شروع')+'</span></div>'+
-  '<h3>جلسه '+fa(i+1)+' — '+s.t+'</h3><p>'+s.d+'</p><div class="session-info"><span>۲ ساعت</span><span>جلسه '+fa(i+1)+' از ۶</span></div>'+
+  '<h3>جلسه '+fa(i+1)+' — '+s.t+'</h3><div class="session-info"><span>۲ ساعت</span><span>جلسه '+fa(i+1)+' از ۶</span></div>'+
   '<button class="session-link" onclick="goRoute(\''+type+'-'+i+'\')">ورود به جلسه</button></article>'
  });
  return '<div class="fade"><section class="page-hero"><div class="breadcrumb"><button onclick="goRoute(\'home\')">خانه</button><span>←</span><span>'+title+'</span></div><h1>'+title+'</h1><p><b>'+sub+'</b><br>'+desc+'</p><div class="page-meta"><span>۶ جلسه</span><span>هر جلسه ۲ ساعت</span><span>Case-based Learning</span></div></section>'+
@@ -272,27 +272,27 @@ function trackPage(type){
 }
 function sessionPage(type,index){
  var data=type==='managers'?managers:hq, s=data[index]; if(!s)return landing();
- setVisited(type+'-'+index);
- var trackTitle=type==='managers'?'مسیر مدیران':'مسیر کارکنان ستاد', topics='';
- s.topics.forEach(function(t,i){topics+='<div class="topic"><i>'+fa(i+1)+'</i><span>'+t+'</span></div>'});
+ var trackTitle=type==='managers'?'مسیر مدیران':'مسیر کارکنان ستاد';
  return '<div class="fade"><section class="page-hero"><div class="breadcrumb"><button onclick="goRoute(\'home\')">خانه</button><span>←</span><button onclick="goRoute(\''+type+'\')">'+trackTitle+'</button><span>←</span><span>جلسه '+fa(index+1)+'</span></div>'+
- '<h1>'+s.t+'</h1><p>'+s.d+'</p><div class="page-meta"><span>جلسه '+fa(index+1)+' از ۶</span><span>۲ ساعت</span><span>Reflection → Practice → Action</span></div></section>'+
- '<section class="session-detail"><div class="content-card"><h2>در این جلسه چه چیزی را بررسی می‌کنیم؟</h2><p>این صفحه فعلاً چارچوب محتوایی جلسه را نشان می‌دهد. در مرحله بعد، Case، جزوه کوتاه، تمرین، self-check و تعهد رفتاری همین جلسه به آن اضافه می‌شود.</p>'+
- '<div class="topic-list">'+topics+'</div><div class="key-message"><b>پیام کلیدی جلسه:</b> '+s.k+'</div></div>'+
- '<aside class="side-card"><h3>زمان جلسه</h3><div class="big">۲ ساعت</div><p>طراحی شده برای گفت‌وگو، تحلیل موقعیت و تمرین عملی؛ نه lecture طولانی.</p>'+
- '<div class="side-actions"><button class="complete-btn" onclick="markDone(\''+type+'-'+index+'\')">علامت‌گذاری به‌عنوان مرورشده</button><button class="back-btn" onclick="goRoute(\''+type+'\')">بازگشت به جلسات</button></div></aside></section>'+footer()+'</div>'
+ '<h1>'+s.t+'</h1><div class="page-meta"><span>جلسه '+fa(index+1)+' از ۶</span><span>۲ ساعت</span></div></section>'+
+ '<section class="session-detail"><div class="content-card"><h2>چارچوب جلسه</h2>'+
+ '<div class="topic-list"><div class="topic"><i>۱</i><span>هدف جلسه</span></div><div class="topic"><i>۲</i><span>محورهای اصلی</span></div><div class="topic"><i>۳</i><span>محتوای آموزشی</span></div><div class="topic"><i>۴</i><span>تمرین / فعالیت کلاسی</span></div><div class="topic"><i>۵</i><span>جمع‌بندی و اقدام</span></div></div></div>'+
+ '<aside class="side-card"><h3>مدت جلسه</h3><div class="big">۲ ساعت</div><p>جزئیات این جلسه در مرحله بعد تکمیل می‌شود.</p>'+
+ '<div class="side-actions"><button class="back-btn" onclick="goRoute(\''+type+'\')">بازگشت به جلسات</button></div></aside></section>'+footer()+'</div>'
 }
 function operationsPage(){
- var blocks='';
- ops.forEach(function(o,i){
-  var lis='';o.items.forEach(function(x){lis+='<li>'+x+'</li>'});
-  blocks+='<article class="ops-block '+(o.break?'break':'')+'"><div class="ops-time">'+o.time+'</div><div><h3>'+o.title+'</h3><p>'+o.desc+'</p>'+(lis?'<ul>'+lis+'</ul>':'')+'</div></article>'
- });
- return '<div class="fade"><section class="page-hero"><div class="breadcrumb"><button onclick="goRoute(\'home\')">خانه</button><span>←</span><span>عملیات</span></div><h1>رفتار حرفه‌ای در عملیات</h1>'+
- '<p><b>یک روز برای رفتارهایی که هر روز نتیجه می‌سازند.</b><br>در محیط عملیات، رفتار فقط موضوع ارتباط انسانی نیست؛ می‌تواند روی ایمنی، سرعت، کیفیت، هزینه و همکاری اثر مستقیم داشته باشد. این برنامه یک‌روزه بر موقعیت‌های واقعی، مثال‌های ساده و تصمیم‌های عملی تمرکز دارد.</p>'+
- '<div class="page-meta"><span>برنامه یک‌روزه</span><span>موقعیت‌محور</span><span>عملیاتی و کاربردی</span></div></section>'+
- '<section class="section"><div class="section-head"><div><h2>نقشه روز</h2><p>یک مسیر فشرده از شناخت رفتار تا تمرین و تعهد عملی.</p></div><span class="section-tag">One-Day Experience</span></div><div class="ops-timeline">'+blocks+'</div>'+
- '<div class="key-message" style="margin-top:12px"><b>پیام پایانی:</b> فرهنگ ناوصنعت از رفتار روزمره همه ما ساخته می‌شود.</div></section>'+footer()+'</div>'
+ var blocks=[
+  ['شروع','آغاز برنامه و هم‌راستاسازی'],
+  ['بخش ۱','رفتار حرفه‌ای در عملیات'],
+  ['بخش ۲','تمرین و موقعیت‌های کاری'],
+  ['استراحت','تنفس و گفت‌وگو'],
+  ['بخش ۳','همکاری، مسئولیت و نظم'],
+  ['بخش ۴','تمرین کاربردی'],
+  ['جمع‌بندی','تعهد و اقدام بعدی']
+ ].map(function(x){return '<article class="ops-block"><div class="ops-time">'+x[0]+'</div><div><h3>'+x[1]+'</h3><p>جزئیات این بخش در مرحله بعد تکمیل می‌شود.</p></div></article>'}).join('');
+ return '<div class="fade"><section class="page-hero"><div class="breadcrumb"><button onclick="goRoute(\'home\')">خانه</button><span>←</span><span>عملیات</span></div><h1>برنامه یک‌روزه عملیات</h1>'+
+ '<p>چارچوب کلی برنامه آموزشی عملیات</p><div class="page-meta"><span>یک روز کامل</span><span>مسیر عملیاتی</span></div></section>'+
+ '<section class="section"><div class="section-head"><div><h2>ساختار روز</h2><p>فعلاً فقط معماری کلی برنامه نمایش داده می‌شود.</p></div></div><div class="ops-timeline">'+blocks+'</div></section>'+footer()+'</div>'
 }
 function markDone(key){setVisited(key);render();window.scrollTo({top:0,behavior:'smooth'})}
 function render(){
