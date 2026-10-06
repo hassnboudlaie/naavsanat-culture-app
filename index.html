@@ -240,7 +240,7 @@ function landing(){
  '<section class="hero"><div class="hero-grid">'+
  '<div class="hero-copy"><span class="eyebrow">NAAVSANAT LEARNING EXPERIENCE</span><h1>مدیریت رفتار سازمانی و فرهنگ</h1>'+
  '<p>یک مسیر یادگیری برای ساختن رفتارهای حرفه‌ای‌تر، همکاری مؤثرتر و فرهنگی متناسب با رشد ناوصنعت. از مسئله واقعی محیط کار شروع می‌کنیم و به رفتار قابل مشاهده و اقدام عملی می‌رسیم.</p>'+
- '<div class="hero-actions"><button class="btn btn-light" onclick="document.getElementById(\\'tracks\\').scrollIntoView({behavior:\\'smooth\\'})">انتخاب مسیر یادگیری</button><button class="btn btn-ghost" onclick="goRoute(\\'managers\\')">مشاهده مسیر مدیران</button></div></div>'+
+ '<div class="hero-actions"><button class="btn btn-light" onclick="document.getElementById(\'tracks\').scrollIntoView({behavior:\'smooth\'})">انتخاب مسیر یادگیری</button><button class="btn btn-ghost" onclick="goRoute(\'managers\')">مشاهده مسیر مدیران</button></div></div>'+
  '<div class="hero-visual" aria-hidden="true"><div class="mine-sky"></div><div class="mountain back"></div><div class="mountain front"></div><div class="road"></div>'+
  '<div class="truck"><div class="truck-body"><span class="truck-logo">NAAVSANAT</span></div><div class="truck-cab"></div><span class="wheel w1"></span><span class="wheel w2"></span><span class="wheel w3"></span></div>'+
  '<div class="hero-stat"><strong>فرهنگ از رفتارهای روزمره ساخته می‌شود.</strong><span>ببینید • فکر کنید • تمرین کنید • اقدام کنید</span></div></div>'+
@@ -254,7 +254,7 @@ function landing(){
  '<div class="principles"><div class="principle"><b>مسئله واقعی</b><span>از تجربه روزمره سازمان شروع می‌کنیم.</span></div><div class="principle"><b>Reflection</b><span>قبل از توصیه، مسئله را دقیق‌تر می‌بینیم.</span></div><div class="principle"><b>Practice</b><span>رفتار مطلوب را در موقعیت واقعی تمرین می‌کنیم.</span></div><div class="principle"><b>Action</b><span>هر یادگیری به یک اقدام قابل پیگیری می‌رسد.</span></div></div></section>'+footer()+'</div>'
 }
 function trackCard(route,icon,title,subtitle,desc,m1,m2){
- return '<article class="track-card" onclick="goRoute(\\''+route+'\\')" role="button" tabindex="0"><div class="track-icon">'+icon+'</div><h3>'+title+'</h3><p><b>'+subtitle+'</b><br>'+desc+'</p><div class="meta-row"><span class="chip">'+m1+'</span><span class="chip">'+m2+'</span></div><div class="track-action"><span>ورود به مسیر</span><span class="arrow">←</span></div></article>'
+ return '<article class="track-card" onclick="goRoute(\''+route+'\')" role="button" tabindex="0"><div class="track-icon">'+icon+'</div><h3>'+title+'</h3><p><b>'+subtitle+'</b><br>'+desc+'</p><div class="meta-row"><span class="chip">'+m1+'</span><span class="chip">'+m2+'</span></div><div class="track-action"><span>ورود به مسیر</span><span class="arrow">←</span></div></article>'
 }
 function trackPage(type){
  var isM=type==='managers', data=isM?managers:hq, title=isM?'مسیر مدیران':'مسیر کارکنان ستاد',
@@ -265,9 +265,9 @@ function trackPage(type){
   var key=type+'-'+i, seen=!!visited[key];
   cards+='<article class="session-card"><div class="session-top"><div class="session-no">'+fa(i+1)+'</div><span class="status '+(seen?'viewed':'')+'">'+(seen?'مرور شده':'آماده برای شروع')+'</span></div>'+
   '<h3>جلسه '+fa(i+1)+' — '+s.t+'</h3><p>'+s.d+'</p><div class="session-info"><span>۲ ساعت</span><span>جلسه '+fa(i+1)+' از ۶</span></div>'+
-  '<button class="session-link" onclick="goRoute(\\''+type+'-'+i+'\\')">ورود به جلسه</button></article>'
+  '<button class="session-link" onclick="goRoute(\''+type+'-'+i+'\')">ورود به جلسه</button></article>'
  });
- return '<div class="fade"><section class="page-hero"><div class="breadcrumb"><button onclick="goRoute(\\'home\\')">خانه</button><span>←</span><span>'+title+'</span></div><h1>'+title+'</h1><p><b>'+sub+'</b><br>'+desc+'</p><div class="page-meta"><span>۶ جلسه</span><span>هر جلسه ۲ ساعت</span><span>Case-based Learning</span></div></section>'+
+ return '<div class="fade"><section class="page-hero"><div class="breadcrumb"><button onclick="goRoute(\'home\')">خانه</button><span>←</span><span>'+title+'</span></div><h1>'+title+'</h1><p><b>'+sub+'</b><br>'+desc+'</p><div class="page-meta"><span>۶ جلسه</span><span>هر جلسه ۲ ساعت</span><span>Case-based Learning</span></div></section>'+
  '<section class="section"><div class="section-head"><div><h2>جلسات مسیر</h2><p>می‌توانید جلسه‌ها را مستقل ببینید؛ ترتیب پیشنهادی از ۱ تا ۶ است.</p></div><span class="section-tag">۶ × ۲ ساعت</span></div><div class="session-grid">'+cards+'</div></section>'+footer()+'</div>'
 }
 function sessionPage(type,index){
@@ -275,12 +275,12 @@ function sessionPage(type,index){
  setVisited(type+'-'+index);
  var trackTitle=type==='managers'?'مسیر مدیران':'مسیر کارکنان ستاد', topics='';
  s.topics.forEach(function(t,i){topics+='<div class="topic"><i>'+fa(i+1)+'</i><span>'+t+'</span></div>'});
- return '<div class="fade"><section class="page-hero"><div class="breadcrumb"><button onclick="goRoute(\\'home\\')">خانه</button><span>←</span><button onclick="goRoute(\\''+type+'\\')">'+trackTitle+'</button><span>←</span><span>جلسه '+fa(index+1)+'</span></div>'+
+ return '<div class="fade"><section class="page-hero"><div class="breadcrumb"><button onclick="goRoute(\'home\')">خانه</button><span>←</span><button onclick="goRoute(\''+type+'\')">'+trackTitle+'</button><span>←</span><span>جلسه '+fa(index+1)+'</span></div>'+
  '<h1>'+s.t+'</h1><p>'+s.d+'</p><div class="page-meta"><span>جلسه '+fa(index+1)+' از ۶</span><span>۲ ساعت</span><span>Reflection → Practice → Action</span></div></section>'+
  '<section class="session-detail"><div class="content-card"><h2>در این جلسه چه چیزی را بررسی می‌کنیم؟</h2><p>این صفحه فعلاً چارچوب محتوایی جلسه را نشان می‌دهد. در مرحله بعد، Case، جزوه کوتاه، تمرین، self-check و تعهد رفتاری همین جلسه به آن اضافه می‌شود.</p>'+
  '<div class="topic-list">'+topics+'</div><div class="key-message"><b>پیام کلیدی جلسه:</b> '+s.k+'</div></div>'+
  '<aside class="side-card"><h3>زمان جلسه</h3><div class="big">۲ ساعت</div><p>طراحی شده برای گفت‌وگو، تحلیل موقعیت و تمرین عملی؛ نه lecture طولانی.</p>'+
- '<div class="side-actions"><button class="complete-btn" onclick="markDone(\\''+type+'-'+index+'\\')">علامت‌گذاری به‌عنوان مرورشده</button><button class="back-btn" onclick="goRoute(\\''+type+'\\')">بازگشت به جلسات</button></div></aside></section>'+footer()+'</div>'
+ '<div class="side-actions"><button class="complete-btn" onclick="markDone(\''+type+'-'+index+'\')">علامت‌گذاری به‌عنوان مرورشده</button><button class="back-btn" onclick="goRoute(\''+type+'\')">بازگشت به جلسات</button></div></aside></section>'+footer()+'</div>'
 }
 function operationsPage(){
  var blocks='';
@@ -288,7 +288,7 @@ function operationsPage(){
   var lis='';o.items.forEach(function(x){lis+='<li>'+x+'</li>'});
   blocks+='<article class="ops-block '+(o.break?'break':'')+'"><div class="ops-time">'+o.time+'</div><div><h3>'+o.title+'</h3><p>'+o.desc+'</p>'+(lis?'<ul>'+lis+'</ul>':'')+'</div></article>'
  });
- return '<div class="fade"><section class="page-hero"><div class="breadcrumb"><button onclick="goRoute(\\'home\\')">خانه</button><span>←</span><span>عملیات</span></div><h1>رفتار حرفه‌ای در عملیات</h1>'+
+ return '<div class="fade"><section class="page-hero"><div class="breadcrumb"><button onclick="goRoute(\'home\')">خانه</button><span>←</span><span>عملیات</span></div><h1>رفتار حرفه‌ای در عملیات</h1>'+
  '<p><b>یک روز برای رفتارهایی که هر روز نتیجه می‌سازند.</b><br>در محیط عملیات، رفتار فقط موضوع ارتباط انسانی نیست؛ می‌تواند روی ایمنی، سرعت، کیفیت، هزینه و همکاری اثر مستقیم داشته باشد. این برنامه یک‌روزه بر موقعیت‌های واقعی، مثال‌های ساده و تصمیم‌های عملی تمرکز دارد.</p>'+
  '<div class="page-meta"><span>برنامه یک‌روزه</span><span>موقعیت‌محور</span><span>عملیاتی و کاربردی</span></div></section>'+
  '<section class="section"><div class="section-head"><div><h2>نقشه روز</h2><p>یک مسیر فشرده از شناخت رفتار تا تمرین و تعهد عملی.</p></div><span class="section-tag">One-Day Experience</span></div><div class="ops-timeline">'+blocks+'</div>'+
@@ -301,7 +301,7 @@ function render(){
  else if(route==='managers'||route==='hq')html=trackPage(route);
  else if(route==='operations')html=operationsPage();
  else{
-  var m=route.match(/^(managers|hq)-(\\d+)$/);
+  var m=route.match(/^(managers|hq)-(\d+)$/);
   html=m?sessionPage(m[1],Number(m[2])):landing();
  }
  document.getElementById('app').innerHTML=html;
