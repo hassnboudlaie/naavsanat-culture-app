@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d3340">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<title>ناوصنعت | تجربه یادگیری رفتار و فرهنگ سازمانی</title>
+<style>
+:root{
+  --navy:#0d3340;--navy2:#174b5a;--copper:#b76538;--copper2:#d79068;
+  --paper:#f6f7f4;--card:#fff;--ink:#173139;--muted:#68787d;--line:#e3e8e6;
+  --soft:#eef3f1;--soft-copper:#f7ece5;--ok:#2f7458;--warn:#a45a36;
+  --shadow:0 10px 30px rgba(13,51,64,.08);--radius:18px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Tahoma,"Segoe UI",Arial,sans-serif;line-height:1.8;-webkit-font-smoothing:antialiased}
+button,input,textarea{font:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+textarea,input{font-size:16px}
+.shell{max-width:780px;margin:0 auto;padding:0 16px 106px}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(246,247,244,.93);backdrop-filter:blur(14px);border-bottom:1px solid rgba(227,232,230,.9)}
+.topbar-in{max-width:780px;margin:0 auto;padding:9px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.mark{width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,#c96f3d,#8f4227);position:relative;box-shadow:var(--shadow);overflow:hidden}
+.mark:before,.mark:after{content:"";position:absolute;background:#fff;opacity:.96;transform:skewX(-28deg)}
+.mark:before{width:9px;height:26px;right:10px;top:7px}
+.mark:after{width:9px;height:20px;right:21px;top:13px}
+.brand h1{font-size:14px;line-height:1.45;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{display:block;font-size:11px;color:var(--muted)}
+.save-state{font-size:11px;color:var(--ok);white-space:nowrap}
+.hero{padding:22px 0 12px}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;color:var(--copper);font-size:12px;font-weight:800}
+.eyebrow:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--copper)}
+.hero h2{font-size:29px;line-height:1.42;margin:8px 0 9px;letter-spacing:-.35px}
+.hero>p{font-size:14px;color:var(--muted);margin:0;max-width:650px}
+.hero-card{margin-top:17px;background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:23px;padding:19px;color:#fff;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero-card:after{content:"";position:absolute;left:-45px;bottom:-75px;width:190px;height:190px;border:30px solid rgba(255,255,255,.055);border-radius:50%}
+.hero-card strong{display:block;font-size:18px;line-height:1.6;margin-bottom:5px;position:relative;z-index:1}
+.hero-card p{margin:0;color:rgba(255,255,255,.78);font-size:13px;position:relative;z-index:1}
+.hero-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;position:relative;z-index:1}
+.btn{min-height:44px;border:0;border-radius:12px;padding:10px 14px;font-weight:800;font-size:13px}
+.btn-primary{background:#fff;color:var(--navy)}
+.btn-ghost{background:rgba(255,255,255,.10);color:#fff;border:1px solid rgba(255,255,255,.22)}
+.btn-copper{background:var(--copper);color:#fff}
+.btn-soft{background:var(--soft);color:var(--navy)}
+.btn-line{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.quick{background:#fff;border:1px solid var(--line);border-radius:15px;padding:11px 12px;display:flex;gap:9px;align-items:center}
+.quick b{font-size:12px;display:block}
+.quick small{display:block;font-size:11px;color:var(--muted)}
+.qicon{min-width:34px;height:34px;border-radius:11px;background:var(--soft-copper);color:var(--copper);display:grid;place-items:center;font-weight:900}
+.progress-wrap{margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:15px;padding:11px 12px}
+.progress-line{height:7px;background:#e9eeec;border-radius:99px;overflow:hidden}
+.progress-line i{display:block;width:0;height:100%;background:linear-gradient(90deg,var(--copper),var(--copper2));transition:.3s}
+.progress-meta{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;margin-top:6px}
+.section{padding:19px 0 3px;scroll-margin-top:70px}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:10px;margin-bottom:11px}
+.section-head h3{font-size:20px;line-height:1.5;margin:0}
+.section-head p{font-size:12px;color:var(--muted);margin:2px 0 0}
+.pill{background:#fff;border:1px solid var(--line);border-radius:99px;padding:5px 9px;font-size:11px;color:var(--muted);white-space:nowrap}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:15px;box-shadow:0 4px 15px rgba(13,51,64,.035)}
+.mini-note{background:#eef4f2;border:1px solid #dbe7e2;border-radius:14px;padding:11px 12px;color:#456069;font-size:12px;margin-bottom:10px}
+/* assessment */
+.assess-card{padding:0;overflow:hidden}
+.assess-top{padding:14px 15px 10px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.assess-count{font-size:11px;color:var(--muted)}
+.assess-body{padding:18px 15px}
+.law-kicker{font-size:11px;color:var(--copper);font-weight:800;margin-bottom:6px}
+.assess-q{font-size:18px;line-height:1.7;font-weight:800;margin:0 0 15px}
+.rating{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;direction:ltr}
+.rate{min-height:46px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font-weight:800}
+.rate.selected{background:var(--navy);border-color:var(--navy);color:#fff}
+.rate-labels{display:flex;justify-content:space-between;direction:rtl;font-size:10.5px;color:var(--muted);margin-top:6px}
+.assess-actions{display:flex;justify-content:space-between;gap:8px;margin-top:17px}
+.assess-actions .btn{flex:1}
+.result{display:none;margin-top:10px;background:var(--soft-copper);border:1px solid #ecd7ca;border-radius:15px;padding:13px}
+.result.show{display:block}
+.result strong{display:block;font-size:14px;margin-bottom:4px}
+.result p{margin:3px 0;font-size:12px;color:#5b6364}
+/* cases */
+.case-list{display:grid;gap:9px}
+.case{background:#fff;border:1px solid var(--line);border-radius:17px;overflow:hidden}
+.case-head{width:100%;border:0;background:#fff;text-align:right;padding:13px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--ink)}
+.case-left{display:flex;align-items:center;gap:10px;min-width:0}
+.case-no{min-width:36px;height:36px;border-radius:11px;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:900}
+.case-head b{display:block;font-size:14px;line-height:1.55}
+.case-head small{display:block;color:var(--muted);font-size:11px;line-height:1.55;margin-top:2px}
+.chev{color:var(--muted);transition:.2s;font-size:17px}
+.case.open .chev{transform:rotate(180deg)}
+.case-body{display:none;padding:0 14px 14px}
+.case.open .case-body{display:block}
+.scenario{background:#f7f8f7;border-radius:13px;padding:11px 12px;color:#425b64;font-size:12px}
+.case-principle{margin:9px 0;background:#f7ece5;border:1px solid #ecd8cc;border-radius:13px;padding:10px 11px;font-size:12px}
+.case-principle b{color:var(--copper)}
+.task-title{display:flex;align-items:center;justify-content:space-between;margin:12px 0 6px}
+.task-title b{font-size:13px}
+.task-title span{font-size:10.5px;color:var(--muted);background:var(--soft);padding:3px 7px;border-radius:99px}
+label{display:block;font-size:12px;font-weight:800;margin:10px 0 5px}
+textarea,input[type=text]{width:100%;border:1px solid #dde4e1;background:#fff;border-radius:12px;padding:10px 11px;outline:none;color:var(--ink)}
+textarea{min-height:76px;resize:vertical}
+textarea:focus,input[type=text]:focus{border-color:#c98763;box-shadow:0 0 0 3px rgba(183,101,56,.09)}
+.full-path{margin-top:10px;border:1px solid var(--line);border-radius:13px;overflow:hidden}
+.full-path>button{width:100%;min-height:44px;border:0;background:#fbfcfb;color:var(--ink);font-weight:800;text-align:right;padding:10px 12px;display:flex;justify-content:space-between}
+.full-path-content{display:none;padding:0 12px 11px}
+.full-path.open .full-path-content{display:block}
+.path-steps{display:grid;gap:6px;margin-top:8px}
+.step{display:flex;gap:9px;align-items:flex-start;background:#f7f8f7;border-radius:11px;padding:8px 9px;font-size:11.5px}
+.step i{font-style:normal;min-width:25px;height:25px;border-radius:8px;background:#f0e3dc;color:var(--copper);display:grid;place-items:center;font-weight:900}
+/* case map */
+.map-box{margin-top:10px}
+.map-toggle{width:100%;min-height:46px;border:1px solid var(--line);background:#fff;border-radius:14px;padding:10px 12px;text-align:right;display:flex;justify-content:space-between;align-items:center;color:var(--ink);font-weight:800}
+.case-map{display:none;margin-top:8px;gap:8px}
+.case-map.show{display:grid}
+.track{background:#fff;border:1px solid var(--line);border-radius:15px;padding:12px}
+.track h4{margin:0 0 7px;font-size:13px;color:var(--navy)}
+.case-chip{display:flex;gap:8px;padding:7px 0;border-bottom:1px dashed #e5e9e7;font-size:11.5px;line-height:1.55}
+.case-chip:last-child{border:0}
+.case-chip i{font-style:normal;min-width:23px;height:23px;border-radius:7px;background:var(--soft-copper);color:var(--copper);display:grid;place-items:center;font-weight:900;font-size:10px}
+/* notes */
+.accordion{display:grid;gap:8px}
+.acc{background:#fff;border:1px solid var(--line);border-radius:15px;overflow:hidden}
+.acc>button{width:100%;border:0;background:#fff;color:var(--ink);min-height:48px;padding:11px 13px;text-align:right;display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:800}
+.acc-content{display:none;padding:0 13px 13px;color:#4f656d;font-size:12px}
+.acc.open .acc-content{display:block}
+.laws{display:grid;gap:6px}
+.law{display:flex;gap:9px;align-items:flex-start;background:#f8f9f8;padding:8px 9px;border-radius:11px}
+.law i{font-style:normal;min-width:24px;height:24px;border-radius:8px;background:#f0e3dc;color:var(--copper);display:grid;place-items:center;font-weight:900;font-size:10px}
+.pillars{display:grid;gap:7px}
+.pillar{border-right:4px solid var(--navy);background:#f8f9f8;border-radius:12px;padding:9px 10px}
+.pillar:nth-child(2){border-color:#347148}.pillar:nth-child(3){border-color:#ad4f26}.pillar:nth-child(4){border-color:#245e80}.pillar:nth-child(5){border-color:#9c7420}
+.pillar b{font-size:12.5px}.pillar p{margin:2px 0 0;font-size:11.5px;color:var(--muted)}
+/* action */
+.focus-select{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.focus-chip{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:99px;padding:7px 10px;font-size:11px;font-weight:700}
+.focus-chip.selected{background:var(--navy);color:#fff;border-color:var(--navy)}
+.ssc{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:11px}
+.ssc>div{border:1px solid var(--line);border-radius:13px;padding:9px}
+.ssc b{display:block;font-size:11.5px;margin-bottom:5px}
+.ssc textarea{border:0;background:#f7f8f7;min-height:86px}
+.commit-card{margin-top:9px;background:#fff;border:1px solid var(--line);border-radius:15px;padding:12px}
+.inline2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.share-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.privacy{font-size:10.5px;color:var(--muted);margin-top:9px}
+.footer-tools{padding:20px 0 5px;text-align:center}
+.reset{background:transparent;border:0;color:#8c979a;font-size:11px;text-decoration:underline}
+/* bottom nav */
+.bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.bottom-in{max-width:780px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
+.navbtn{border:0;background:transparent;color:#718084;min-height:58px;padding:7px 2px;font-size:10px}
+.navbtn span{display:block;font-size:18px;line-height:1.1;margin-bottom:2px}
+.navbtn.active{color:var(--copper);font-weight:900}
+.toast{position:fixed;left:50%;bottom:82px;z-index:80;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;background:#173139;color:#fff;border-radius:12px;padding:9px 13px;font-size:11px;transition:.22s;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:560px){
+ .hero h2{font-size:25px}.ssc{grid-template-columns:1fr}.inline2{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr 1fr}
+ .section-head h3{font-size:19px}.assess-q{font-size:17px}.rating{gap:5px}.rate{min-height:44px}
+}
+@media(max-width:350px){.quick-grid{grid-template-columns:1fr}.brand small{display:none}.save-state{display:none}}
+@media print{
+ .topbar,.bottom-nav,.hero-actions,.share-row,.footer-tools{display:none!important}.shell{max-width:none;padding:0}.case-body,.acc-content,.full-path-content,.case-map{display:block!important}body{background:#fff}.card,.case,.acc,.track{box-shadow:none;break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand"><div class="mark" aria-hidden="true"></div><div><h1>ناوصنعت | تجربه یادگیری مدیران</h1><small>رفتار و فرهنگ سازمانی</small></div></div>
+    <div class="save-state" id="saveState">ذخیره روی دستگاه ✓</div>
+  </div>
+</header>
+
+<main class="shell">
+  <section class="hero" id="home">
+    <span class="eyebrow">کارگاه تعاملی مدیران ناوصنعت</span>
+    <h2>از مسئله واقعی سازمان، به رفتار مطلوب و اقدام مدیریتی.</h2>
+    <p>این وب‌اپ همراه جلسه است؛ برای خواندن طولانی ساخته نشده. در هر بخش فقط یک کار مشخص انجام می‌دهید: ببینید، فکر کنید، بنویسید و یک رفتار را امتحان کنید.</p>
+    <div class="hero-card">
+      <strong>فرهنگ با حرف ساخته نمی‌شود؛ با رفتارهای روزمره، در میدان کار و در کنار هم شکل می‌گیرد.</strong>
+      <p>هدف جلسه پیدا کردن مقصر نیست؛ هدف پیدا کردن رفتار و شیوه مدیریت بهتر است.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="go('pulse')">شروع نبض رفتاری</button>
+        <button class="btn btn-ghost" onclick="go('cases')">رفتن به کیس‌ها</button>
+      </div>
+    </div>
+    <div class="quick-grid" aria-label="مسیر کارگاه">
+      <div class="quick"><div class="qicon">۱</div><div><b>نبض رفتاری</b><small>حدود ۳ دقیقه</small></div></div>
+      <div class="quick"><div class="qicon">۲</div><div><b>کیس واقعی</b><small>۳ تا ۶ دقیقه برای هر کیس</small></div></div>
+      <div class="quick"><div class="qicon">۳</div><div><b>جزوه سریع</b><small>مرور ۸ قانون و ۵ ستون</small></div></div>
+      <div class="quick"><div class="qicon">۴</div><div><b>تعهد رفتاری</b><small>یک اقدام تا جلسه بعد</small></div></div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-line"><i id="progressBar"></i></div>
+      <div class="progress-meta"><span>پیشرفت شخصی در کارگاه</span><b id="progressText">۰٪</b></div>
+    </div>
+  </section>
+
+  <section class="section" id="pulse">
+    <div class="section-head"><div><h3>نبض رفتاری من</h3><p>این یک نمره عملکرد نیست؛ یک آینه برای گفت‌وگوست.</p></div><span class="pill">۸ رفتار</span></div>
+    <div class="mini-note">بر اساس تجربه واقعی خودتان پاسخ دهید، نه تصویری که دوست دارید از سازمان ببینید. انتخاب شما فقط روی همین دستگاه ذخیره می‌شود.</div>
+    <div class="card assess-card">
+      <div class="assess-top"><b>خودارزیابی کوتاه</b><span class="assess-count" id="assessCount">۱ از ۸</span></div>
+      <div class="assess-body">
+        <div class="law-kicker" id="lawKicker"></div>
+        <p class="assess-q" id="assessQuestion"></p>
+        <div class="rating" id="rating"></div>
+        <div class="rate-labels"><span>خیلی کم</span><span>تا حدی</span><span>قوی و پایدار</span></div>
+        <div class="assess-actions">
+          <button class="btn btn-line" id="prevAssess" onclick="prevAssessment()">قبلی</button>
+          <button class="btn btn-copper" id="nextAssess" onclick="nextAssessment()">بعدی</button>
+        </div>
+      </div>
+    </div>
+    <div class="result" id="assessmentResult"></div>
+  </section>
+
+  <section class="section" id="cases">
+    <div class="section-head"><div><h3>آزمایشگاه کیس‌ها</h3><p>پنج کیس اصلی این بسته؛ یکی را با مدرس باز کنید.</p></div><span class="pill">Case Lab</span></div>
+    <div class="mini-note"><b>مسیر پیشنهادی کلاس:</b> ابتدا سه سؤال «تمرین سریع» را پاسخ دهید. اگر مدرس خواست، مسیر کامل ۹ مرحله‌ای همان کیس را باز کنید.</div>
+    <div class="case-list" id="caseList"></div>
+    <div class="map-box">
+      <button class="map-toggle" onclick="toggleMap()"><span>نقشه کامل ۱۵ کیس ناوصنعت</span><span id="mapChev">⌄</span></button>
+      <div class="case-map" id="caseMap"></div>
+    </div>
+  </section>
+
+  <section class="section" id="notes">
+    <div class="section-head"><div><h3>جزوه سریع</h3><p>برای مرور در لحظه، نه مطالعه سنگین.</p></div><span class="pill">Quick Notes</span></div>
+    <div class="accordion">
+      <div class="acc open">
+        <button onclick="toggleAcc(this)">چطور هر کیس را بررسی می‌کنیم؟ <span>⌄</span></button>
+        <div class="acc-content"><div class="path-steps" id="masterPath"></div></div>
+      </div>
+      <div class="acc">
+        <button onclick="toggleAcc(this)">۸ قانون رفتاری ناوصنعت <span>⌄</span></button>
+        <div class="acc-content"><div class="laws" id="lawList"></div></div>
+      </div>
+      <div class="acc">
+        <button onclick="toggleAcc(this)">۵ ستون فرهنگ در حال ظهور <span>⌄</span></button>
+        <div class="acc-content"><div class="pillars" id="pillarList"></div></div>
+      </div>
+      <div class="acc">
+        <button onclick="toggleAcc(this)">فرهنگ واقعی را کجا ببینیم؟ <span>⌄</span></button>
+        <div class="acc-content">فرهنگ واقعی را در رفتارهای تکرارشونده ببینید: کار واقعاً چگونه انجام می‌شود، وقتی مشکلی پیش می‌آید چه کسی پاسخ می‌دهد، تصمیم‌ها چطور پیگیری می‌شوند، رابطه‌ها تا کجا روی قاعده اثر می‌گذارند و مدیران در عمل چه الگویی می‌سازند.</div>
+      </div>
+    </div>
+    <label for="freeNote">یادداشت من از گفت‌وگوی امروز</label>
+    <textarea id="freeNote" data-save="freeNote" placeholder="یک نکته، یک سؤال یا یک مشاهده که نمی‌خواهم فراموش کنم..."></textarea>
+  </section>
+
+  <section class="section" id="action">
+    <div class="section-head"><div><h3>تعهد رفتاری من</h3><p>از یادگیری به اقدام مدیریتی.</p></div><span class="pill">تا جلسه بعد</span></div>
+    <div class="card">
+      <label>کدام قانون رفتاری الان بیشترین ارزش را برای من دارد؟</label>
+      <div class="focus-select" id="focusSelect"></div>
+      <div class="ssc">
+        <div><b>شروع می‌کنم</b><textarea data-save="startDoing" placeholder="یک رفتار مشخص که شروع می‌کنم..."></textarea></div>
+        <div><b>متوقف می‌کنم</b><textarea data-save="stopDoing" placeholder="یک عادت یا رفتار که متوقف می‌کنم..."></textarea></div>
+        <div><b>ادامه می‌دهم</b><textarea data-save="continueDoing" placeholder="یک رفتار مثبت که حفظ می‌کنم..."></textarea></div>
+      </div>
+      <div class="commit-card">
+        <label>تا جلسه بعد چه چیزی را امتحان می‌کنم؟</label>
+        <textarea data-save="commitment" placeholder="یک اقدام کوچک، واقعی و قابل مشاهده..."></textarea>
+        <div class="inline2">
+          <div><label>تا چه زمانی؟</label><input type="text" data-save="deadline" placeholder="مثلاً تا پایان هفته"></div>
+          <div><label>از کجا بفهمم انجام شده؟</label><input type="text" data-save="evidence" placeholder="نشانه یا نتیجه قابل مشاهده"></div>
+        </div>
+        <label>چه چیزی کمک می‌کند پیگیری کنم و حلقه را ببندم؟</label>
+        <input type="text" data-save="followThrough" placeholder="یادآوری، همکار پاسخگو، جلسه پیگیری، گزارش نتیجه...">
+      </div>
+      <div class="share-row">
+        <button class="btn btn-copper" onclick="shareSummary()">اشتراک خلاصه من</button>
+        <button class="btn btn-soft" onclick="copySummary()">کپی خلاصه</button>
+        <button class="btn btn-soft" onclick="window.print()">نسخه چاپی</button>
+      </div>
+      <div class="privacy">نیازی به ثبت‌نام نیست. نوشته‌ها و پاسخ‌ها در نسخه فعلی فقط در مرورگر همین دستگاه ذخیره می‌شوند.</div>
+    </div>
+  </section>
+  <div class="footer-tools"><button class="reset" onclick="resetApp()">پاک کردن پاسخ‌ها و شروع مجدد</button></div>
+</main>
+
+<nav class="bottom-nav" aria-label="پیمایش اصلی">
+  <div class="bottom-in">
+    <button class="navbtn active" data-target="home" onclick="go('home')"><span>⌂</span>خانه</button>
+    <button class="navbtn" data-target="pulse" onclick="go('pulse')"><span>◎</span>نبض</button>
+    <button class="navbtn" data-target="cases" onclick="go('cases')"><span>▣</span>کیس‌ها</button>
+    <button class="navbtn" data-target="notes" onclick="go('notes')"><span>≡</span>جزوه</button>
+    <button class="navbtn" data-target="action" onclick="go('action')"><span>✓</span>تعهد</button>
+  </div>
+</nav>
+<div class="toast" id="toast">ذخیره شد</div>
+
+<script>
+var KEY='navosanaatCultureWorkshopV2';
+var state=readState();
+var assessIndex=0;
+
+var laws=[
+ 'سرعت و صمیمیت همراه با مسئولیت',
+ 'قاعده به اندازه و به هدف',
+ 'دسترسی بالا، پاسخگویی روشن',
+ 'رابطه شخصی جای قانون را نمی‌گیرد',
+ 'تعهد یعنی پیگیری تا نتیجه',
+ 'تعهد روشن و قابل اندازه‌گیری',
+ 'اختلاف روی مسئله، نه شخص',
+ 'همکاری روی هدف مشترک'
+];
+
+var assessmentStatements=[
+ 'در تیم من، سرعت و صمیمیت با مسئولیت‌پذیری همراه است.',
+ 'قواعد را جایی به کار می‌بریم که به شفافیت، کیفیت و عملکرد کمک کند؛ نه برای بوروکراسی.',
+ 'دسترسی به مدیران باعث حذف مسیر مسئولیت و پاسخگویی نمی‌شود.',
+ 'روابط شخصی جای قانون، انصاف و معیار حرفه‌ای را نمی‌گیرد.',
+ 'وقتی تعهدی می‌دهیم، تا رسیدن به نتیجه آن را پیگیری می‌کنیم.',
+ 'تعهدات ما مسئول، خروجی و زمان روشن دارند.',
+ 'در اختلاف‌ها روی مسئله تمرکز می‌کنیم، نه شخص.',
+ 'حتی با اختلاف نظر، همکاری برای هدف مشترک حفظ می‌شود.'
+];
+
+var reviewPath=[
+ 'مسئله چیست؟ موضوع اصلی کیس را به‌طور شفاف تعریف کنیم.',
+ 'نشانه‌ها چیست؟ رفتارها، رویدادها و شواهد نشان‌دهنده مسئله را ببینیم.',
+ 'چرا ایجاد شده؟ ریشه‌ها و عوامل شکل‌گیری را بررسی کنیم.',
+ 'نقش مدیران چیست؟ مدیران در ایجاد، تداوم یا حل مسئله چه نقشی دارند؟',
+ 'اگر ادامه پیدا کند چه می‌شود؟ پیامدهای وضع موجود برای سازمان چیست؟',
+ 'وضعیت مطلوب چیست؟ در حالت ایده‌آل چه رفتار و چه نتیجه‌ای می‌خواهیم؟',
+ 'چه باید کرد؟ راهکارها و اقدامات عملی کوتاه‌مدت و بلندمدت چیست؟',
+ 'چه اصل رفتاری یاد گرفتیم؟ از کیس چه اصل یا قاعده رفتاری استخراج می‌کنیم؟',
+ 'تا جلسه بعد چه چیزی را امتحان می‌کنیم؟ هر مدیر یک اقدام مشخص را در عمل آزمایش کند.'
+];
+
+var cases=[
+ {title:'از سازمان کوچک و غیررسمی تا سازمان حرفه‌ای',subtitle:'وقتی سازمان بزرگ می‌شود، روش کار هم باید تغییر کند.',scenario:'رابطه شخصی، تماس مستقیم، تصمیم موردی، دسترسی سریع به مدیران و قواعد محدود در دوره‌ای به سرعت و چابکی کمک کرده‌اند؛ اما با بزرگ‌تر شدن سازمان می‌توانند ابهام، دوباره‌کاری و ناهماهنگی ایجاد کنند.',principle:'آنچه ارزشمند است حفظ کنیم؛ مسئولیت، اختیار و فرایند را روشن‌تر کنیم.',q1:'در واحد شما کدام روش قدیمی هنوز ادامه دارد اما دیگر با اندازه امروز سازمان متناسب نیست؟',q2:'چه چیزی باید رسمی‌تر و روشن‌تر شود، بدون اینکه سرعت و ارتباط انسانی را از دست بدهیم؟',q3:'یک تغییر کوچک و کم‌ریسک که این هفته می‌توانید امتحان کنید چیست؟'},
+ {title:'دور زدن مدیر و مسیرهای غیررسمی',subtitle:'دسترسی باز خوب است؛ مسئولیت نباید دور زده شود.',scenario:'در محیط پروژه‌محور و پراکنده، دسترسی سریع به مدیر بالاتر گاهی کار را جلو می‌برد؛ اما اگر به مسیر معمول تبدیل شود، اختیار مدیر تضعیف، مسئولیت مبهم و پاسخگویی کم می‌شود.',principle:'دسترسی را حفظ کنیم، اما پاسخگویی و مسیر مسئولیت را دور نزنیم.',q1:'در کار شما کجا «دسترسی مستقیم» عملاً مسئولیت یا اختیار را دور می‌زند؟',q2:'ریشه اصلی چیست: کندی مسیر رسمی، مرز نقش نامشخص، پاسخگو نبودن مدیر مستقیم یا عادت رفتاری؟',q3:'چه قاعده ساده‌ای می‌تواند هم سرعت را حفظ کند و هم مسئولیت را روشن نگه دارد؟'},
+ {title:'قانون‌مداری و صمیمیت حرفه‌ای',subtitle:'صمیمیت خوب است؛ قانون و مسئولیت هم هست.',scenario:'رابطه نزدیک و صمیمی سرمایه ارزشمند ناوصنعت است؛ اما اگر مرزهای حرفه‌ای، نقش‌ها، قواعد و پاسخگویی قربانی رابطه شخصی شوند، ریسک عملیاتی و احساس بی‌عدالتی ایجاد می‌شود.',principle:'صمیمیت را نگه داریم؛ رابطه شخصی را جایگزین قانون و معیار حرفه‌ای نکنیم.',q1:'در چه موقعیتی ممکن است رابطه خوب ناخواسته روی تصمیم حرفه‌ای اثر بگذارد؟',q2:'مرز حرفه‌ای مطلوب در آن موقعیت دقیقاً چیست؟',q3:'برای حفظ هم‌زمان صمیمیت و انصاف، چه رفتار مشخصی از شما لازم است؟'},
+ {title:'قول می‌دهیم؛ اما آیا انجام می‌دهیم؟',subtitle:'از «پیگیری می‌کنم» تا «کار بسته شد».',scenario:'بسیاری از کارها با یک توافق کلامی شروع می‌شوند اما اگر مالک، خروجی، زمان و پیگیری روشن نباشد، قول به نتیجه تبدیل نمی‌شود و اعتماد، زمان و هزینه آسیب می‌بیند.',principle:'تعهد یعنی مالک روشن، خروجی روشن، زمان روشن و پیگیری تا بستن حلقه.',q1:'کدام نوع قول یا اقدام در تیم شما بیشتر در میانه راه رها می‌شود؟',q2:'کجای زنجیره می‌شکند: قول، اقدام، پیگیری، نتیجه یا اعلام نتیجه؟',q3:'برای یک کار واقعی، همین حالا مالک، خروجی، زمان و نقطه «بسته‌شدن حلقه» را مشخص کنید.'},
+ {title:'همکاری مدیرانی که با هم اختلاف دارند',subtitle:'اختلاف را مدیریت کنیم؛ همکاری را حفظ کنیم.',scenario:'اختلاف نظر میان مدیران طبیعی است؛ خطر زمانی آغاز می‌شود که مسئله به شخص تبدیل شود، اختلاف به کارکنان منتقل شود یا هدف مشترک سازمان از دید خارج شود.',principle:'مسئله را از شخص جدا کنیم، هدف مشترک را پیدا کنیم و روی اقدام قابل توافق پیش برویم.',q1:'در اختلاف‌های مدیریتی، چه چیزی معمولاً گفت‌وگو را از مسیر سازنده خارج می‌کند؟',q2:'هدف مشترکی که هر دو طرف می‌توانند روی آن توافق کنند چیست؟',q3:'یک اقدام مشخص برای حفظ همکاری، حتی بدون حل کامل اختلاف، چیست؟'}
+];
+
+var caseMapGroups=[
+ {title:'۱) رشد، رسمیت و حرفه‌ای‌گری',items:[
+  'از سازمان کوچک و غیررسمی تا سازمان حرفه‌ای','دور زدن مدیر و مسیرهای غیررسمی','قانون‌مداری و صمیمیت حرفه‌ای','قول می‌دهیم؛ اما آیا انجام می‌دهیم؟','همکاری مدیرانی که با هم اختلاف دارند'
+ ]},
+ {title:'۲) همکاری، تصمیم‌گیری و عملیات',items:[
+  'واحد تخصصی؛ مانع یا شریک حل مسئله؟','تصمیم‌گیری بدون حضور ذی‌نفعان اصلی','سازمانی که همیشه در وضعیت فوری است','ایمنی؛ آموزش کافی است یا نظارت هم لازم است؟','از کنترل شخصی تا نظم، نظارت و پاسخگویی'
+ ]},
+ {title:'۳) مدیریت، منابع انسانی و پاسخگویی',items:[
+  'رفتار مدیر؛ پیام فرهنگی سازمان','استخدام در سایت‌ها؛ چه کسی تصمیم می‌گیرد؟','امنیت روانی و فیزیکی کارکنان','اختیار، مسئولیت و پاسخگویی مدیران','یک کار، دو تیم؛ مسئول واقعی کیست؟'
+ ]}
+];
+
+var pillars=[
+ {title:'همکاری حرفه‌ای',line:'اختلاف، مانع همکاری نیست.',detail:'تمرکز بر مسئله نه شخص؛ احترام در اختلاف نظر؛ انتقال ندادن اختلاف به افراد؛ بازگشت به هدف مشترک.'},
+ {title:'قانون‌مداری و انصاف',line:'معیار ما قاعده است، نه رابطه.',detail:'یک معیار برای همه؛ تصمیم‌های شفاف و منصفانه؛ رعایت فرایندهای مصوب؛ حفظ اعتماد در سازمان.'},
+ {title:'پاسخگویی',line:'مسئولیت‌پذیری تا نتیجه.',detail:'مالکیت کار و پیگیری مستمر؛ ارجاع‌پذیری نه فرار از مسئولیت؛ گزارش‌دهی شفاف؛ پاسخگویی در برابر نتایج.'},
+ {title:'حرفه‌ای‌گری',line:'صمیمیت همراه با مرز حرفه‌ای.',detail:'چابکی در کنار نظم؛ استفاده از قاعده جایی که لازم است؛ پرهیز از بوروکراسی غیرضروری؛ تصمیم‌گیری حرفه‌ای و واقع‌بینانه.'},
+ {title:'قابلیت اتکا',line:'قول ما نتیجه می‌سازد.',detail:'تعهد روشن و واقع‌بینانه؛ تعیین مسئول، خروجی و زمان؛ پیگیری تا بستن حلقه؛ اعلام نتیجه به‌موقع.'}
+];
+
+function readState(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return {}}}
+function save(){localStorage.setItem(KEY,JSON.stringify(state));var el=document.getElementById('saveState');el.textContent='ذخیره شد ✓';setTimeout(function(){el.textContent='ذخیره روی دستگاه ✓'},900);updateProgress()}
+function bindSave(el,key){if(state[key]!==undefined)el.value=state[key];el.addEventListener('input',function(){state[key]=el.value;save()})}
+function faNum(n){return String(n).replace(/0/g,'۰').replace(/1/g,'۱').replace(/2/g,'۲').replace(/3/g,'۳').replace(/4/g,'۴').replace(/5/g,'۵').replace(/6/g,'۶').replace(/7/g,'۷').replace(/8/g,'۸').replace(/9/g,'۹')}
+function go(id){document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});document.querySelectorAll('.navbtn').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-target')===id)})}
+function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},1700)}
+
+function renderAssessment(){
+ var q=assessmentStatements[assessIndex],key='law'+assessIndex,val=state[key];
+ document.getElementById('assessCount').textContent=faNum(assessIndex+1)+' از ۸';
+ document.getElementById('lawKicker').textContent='قانون '+faNum(assessIndex+1)+' — '+laws[assessIndex];
+ document.getElementById('assessQuestion').textContent=q;
+ var root=document.getElementById('rating');root.innerHTML='';
+ for(var i=1;i<=5;i++){
+  var b=document.createElement('button');b.className='rate'+(Number(val)===i?' selected':'');b.textContent=i;b.setAttribute('aria-label','امتیاز '+i);
+  (function(score){b.onclick=function(){state[key]=score;save();renderAssessment();if(assessIndex===7)renderAssessmentResult()}})(i);root.appendChild(b)
+ }
+ document.getElementById('prevAssess').disabled=assessIndex===0;document.getElementById('prevAssess').style.opacity=assessIndex===0?'.45':'1';
+ document.getElementById('nextAssess').textContent=assessIndex===7?'دیدن جمع‌بندی':'بعدی';
+ renderAssessmentResult();
+}
+function nextAssessment(){if(assessIndex<7){assessIndex++;renderAssessment()}else{renderAssessmentResult(true)}}
+function prevAssessment(){if(assessIndex>0){assessIndex--;renderAssessment()}}
+function renderAssessmentResult(force){
+ var answered=laws.map(function(_,i){return state['law'+i]}).filter(function(v){return Number(v)>=1});
+ var box=document.getElementById('assessmentResult');
+ if(answered.length<8&&!force){box.classList.remove('show');return}
+ if(answered.length===0){box.classList.remove('show');return}
+ var scored=laws.map(function(name,i){return {name:name,val:Number(state['law'+i]||99)}}).filter(function(x){return x.val!==99});
+ scored.sort(function(a,b){return a.val-b.val});var focus=scored[0],strength=scored[scored.length-1];
+ box.innerHTML='<strong>الگوی اولیه شما</strong><p><b>نقطه تمرکز برای گفت‌وگو:</b> '+focus.name+'</p><p><b>رفتاری که می‌توانید روی آن بنا کنید:</b> '+strength.name+'</p><p style="font-size:11px;color:#7a6a62">این نتیجه تشخیص قطعی یا ارزیابی عملکرد نیست؛ فقط نقطه شروع reflection و انتخاب اقدام بعدی است.</p>';
+ box.classList.add('show');
+}
+
+function renderCases(){
+ var root=document.getElementById('caseList');root.innerHTML='';
+ cases.forEach(function(c,i){
+  var box=document.createElement('div');box.className='case'+(i===0?' open':'');
+  box.innerHTML='<button class="case-head" onclick="toggleCase(this)"><span class="case-left"><span class="case-no">'+faNum(i+1)+'</span><span><b>'+c.title+'</b><small>'+c.subtitle+'</small></span></span><span class="chev">⌄</span></button>'+
+  '<div class="case-body"><div class="scenario">'+c.scenario+'</div><div class="case-principle"><b>اصل رفتاری پیشنهادی:</b> '+c.principle+'</div>'+
+  '<div class="task-title"><b>تمرین سریع کلاس</b><span>حدود ۳ دقیقه</span></div>'+
+  '<label>۱. '+c.q1+'</label><textarea data-save="case'+i+'q1" placeholder="کوتاه و مصداقی بنویسید..."></textarea>'+
+  '<label>۲. '+c.q2+'</label><textarea data-save="case'+i+'q2" placeholder="برداشت شما..."></textarea>'+
+  '<label>۳. '+c.q3+'</label><textarea data-save="case'+i+'q3" placeholder="یک اقدام مشخص..."></textarea>'+
+  '<div class="full-path"><button onclick="toggleFullPath(this)"><span>مسیر کامل ۹ مرحله‌ای این کیس</span><span>⌄</span></button><div class="full-path-content"><div class="path-steps">'+reviewPath.map(function(x,n){return '<div class="step"><i>'+faNum(n+1)+'</i><span>'+x+'</span></div>'}).join('')+'</div></div></div></div>';
+  root.appendChild(box)
+ });
+ document.querySelectorAll('[data-save]').forEach(function(el){if(!el.dataset.bound){bindSave(el,el.getAttribute('data-save'));el.dataset.bound='1'}})
+}
+function toggleCase(btn){btn.parentElement.classList.toggle('open')}
+function toggleFullPath(btn){btn.parentElement.classList.toggle('open')}
+
+function renderMap(){
+ var root=document.getElementById('caseMap');root.innerHTML='';var n=1;
+ caseMapGroups.forEach(function(g){var t=document.createElement('div');t.className='track';t.innerHTML='<h4>'+g.title+'</h4>'+g.items.map(function(x){return '<div class="case-chip"><i>'+faNum(n++)+'</i><span>'+x+'</span></div>'}).join('');root.appendChild(t)})
+}
+function toggleMap(){var m=document.getElementById('caseMap');m.classList.toggle('show');document.getElementById('mapChev').textContent=m.classList.contains('show')?'⌃':'⌄'}
+
+function renderNotes(){
+ document.getElementById('masterPath').innerHTML=reviewPath.map(function(x,i){return '<div class="step"><i>'+faNum(i+1)+'</i><span>'+x+'</span></div>'}).join('');
+ document.getElementById('lawList').innerHTML=laws.map(function(x,i){return '<div class="law"><i>'+faNum(i+1)+'</i><span>'+x+'</span></div>'}).join('');
+ document.getElementById('pillarList').innerHTML=pillars.map(function(p){return '<div class="pillar"><b>'+p.title+' — '+p.line+'</b><p>'+p.detail+'</p></div>'}).join('');
+}
+function toggleAcc(btn){btn.parentElement.classList.toggle('open')}
+
+function renderFocus(){
+ var root=document.getElementById('focusSelect');root.innerHTML='';
+ laws.forEach(function(x,i){var b=document.createElement('button');b.className='focus-chip'+(state.focusLaw===i?' selected':'');b.textContent=faNum(i+1)+'. '+x;b.onclick=function(){state.focusLaw=i;save();renderFocus()};root.appendChild(b)})
+}
+
+function updateProgress(){
+ var blocks=0,total=8;
+ if(laws.every(function(_,i){return Number(state['law'+i])>=1}))blocks++;
+ for(var i=0;i<5;i++){if((state['case'+i+'q1']||'').trim()||(state['case'+i+'q2']||'').trim()||(state['case'+i+'q3']||'').trim())blocks++}
+ if((state.freeNote||'').trim())blocks++;
+ if((state.commitment||'').trim()||(state.startDoing||'').trim()||(state.focusLaw!==undefined))blocks++;
+ var pct=Math.round(blocks/total*100);document.getElementById('progressBar').style.width=pct+'%';document.getElementById('progressText').textContent=faNum(pct)+'٪'
+}
+
+function summaryText(){
+ var s=['خلاصه شخصی کارگاه رفتار و فرهنگ سازمانی ناوصنعت','----------------------------------------'];
+ var scored=laws.map(function(name,i){return {name:name,val:Number(state['law'+i]||99)}}).filter(function(x){return x.val!==99}).sort(function(a,b){return a.val-b.val});
+ if(scored.length){s.push('نقطه تمرکز خودارزیابی: '+scored[0].name)}
+ if(state.focusLaw!==undefined)s.push('قانون انتخابی من: '+laws[state.focusLaw]);
+ s.push('');s.push('شروع می‌کنم: '+(state.startDoing||'—'));s.push('متوقف می‌کنم: '+(state.stopDoing||'—'));s.push('ادامه می‌دهم: '+(state.continueDoing||'—'));s.push('تا جلسه بعد امتحان می‌کنم: '+(state.commitment||'—'));s.push('زمان: '+(state.deadline||'—'));s.push('نشانه انجام: '+(state.evidence||'—'));s.push('عامل پیگیری: '+(state.followThrough||'—'));s.push('');s.push('یادداشت: '+(state.freeNote||'—'));return s.join('\n')
+}
+function copySummary(){var txt=summaryText();if(navigator.clipboard){navigator.clipboard.writeText(txt).then(function(){toast('خلاصه کپی شد')})}else{toast('کپی خودکار در این مرورگر در دسترس نیست')}}
+function shareSummary(){var txt=summaryText();if(navigator.share){navigator.share({title:'خلاصه کارگاه ناوصنعت',text:txt}).catch(function(){})}else copySummary()}
+function resetApp(){if(confirm('همه پاسخ‌های ذخیره‌شده روی این دستگاه پاک شود؟')){localStorage.removeItem(KEY);location.reload()}}
+
+renderAssessment();renderCases();renderMap();renderNotes();renderFocus();
+document.querySelectorAll('[data-save]').forEach(function(el){if(!el.dataset.bound){bindSave(el,el.getAttribute('data-save'));el.dataset.bound='1'}});updateProgress();
+
+var sectionIds=['home','pulse','cases','notes','action'];
+window.addEventListener('scroll',function(){var y=window.scrollY+120,current='home';sectionIds.forEach(function(id){var el=document.getElementById(id);if(el&&el.offsetTop<=y)current=id});document.querySelectorAll('.navbtn').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-target')===current)})},{passive:true});
+</script>
+</body>
+</html>
