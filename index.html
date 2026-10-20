@@ -143,10 +143,37 @@ radial-gradient(circle at 75% 20%,rgba(255,187,126,.36),transparent 18%)}
 .ops-block ul{margin:7px 0 0;padding-right:17px;color:#50676e;font-size:10.8px}
 .ops-block.break{background:linear-gradient(135deg,#f7ece5,#fff)}
 .ops-block.break .ops-time{background:var(--copper)}
+.case-category{margin:18px 0 28px}
+.case-category-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.case-category-head h3{margin:0;font-size:17px;color:var(--navy)}
+.case-category-head span{font-size:10px;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:99px;padding:4px 8px}
+.case-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.case-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:var(--shadow-sm);display:flex;gap:11px;align-items:flex-start;transition:.2s}
+.case-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:#d7c2b6}
+.case-num{width:38px;height:38px;flex:0 0 38px;border-radius:12px;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:900;font-size:12px}
+.case-copy{min-width:0;flex:1}
+.case-copy b{display:block;font-size:13px;line-height:1.65;margin-bottom:2px}
+.case-copy small{display:block;color:var(--muted);font-size:10.5px}
+.case-open{margin-top:8px;color:var(--copper3);font-weight:900;font-size:10.5px}
+.case-pattern{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
+.pattern-card{background:#fff;border:1px solid var(--line);border-radius:19px;padding:16px;box-shadow:var(--shadow-sm)}
+.pattern-label{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.pattern-icon{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--soft-copper);color:var(--copper3);font-weight:900}
+.pattern-label b{font-size:13px;color:var(--navy)}
+.pattern-card p{margin:0;color:#52686f;font-size:11.5px;line-height:1.9}
+.pattern-card.problem{border-right:4px solid #a64b3b}
+.pattern-card.lesson{border-right:4px solid #2f6f7d}
+.pattern-card.note{border-right:4px solid #c0892f}
+.pattern-card.solution{border-right:4px solid #3c765b}
+.case-nav-row{display:flex;gap:8px;justify-content:space-between;margin-top:14px}
+.case-nav-row button{border:0;border-radius:11px;min-height:42px;padding:8px 13px;font-weight:900;font-size:10.5px}
+.case-nav-row .prevnext{background:#fff;border:1px solid var(--line);color:var(--navy)}
+.case-nav-row .allcases{background:var(--navy);color:#fff}
+@media(max-width:680px){.case-grid,.case-pattern{grid-template-columns:1fr}}
 .footer{margin-top:32px;border-top:1px solid var(--line);padding:23px 0 0;display:flex;justify-content:space-between;gap:15px;align-items:center;color:var(--muted);font-size:10.5px}
 .footer b{color:var(--navy)}
 .mobile-nav{display:none;position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(255,255,255,.96);backdrop-filter:blur(16px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
-.mobile-nav-in{display:grid;grid-template-columns:repeat(4,1fr)}
+.mobile-nav-in{display:grid;grid-template-columns:repeat(5,1fr)}
 .mobile-nav button{border:0;background:transparent;color:#728085;padding:7px 2px;min-height:58px;font-size:9.5px}
 .mobile-nav button span{display:block;font-size:18px;line-height:1.2}
 .mobile-nav button.active{color:var(--copper);font-weight:900}
@@ -188,6 +215,7 @@ radial-gradient(circle at 75% 20%,rgba(255,187,126,.36),transparent 18%)}
       <button class="nav-link" data-route="managers" onclick="goRoute('managers')">مدیران</button>
       <button class="nav-link" data-route="hq" onclick="goRoute('hq')">کارکنان ستاد</button>
       <button class="nav-link" data-route="operations" onclick="goRoute('operations')">عملیات</button>
+      <button class="nav-link" data-route="cases" onclick="goRoute('cases')">کیس‌ها</button>
     </nav>
     <span class="top-pill">Learning Experience • V2</span>
   </div>
@@ -201,6 +229,7 @@ radial-gradient(circle at 75% 20%,rgba(255,187,126,.36),transparent 18%)}
     <button data-route="managers" onclick="goRoute('managers')"><span>◈</span>مدیران</button>
     <button data-route="hq" onclick="goRoute('hq')"><span>▦</span>ستاد</button>
     <button data-route="operations" onclick="goRoute('operations')"><span>⚙</span>عملیات</button>
+    <button data-route="cases" onclick="goRoute('cases')"><span>▣</span>کیس‌ها</button>
   </div>
 </nav>
 
@@ -250,6 +279,7 @@ function landing(){
  trackCard('hq','▦','کارکنان ستاد','مسیر همکاری حرفه‌ای در ستاد','همکاری بین‌واحدی، ارتباط مؤثر، مسئولیت‌پذیری، قانون‌مداری، پیگیری و حل مسئله.','۶ جلسه','هر جلسه ۲ ساعت')+
  trackCard('operations','⚙','عملیات','تجربه یک‌روزه رفتار حرفه‌ای در عملیات','فشرده، کاربردی و موقعیت‌محور؛ متناسب با فضای اجرایی و میدانی ناوصنعت.','برنامه یک‌روزه','کاربردی و میدانی')+
  '</div></section>'+
+ '<section class="section"><div class="section-head"><div><h2>کتابخانه ۱۵ کیس ناوصنعت</h2><p>کیس‌های واقعی و پرتکرار، در سه دسته و با یک الگوی ثابت یادگیری.</p></div><span class="section-tag">۱۵ Case</span></div><button class="btn btn-copper" onclick="goRoute(\'cases\')">مشاهده همه کیس‌ها</button></section>'+
  '<section class="section"><div class="section-head"><div><h2>چه چیزی در همه مسیرها مشترک است؟</h2><p>چهار اصل طراحی تجربه یادگیری ناوصنعت.</p></div></div>'+
  '<div class="principles"><div class="principle"><b>مسئله واقعی</b><span>از تجربه روزمره سازمان شروع می‌کنیم.</span></div><div class="principle"><b>Reflection</b><span>قبل از توصیه، مسئله را دقیق‌تر می‌بینیم.</span></div><div class="principle"><b>Practice</b><span>رفتار مطلوب را در موقعیت واقعی تمرین می‌کنیم.</span></div><div class="principle"><b>Action</b><span>هر یادگیری به یک اقدام قابل پیگیری می‌رسد.</span></div></div></section>'+footer()+'</div>'
 }
@@ -294,18 +324,71 @@ function operationsPage(){
  '<p>چارچوب کلی برنامه آموزشی عملیات</p><div class="page-meta"><span>یک روز کامل</span><span>مسیر عملیاتی</span></div></section>'+
  '<section class="section"><div class="section-head"><div><h2>ساختار روز</h2><p>فعلاً فقط معماری کلی برنامه نمایش داده می‌شود.</p></div></div><div class="ops-timeline">'+blocks+'</div></section>'+footer()+'</div>'
 }
+
+var caseGroups=[
+ {title:'رشد، رسمیت و حرفه‌ای‌گری',cases:[
+  {title:'از سازمان کوچک و غیررسمی تا سازمان حرفه‌ای',problem:'رشد سازمان باعث شده روش‌های غیررسمی گذشته دیگر در همه موقعیت‌ها جواب ندهند و ابهام، دوباره‌کاری و ناهماهنگی بیشتر شود.',lesson:'سازمان در حال رشد باید هم‌زمان نقش‌ها، قواعد و فرایندهای خود را حرفه‌ای‌تر کند.',note:'رسمی‌ترشدن با بوروکراتیک‌شدن یکی نیست؛ فقط چیزهایی را روشن می‌کنیم که برای هماهنگی و پاسخگویی لازم‌اند.',solution:'روش‌های ارزشمند گذشته را حفظ کنید، اما برای مسئولیت، اختیار، مسیر تصمیم و تحویل کار قواعد روشن و حداقلی تعریف کنید.'},
+  {title:'دور زدن مدیر و مسیرهای غیررسمی',problem:'افراد برای سرعت بیشتر مستقیماً به مدیران بالاتر مراجعه می‌کنند و مدیر مستقیم از جریان تصمیم و مسئولیت کنار گذاشته می‌شود.',lesson:'دسترسی باز مفید است، اما نباید ساختار پاسخگویی را بی‌اثر کند.',note:'مسئله اصلی خودِ دسترسی نیست؛ مسئله وقتی ایجاد می‌شود که مسئولیت و اختیار دور زده شود.',solution:'قاعده escalation روشن تعریف کنید: چه موضوعی، در چه شرایطی و با اطلاع چه کسی می‌تواند به سطح بالاتر ارجاع شود.'},
+  {title:'قانون‌مداری و صمیمیت حرفه‌ای',problem:'روابط صمیمی و شخصی در بعضی تصمیم‌ها بر معیار حرفه‌ای، انصاف یا قاعده اثر می‌گذارد.',lesson:'رابطه انسانی باید حفظ شود، اما تصمیم سازمانی باید بر معیار مشترک تکیه کند.',note:'اعتماد زمانی آسیب می‌بیند که افراد احساس کنند قاعده برای همه یکسان نیست.',solution:'برای تصمیم‌های پرتکرار معیار روشن داشته باشید و همان معیار را بدون توجه به رابطه شخصی اجرا کنید.'},
+  {title:'قول می‌دهیم؛ اما آیا انجام می‌دهیم؟',problem:'کارها با قول و توافق شروع می‌شوند اما به‌دلیل نبود مسئول، زمان و پیگیری روشن، بعضی تعهدات تا نتیجه پیش نمی‌روند.',lesson:'تعهد حرفه‌ای یعنی مالک روشن، خروجی روشن، زمان روشن و پیگیری تا بسته‌شدن کار.',note:'بیشتر شکست‌ها در مرحله پیگیری و بستن حلقه رخ می‌دهند، نه در مرحله تصمیم.',solution:'هر تعهد را با چهار جزء ثبت کنید: مسئول، خروجی، موعد و نقطه تأیید انجام.'},
+  {title:'همکاری مدیرانی که با هم اختلاف دارند',problem:'اختلاف حرفه‌ای میان مدیران گاهی شخصی می‌شود و روی تیم‌ها و همکاری بین واحدها اثر می‌گذارد.',lesson:'اختلاف نظر طبیعی است؛ تبدیل اختلاف موضوعی به تعارض شخصی، عملکرد سازمان را تضعیف می‌کند.',note:'هدف مشترک سازمان باید بالاتر از اختلاف فردی باقی بماند.',solution:'مسئله را از شخص جدا کنید، نقطه اختلاف را دقیق تعریف کنید و روی یک اقدام مشترک قابل توافق جلو بروید.'}
+ ]},
+ {title:'همکاری، تصمیم‌گیری و عملیات',cases:[
+  {title:'واحد تخصصی؛ مانع یا شریک حل مسئله؟',problem:'واحدهای تخصصی گاهی از سوی عملیات به‌عنوان مانع سرعت دیده می‌شوند و خودشان نیز نقش خود را بیشتر کنترل‌گر می‌بینند تا حل‌کننده مسئله.',lesson:'واحد تخصصی باید هم استاندارد را حفظ کند و هم شریک حل مسئله باشد.',note:'کنترل بدون فهم واقعیت عملیات، مقاومت ایجاد می‌کند.',solution:'قبل از رد یا تأیید درخواست، مسئله عملیاتی را مشترک تعریف کنید و گزینه‌ای پیشنهاد دهید که هم استاندارد و هم نیاز اجرا را پوشش دهد.'},
+  {title:'تصمیم‌گیری بدون حضور ذی‌نفعان اصلی',problem:'تصمیم‌هایی گرفته می‌شود که افراد یا واحدهای اثرپذیر در شکل‌گیری آن حضور نداشته‌اند و بعد در اجرا مقاومت یا ابهام ایجاد می‌شود.',lesson:'کیفیت تصمیم فقط به سرعت آن نیست؛ حضور ذی‌نفعان کلیدی اجرای آن را قوی‌تر می‌کند.',note:'همه لازم نیست در همه تصمیم‌ها باشند؛ فقط کسانی که اطلاعات یا مسئولیت کلیدی دارند.',solution:'برای تصمیم‌های مهم، قبل از نهایی‌سازی مشخص کنید چه کسی باید مشورت داده، چه کسی تصمیم بگیرد و چه کسی اجرا کند.'},
+  {title:'سازمانی که همیشه در وضعیت فوری است',problem:'بسیاری از کارها با برچسب فوری وارد سیستم می‌شوند و برنامه‌ریزی، اولویت‌بندی و کیفیت تصمیم تحت فشار قرار می‌گیرد.',lesson:'اگر همه‌چیز فوری باشد، عملاً هیچ‌چیز اولویت ندارد.',note:'فرهنگ فوریت مزمن معمولاً نشانه ضعف در برنامه‌ریزی، پیش‌بینی یا مرزبندی اولویت‌هاست.',solution:'معیار مشخص برای کار فوری تعریف کنید و برای سایر کارها اولویت، مسئول و زمان‌بندی واقعی تعیین کنید.'},
+  {title:'ایمنی؛ آموزش کافی است یا نظارت هم لازم است؟',problem:'قواعد ایمنی آموزش داده شده‌اند، اما رعایت آن‌ها در میدان همیشه پایدار نیست.',lesson:'دانستن قاعده با اجرای پایدار آن متفاوت است؛ رفتار ایمن نیازمند مشاهده، بازخورد و پیگیری است.',note:'مدیران با آنچه تحمل می‌کنند، استاندارد واقعی ایمنی را تعریف می‌کنند.',solution:'بازدید و بازخورد کوتاه منظم داشته باشید، رفتارهای پرریسک را همان لحظه اصلاح کنید و رعایت ایمنی را قابل مشاهده و قابل پیگیری کنید.'},
+  {title:'از کنترل شخصی تا نظم، نظارت و پاسخگویی',problem:'بعضی مدیران برای اطمینان از نتیجه، همه جزئیات را شخصاً کنترل می‌کنند و تیم به جای سیستم به حضور فرد وابسته می‌شود.',lesson:'کنترل مؤثر باید از فرد به سازوکار تبدیل شود.',note:'نظارت خوب یعنی وضوح معیار، مشاهده نتیجه و پاسخگویی؛ نه مداخله دائمی در همه جزئیات.',solution:'شاخص، نقطه کنترل و گزارش کوتاه تعریف کنید تا مدیر بر نتیجه نظارت کند، نه اینکه جای تیم کار کند.'}
+ ]},
+ {title:'مدیریت، منابع انسانی و پاسخگویی',cases:[
+  {title:'رفتار مدیر؛ پیام فرهنگی سازمان',problem:'مدیر درباره یک رفتار حرف می‌زند اما در عمل رفتار متفاوتی نشان می‌دهد و کارکنان پیام واقعی را از رفتار او می‌گیرند.',lesson:'فرهنگ بیش از سخنرانی، از الگوی رفتاری مدیران ساخته می‌شود.',note:'کارکنان آنچه مدیران پاداش می‌دهند، تحمل می‌کنند و تکرار می‌کنند را جدی می‌گیرند.',solution:'سه رفتار مدیریتی مشخص انتخاب کنید که باید در همه موقعیت‌ها ثابت و قابل مشاهده باشند و خود مدیران نخستین مجریان آن باشند.'},
+  {title:'استخدام در سایت‌ها؛ چه کسی تصمیم می‌گیرد؟',problem:'در جذب نیرو بین ستاد، منابع انسانی و مدیران سایت ابهام درباره اختیار تصمیم و مسئولیت نتیجه وجود دارد.',lesson:'استخدام تصمیم مشترک است اما نقش هر طرف باید روشن باشد.',note:'ابهام در حق تصمیم باعث تأخیر، تعارض و انتقال مسئولیت می‌شود.',solution:'نقش‌ها را تفکیک کنید: چه کسی نیاز را تعریف می‌کند، چه کسی ارزیابی می‌کند، چه کسی تأیید نهایی می‌دهد و چه کسی پاسخگوی نتیجه است.'},
+  {title:'امنیت روانی و فیزیکی کارکنان',problem:'کارکنان ممکن است درباره خطر، خطا یا مسئله مهم سکوت کنند چون از واکنش مدیر، سرزنش یا پیامدهای بعدی نگران‌اند.',lesson:'سازمان ایمن جایی است که افراد بتوانند خطر و مسئله را زود و بدون ترس غیرمنطقی مطرح کنند.',note:'سکوت کارکنان همیشه نشانه نبود مسئله نیست؛ گاهی نشانه نبود امنیت برای بیان مسئله است.',solution:'برای گزارش خطر و خطا مسیر روشن، بدون تحقیر و با پاسخ سریع ایجاد کنید و مدیران را ملزم به واکنش حرفه‌ای کنید.'},
+  {title:'اختیار، مسئولیت و پاسخگویی مدیران',problem:'گاهی مسئولیت به مدیر داده شده اما اختیار کافی ندارد، یا اختیار وجود دارد ولی پاسخگویی نتیجه روشن نیست.',lesson:'اختیار، مسئولیت و پاسخگویی باید با هم متوازن باشند.',note:'مسئولیت بدون اختیار فرسودگی می‌آورد؛ اختیار بدون پاسخگویی ریسک ایجاد می‌کند.',solution:'برای هر نقش مدیریتی سه سؤال را روشن کنید: چه نتیجه‌ای مسئول من است؟ چه اختیاری دارم؟ در برابر چه کسی و با چه معیاری پاسخگو هستم؟'},
+  {title:'یک کار، دو تیم؛ مسئول واقعی کیست؟',problem:'وقتی چند واحد روی یک کار مشترک هستند، در نقطه شکست هر واحد تصور می‌کند مسئول اصلی واحد دیگر است.',lesson:'کار مشترک هم باید یک owner نهایی داشته باشد.',note:'همکاری چندواحدی بدون مالکیت نهایی، حلقه پاسخگویی را باز می‌گذارد.',solution:'برای هر کار مشترک یک owner نهایی، نقش هر تیم، نقاط handoff و معیار پایان کار را مشخص کنید.'}
+ ]}
+];
+
+function casesPage(){
+ var html='';
+ var num=1;
+ caseGroups.forEach(function(g,gi){
+   var cards='';
+   g.cases.forEach(function(x,ci){
+     cards+='<button class="case-card" onclick="goRoute(\'case-'+gi+'-'+ci+'\')"><span class="case-num">'+fa(num++)+'</span><span class="case-copy"><b>'+x.title+'</b><small>باز کردن کیس و درس</small><span class="case-open">مشاهده ←</span></span></button>';
+   });
+   html+='<section class="case-category"><div class="case-category-head"><h3>'+g.title+'</h3><span>۵ کیس</span></div><div class="case-grid">'+cards+'</div></section>';
+ });
+ return '<div class="fade"><section class="page-hero"><div class="breadcrumb"><button onclick="goRoute(\'home\')">خانه</button><span>←</span><span>کیس‌ها</span></div><h1>کتابخانه ۱۵ کیس ناوصنعت</h1><p>۱۵ موقعیت واقعی و پرتکرار در سه دسته. هر کیس با یک الگوی ثابت بررسی می‌شود: مسئله، درس، نکته و راه‌حل.</p><div class="page-meta"><span>۱۵ کیس</span><span>۳ دسته</span><span>الگوی ثابت یادگیری</span></div></section>'+
+ html+footer()+'</div>';
+}
+function casePage(gi,ci){
+ var group=caseGroups[gi], x=group&&group.cases[ci]; if(!x)return casesPage();
+ var n=gi*5+ci+1;
+ return '<div class="fade"><section class="page-hero"><div class="breadcrumb"><button onclick="goRoute(\'home\')">خانه</button><span>←</span><button onclick="goRoute(\'cases\')">کیس‌ها</button><span>←</span><span>کیس '+fa(n)+'</span></div><h1>'+x.title+'</h1><p>'+group.title+'</p><div class="page-meta"><span>Case '+fa(n)+'</span><span>مسئله → درس → نکته → راه‌حل</span></div></section>'+
+ '<section class="case-pattern">'+
+ '<article class="pattern-card problem"><div class="pattern-label"><span class="pattern-icon">۱</span><b>مسئله</b></div><p>'+x.problem+'</p></article>'+
+ '<article class="pattern-card lesson"><div class="pattern-label"><span class="pattern-icon">۲</span><b>درس</b></div><p>'+x.lesson+'</p></article>'+
+ '<article class="pattern-card note"><div class="pattern-label"><span class="pattern-icon">۳</span><b>نکته کلیدی</b></div><p>'+x.note+'</p></article>'+
+ '<article class="pattern-card solution"><div class="pattern-label"><span class="pattern-icon">۴</span><b>راه‌حل</b></div><p>'+x.solution+'</p></article>'+
+ '</section>'+
+ '<div class="case-nav-row"><button class="allcases" onclick="goRoute(\'cases\')">بازگشت به ۱۵ کیس</button><button class="prevnext" onclick="goRoute(\'case-'+gi+'-'+((ci+1)%5)+'\')">کیس بعدی ←</button></div>'+
+ footer()+'</div>';
+}
 function markDone(key){setVisited(key);render();window.scrollTo({top:0,behavior:'smooth'})}
 function render(){
  var route=(location.hash||'#home').slice(1), html;
  if(route==='home'||!route)html=landing();
  else if(route==='managers'||route==='hq')html=trackPage(route);
  else if(route==='operations')html=operationsPage();
+ else if(route==='cases')html=casesPage();
  else{
+  var cm=route.match(/^case-(\d+)-(\d+)$/);
   var m=route.match(/^(managers|hq)-(\d+)$/);
-  html=m?sessionPage(m[1],Number(m[2])):landing();
+  html=cm?casePage(Number(cm[1]),Number(cm[2])):(m?sessionPage(m[1],Number(m[2])):landing());
  }
  document.getElementById('app').innerHTML=html;
- document.querySelectorAll('[data-route]').forEach(function(b){b.classList.toggle('active',route===b.getAttribute('data-route')||(route.indexOf(b.getAttribute('data-route')+'-')===0))});
+ document.querySelectorAll('[data-route]').forEach(function(b){var r=b.getAttribute('data-route');b.classList.toggle('active',route===r||(route.indexOf(r+'-')===0)||(r==='cases'&&route.indexOf('case-')===0))});
  window.scrollTo(0,0);
 }
 window.addEventListener('hashchange',render);
