@@ -24,12 +24,21 @@ function coIntro(){
 function coMetricLink(id,label){return '<button class="co-link" onclick="cultureGo(\'metrics\')">'+coEsc(label||id)+' ←</button>'}
 function coPillarCard(p){return '<article class="co-pillar"><div class="co-pillar-head"><b>'+coEsc(p.title)+'</b><span>'+coEsc(p.id)+'</span></div><small>'+coEsc(p.subtitle)+'</small><div class="co-two-row"><div><em>الگوی مسئله</em><p>'+coEsc(p.problem)+'</p></div><div><em>رفتار مطلوب</em><p>'+coEsc(p.desired)+'</p></div></div><details><summary>رفتارهای قابل مشاهده و کیس‌های مرتبط</summary><ul>'+p.behaviors.map(function(b){return '<li>'+coEsc(b)+'</li>'}).join('')+'</ul>'+coCasesInline(p.cases)+'</details></article>'}
 function coCasesInline(ids){return '<div class="co-case-links">'+ids.map(function(id){return '<button type="button" onclick="openCase('+id+',\'managers\')">کیس '+coPersian(id)+'</button>'}).join('')+'</div>'}
-function coScoreProgress(id,target){var s=coMeasured(id);if(!s)return '<div class="co-no-data">Baseline / Actual: هنوز اندازه‌گیری نشده</div>';
-var base=s.baseline,hasBaseline=base!=null&&Number.isFinite(base),progress=hasBaseline&&target>base?Math.max(0,Math.min(100,Math.round((s.value-base)/(target-base)*100))):null;
-var a='<div class="co-measure"><span>مقدار ثبت‌شده: <b>'+coNumber(s.value)+'</b></span><span>هدف پیشنهادی: '+coTarget(target)+'</span></div>';
-if(progress!==null){a+='<div class="co-meter" role="progressbar" aria-label="پیشرفت نسبت به خط مبنا" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+progress+'"><span style="width:'+progress+'%"></span></div><small>پیشرفت نسبت به Baseline ثبت‌شده: '+coPersian(progress)+'٪</small>'}
-else a+='<div class="co-no-data">پیشرفت واقعی تا تأیید Baseline قابل محاسبه نیست.</div>';
-return a}
+function coScoreProgress(id,target){
+ var s=coMeasured(id);
+ if(!s)return '<div class="co-no-data">هنوز مقدار واقعی ثبت نشده است.</div>';
+ var base=s.baseline,hasBaseline=base!=null&&Number.isFinite(base);
+ var progress=hasBaseline&&target>base?Math.max(0,Math.min(100,Math.round((s.value-base)/(target-base)*100))):null;
+ var a='<div class="co-measure"><span>مقدار ثبت‌شده: <b>'+coNumber(s.value)+'</b></span><span>هدف پیشنهادی: '+coTarget(target)+'</span></div>';
+ if(progress!==null){
+  a+='<div class="co-meter" role="progressbar" aria-label="پیشرفت نسبت به خط مبنا" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+progress+'"><span style="width:'+progress+'%"></span></div><small>میزان حرکت از Baseline ثبت‌شده به Target پیشنهادی: '+coPersian(progress)+'٪</small>'
+ }else if(hasBaseline&&base>=target){
+  a+='<div class="co-no-data">خط مبنای واردشده از هدف پیشنهادی کمتر نیست؛ هدف را پس از اعتبارسنجی بازنگری کنید.</div>';
+ }else{
+  a+='<div class="co-no-data">برای محاسبه میزان تغییر، خط مبنای معتبر لازم است.</div>';
+ }
+ return a;
+}
 function coNorth(){var m=CULTURE_OKR_MODEL,s=coMeasured('NS');return '<section class="co-north"><div class="co-kicker">NORTH STAR / ULTIMATE GOAL</div><h2>'+coEsc(m.north.headline)+'</h2><p>'+coEsc(m.north.ultimate)+'</p><div class="co-northmetric"><b>شاخص محوری پیشنهادی: مأموریت ایمن و قابل‌اتکا</b><p>'+coEsc(m.north.metric)+'</p><div class="co-measure"><span>اندازه‌گیری واقعی: <b>'+(s?coNumber(s.value):'بدون داده')+'</b></span><button class="co-link" onclick="cultureGo(\'metrics\')">ثبت و مشاهده شاخص ←</button></div></div><details><summary>تعریف دقیق Numerator / Denominator و محدودیت تفسیر</summary><p><b>صورت:</b> '+coEsc(m.north.numerator)+'</p><p><b>مخرج:</b> '+coEsc(m.north.denominator)+'</p><p>'+coEsc(m.north.caveat)+'</p></details></section>'}
 
 function coRoleDefinitions(){return {
@@ -148,14 +157,31 @@ function coRoadmap(){
  '<details class="co-deeper"><summary>اقدامات اجرایی، مسئولان و وضعیت پیگیری</summary>'+coInitiatives()+'</details>'
 }
 function coCases(){var m=CULTURE_OKR_MODEL;return '<section class="co-section"><div class="co-heading"><h2>۱۵ کیس؛ پل میان تشخیص و OKR</h2><p>برای هر کیس می‌توانید تجربه متفاوت مدیران، ستاد یا عملیات را باز کنید.</p></div><div class="co-case-matrix">'+CASES.map(function(c){var pids=m.casePillars[c.id]||[];return '<article class="co-case-item"><div><b>'+coPersian(c.id)+' · '+coEsc(c.title)+'</b><small>'+pids.map(function(id){var p=m.pillars.find(function(z){return z.id===id});return p?coEsc(p.title):id}).join(' · ')+'</small></div><div class="co-role-buttons"><button onclick="openCase('+c.id+',\'managers\')">مدیران</button><button onclick="openCase('+c.id+',\'hq\')">ستاد</button><button onclick="openCase('+c.id+',\'operations\')">عملیات</button></div></article>'}).join('')+'</div></section>'}
-function coSources(){var m=CULTURE_OKR_MODEL;return '<section class="co-section"><div class="co-heading"><h2>مبانی و سطح اطمینان</h2></div><div class="co-evidence"><article><b>شواهد تأییدشده بیرونی</b><p>تاریخ تأسیس، دامنه موضوع فعالیت و جایگاه شرکت در زنجیره مس از صفحه رسمی هلدینگ؛ مفاهیم Strategy Map، KPI و OKR از اسناد Perdoo.</p></article><article><b>فرضیه‌های داخلی برای آزمون</b><p>'+coEsc(m.context.diagnostic)+'</p></article><article><b>اطلاعات هنوز جمع‌آوری‌نشده</b><p>اندازه ناوگان فعال، تعداد سایت‌ها، مالک فرایندها، ساختار سازمانی روز، شاخص‌های حقیقی HSE، نرخ تحویل در موعد، میزان اعتماد و خط مبنای فرهنگ.</p></article></div><h3>منابع اصلی</h3><div class="co-source-list">'+m.context.sources.map(function(s){return '<a href="'+coEsc(s.url)+'" target="_blank" rel="noopener noreferrer">'+coEsc(s.label)+' ↗</a>'}).join('')+'</div><h3>پنج Guardrail غیرقابل حذف</h3><ol class="co-guard-list">'+m.guardrails.map(function(g){return '<li>'+coEsc(g)+'</li>'}).join('')+'</ol></section>'}
+function coSources(){
+ var m=CULTURE_OKR_MODEL;
+ return '<section class="co-section"><div class="co-heading"><h2>راهنمای استفاده؛ کمتر از سه دقیقه</h2><p>برای استفاده لازم نیست متخصص OKR باشید.</p></div>'+
+ '<div class="co-three-stages co-guide-steps">'+
+ '<div><b>۱. تصویر کلی</b><p>از «وضع موجود» به «رفتار مطلوب» نگاه کنید و نقش خود را انتخاب کنید.</p><button class="co-link" onclick="cultureGo(\'map\')">شروع از تصویر کلی ←</button></div>'+
+ '<div><b>۲. سه هدف</b><p>فقط سه تغییر مهم را ببینید؛ لازم نیست از ابتدا تمام شاخص‌ها را بخوانید.</p><button class="co-link" onclick="cultureGo(\'okrs\')">دیدن اهداف ←</button></div>'+
+ '<div><b>۳. اجرا و سنجش</b><p>یک اقدام واقعی انجام دهید؛ سپس فقط اگر داده معتبر دارید، مقدار شاخص را ثبت کنید.</p><button class="co-link" onclick="cultureGo(\'metrics\')">سنجش پیشرفت ←</button></div>'+
+ '</div></section>'+
+ '<details class="co-deeper"><summary>منشور رفتاری پیشنهادی ناوصنعت؛ شش جمله برای کار روزانه</summary><ol class="co-guard-list">'+
+ '<li>پیش از قول‌دادن، ظرفیت و هماهنگی لازم را بررسی می‌کنیم.</li>'+
+ '<li>تعهد مهم بدون مسئول، موعد و روش پیگیری نمی‌ماند.</li>'+
+ '<li>تغییر برنامه را به‌موقع به افراد درگیر اطلاع می‌دهیم.</li>'+
+ '<li>درباره خطر و نگرانی، بی‌تلافی و طبق مسیر ایمن حرف می‌زنیم.</li>'+
+ '<li>تحویل کار وقتی کامل است که گیرنده وضعیت و موارد باز را تأیید کند.</li>'+
+ '<li>مدیران همان قواعدی را رعایت می‌کنند که از دیگران انتظار دارند.</li></ol><p>این منشور، پیش‌نویس است؛ برای تصویب باید با مدیران و کارکنان گفت‌وگو شود.</p></details>'+
+ '<details class="co-deeper"><summary>پشتوانه مدل، فرضیه‌ها و داده‌های هنوز ناموجود</summary><div class="co-evidence"><article><b>شواهد بیرونی</b><p>معرفی شرکت در زنجیره صنعت مس و مفاهیم Strategy Map، KPI و OKR در منابع Perdoo.</p></article><article><b>فرضیه‌های قابل بررسی</b><p>'+coEsc(m.context.diagnostic)+'</p></article><article><b>داده‌هایی که نداریم</b><p>اندازه ناوگان فعال، وضعیت امروز فرایندها، نرخ واقعی تحویل، داده معتبر HSE، نظر کارکنان و Baseline فرهنگ.</p></article></div></details>'+
+ '<details class="co-deeper"><summary>منابع و محدودیت‌های ایمنی و محرمانگی</summary><div class="co-source-list">'+m.context.sources.map(function(r){return '<a href="'+coEsc(r.url)+'" target="_blank" rel="noopener noreferrer">'+coEsc(r.label)+' ↗</a>'}).join('')+'</div><ol class="co-guard-list">'+m.guardrails.map(function(x){return '<li>'+coEsc(x)+'</li>'}).join('')+'</ol></details>'
+}
 function cultureOkrPage(){if(typeof CULTURE_OKR_MODEL==='undefined')return '<div class="content-card"><h1>ماژول تحول فرهنگ بارگذاری نشد</h1><p>دسترسی به فایل داده را بررسی کنید.</p></div>';var views={map:coStrategyMap,okrs:coOkrs,metrics:coMetrics,roadmap:coRoadmap,cases:coCases,sources:coSources};return '<div class="fade co-app">'+coHero()+coIntro()+coTabs()+(views[cultureTab]||views.map)()+'<footer class="co-foot">CULTURE → LEADERSHIP → BEHAVIOR → RESULT · نسخه آزمایشی و مستقل از سامانه سازمانی</footer>'+footer()+'</div>'}
 function coSaveKpi(ev,id){ev.preventDefault();var f=ev.target,e=function(n){return f.elements.namedItem(n).value.trim()},bn=e('baseline'),nn=e('num'),dd=e('den'),per=e('period'),src=e('evidence');var status=f.querySelector('.co-form-status');
 var baseline=bn===''?null:Number(bn),isBaseValid=baseline===null||(Number.isFinite(baseline)&&baseline>=0&&baseline<=100);
 if(!isBaseValid){status.textContent='Baseline باید عدد ۰ تا ۱۰۰ باشد.';return}
 var hasCount=nn!==''||dd!=='';
 if(hasCount&&(nn===''||dd===''||!Number.isInteger(Number(nn))||!Number.isInteger(Number(dd))||Number(nn)<0||Number(dd)<1||Number(nn)>Number(dd))){status.textContent='صورت و مخرج باید تعداد صحیح، غیرمنفی و صورت کمتر یا برابر مخرج باشد.';return}
-if(hasCount&&(!per||!src)){status.textContent='برای مقدار واقعی، دوره و منبع اندازه‌گیری را ثبت کنید.';return}
+if((hasCount||baseline!==null)&&(!per||!src)){status.textContent='برای ثبت خط مبنا یا عملکرد، دوره و منبع اندازه‌گیری را وارد کنید.';return}
 var s=coState(),value=hasCount?Math.round(Number(nn)/Number(dd)*10000)/100:null;
 s.measurements[id]={baseline:baseline,num:hasCount?Number(nn):null,den:hasCount?Number(dd):null,value:value,period:per,evidence:src};
 if(!coSave(s)){status.textContent='ذخیره محلی ممکن نشد؛ از داده‌های محرمانه استفاده نکنید.';return}
