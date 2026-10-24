@@ -9,12 +9,18 @@ function coMeasured(id){var v=coState().measurements[id];return v&&typeof v.valu
 function coPersian(x){return typeof fa==='function'?fa(x):String(x)}
 function coNumber(x){return x==null||!Number.isFinite(x)?'ثبت نشده':coPersian((Math.round(x*10)/10).toLocaleString('en-US',{maximumFractionDigits:1}))+'٪'}
 function coTarget(x){return coPersian(String(x))+'٪'}
-function coTabs(){var tabs=[['map','نقشه تحول'],['okrs','OKRها'],['metrics','KPIها و داده'],['roadmap','نقشه راه'],['cases','۱۵ کیس'],['sources','شواهد و منابع']];
-return '<nav class="co-tabs" aria-label="بخش‌های برنامه تحول">'+tabs.map(function(t){return '<button class="'+(cultureTab===t[0]?'active':'')+'" aria-pressed="'+(cultureTab===t[0])+'" onclick="cultureGo(\''+t[0]+'\')">'+coEsc(t[1])+'</button>'}).join('')+'</nav>'}
+function coTabs(){
+ var tabs=[['map','تصویر کلی'],['okrs','۳ هدف اصلی'],['metrics','سنجش پیشرفت'],['roadmap','برنامه اجرا'],['cases','۱۵ کیس واقعی‌نما'],['sources','راهنما و منابع']];
+ return '<nav class="co-tabs" aria-label="بخش‌های برنامه تحول">'+tabs.map(function(t){return '<button class="'+(cultureTab===t[0]?'active':'')+'" aria-pressed="'+(cultureTab===t[0])+'" onclick="cultureGo(\''+t[0]+'\')">'+coEsc(t[1])+'</button>'}).join('')+'</nav>'
+}
 function cultureGo(tab){if(!['map','okrs','metrics','roadmap','cases','sources'].includes(tab))return;cultureTab=tab;render()}
 function coTag(x){return '<span class="co-pill">'+coEsc(x)+'</span>'}
-function coHero(){var m=CULTURE_OKR_MODEL;return '<header class="co-hero"><div class="co-hero-pattern" aria-hidden="true">◎</div><div><div class="co-eyebrow">NAAVSANAT · CULTURE TO EXECUTION</div><h1>از رشد عملیات به بلوغ فرهنگ سازمانی</h1><p>'+coEsc(m.north.headline)+'</p><div class="co-badges">'+coTag('۴ ستون تحول')+coTag('۳ OKR سازمانی')+coTag('۱۰ KPI تعریف‌شده')+coTag('۱۵ کیس × ۳ نقش')+'</div></div></header>'}
-function coIntro(){return '<div class="co-notice"><b>وضعیت داده:</b> این نسخه «مدل پیشنهادی و Pilot» است. مقادیر واقعی Baseline و Actual شرکت موجود نیستند؛ هیچ درصدی به‌عنوان عملکرد اندازه‌گیری‌شده نمایش داده نمی‌شود. عددهای Target نیازمند تأیید مدیران و سنجش خط مبنا هستند. داده‌های ثبت‌شده فقط در مرورگر همین دستگاه می‌مانند.</div>'}
+function coHero(){
+ return '<header class="co-hero"><div class="co-hero-pattern" aria-hidden="true">◎</div><div><div class="co-eyebrow">CULTURE & BEHAVIOR · ناوصنعت مس</div><h1>از وضع موجود به فرهنگ مطلوب</h1><p>یک نقشه ساده برای اینکه مدیران، ستاد و عملیات هماهنگ‌تر و پاسخگوتر کار کنند.</p><div class="co-badges">'+coTag('۳ هدف تغییر')+coTag('۴ رفتار کلیدی')+coTag('برنامه ۶ ماهه')+'</div></div></header>'
+}
+function coIntro(){
+ return '<div class="co-notice"><b>نکته مهم:</b> «وضع موجود» فعلاً فرضیه برآمده از کیس‌هاست، نه نتیجه ارزیابی رسمی. عددهای هدف پیشنهادی‌اند و عملکرد واقعی شرکت تا زمان ثبت شواهد، «نامشخص» می‌ماند.</div>'
+}
 function coMetricLink(id,label){return '<button class="co-link" onclick="cultureGo(\'metrics\')">'+coEsc(label||id)+' ←</button>'}
 function coPillarCard(p){return '<article class="co-pillar"><div class="co-pillar-head"><b>'+coEsc(p.title)+'</b><span>'+coEsc(p.id)+'</span></div><small>'+coEsc(p.subtitle)+'</small><div class="co-two-row"><div><em>الگوی مسئله</em><p>'+coEsc(p.problem)+'</p></div><div><em>رفتار مطلوب</em><p>'+coEsc(p.desired)+'</p></div></div><details><summary>رفتارهای قابل مشاهده و کیس‌های مرتبط</summary><ul>'+p.behaviors.map(function(b){return '<li>'+coEsc(b)+'</li>'}).join('')+'</ul>'+coCasesInline(p.cases)+'</details></article>'}
 function coCasesInline(ids){return '<div class="co-case-links">'+ids.map(function(id){return '<button type="button" onclick="openCase('+id+',\'managers\')">کیس '+coPersian(id)+'</button>'}).join('')+'</div>'}
@@ -25,11 +31,80 @@ if(progress!==null){a+='<div class="co-meter" role="progressbar" aria-label="پ�
 else a+='<div class="co-no-data">پیشرفت واقعی تا تأیید Baseline قابل محاسبه نیست.</div>';
 return a}
 function coNorth(){var m=CULTURE_OKR_MODEL,s=coMeasured('NS');return '<section class="co-north"><div class="co-kicker">NORTH STAR / ULTIMATE GOAL</div><h2>'+coEsc(m.north.headline)+'</h2><p>'+coEsc(m.north.ultimate)+'</p><div class="co-northmetric"><b>شاخص محوری پیشنهادی: مأموریت ایمن و قابل‌اتکا</b><p>'+coEsc(m.north.metric)+'</p><div class="co-measure"><span>اندازه‌گیری واقعی: <b>'+(s?coNumber(s.value):'بدون داده')+'</b></span><button class="co-link" onclick="cultureGo(\'metrics\')">ثبت و مشاهده شاخص ←</button></div></div><details><summary>تعریف دقیق Numerator / Denominator و محدودیت تفسیر</summary><p><b>صورت:</b> '+coEsc(m.north.numerator)+'</p><p><b>مخرج:</b> '+coEsc(m.north.denominator)+'</p><p>'+coEsc(m.north.caveat)+'</p></details></section>'}
-function coStrategyMap(){var m=CULTURE_OKR_MODEL;return coNorth()+
-'<section class="co-section"><div class="co-heading"><h2>مرحله چرخه عمر کسب‌وکار</h2>'+coTag('تشخیص اولیه · نیازمند اعتبارسنجی')+'</div><div class="co-lifecycle"><div><b>وضعیت محتمل کنونی</b><p>گسترش فعالیت‌ها، اتکا به تجربه اشخاص، تصمیم‌های غیررسمی و ناهماهنگی در نقاط تحویل</p></div><div class="co-arrow">←</div><div><b>وضع مطلوب</b><p>حفظ چابکی، همراه با مرز اختیار، تعهد قابل ردیابی، صدای امن و یادگیری میان سایت‌ها</p></div></div><p class="co-description">'+coEsc(m.context.lifecycle)+' — '+coEsc(m.context.diagnostic)+'</p></section>'+
-'<section class="co-section"><div class="co-heading"><h2>چهار ستون فرهنگ مطلوب</h2><p>رفتارهایی که مدیر و کارکنان باید بتوانند در کار واقعی مشاهده کنند.</p></div><div class="co-pillar-grid">'+m.pillars.map(coPillarCard).join('')+'</div></section>'+
-'<section class="co-section"><div class="co-heading"><h2>نقشه اتصال Strategy → Execution</h2></div><div class="co-flow"><div>Ultimate Goal / North Star</div><span>↓</span><div>۴ ستون راهبردی و ۱۵ کیس رفتاری</div><span>↓</span><div>۳ Objective و ۹ Key Result تغییر</div><span>↓</span><div>۱۰ KPI نگهداشت + ۱۰ Initiative اجرایی</div><span>↓</span><div>Check-in و کوچینگ گروهی هر یک یا دو هفته</div></div></section>'+
-'<section class="co-section"><div class="co-heading"><h2>نردبان بلوغ رفتاری</h2><p>موقعیت فعلی هیچ سطحی به‌طور رسمی امتیازدهی نشده است.</p></div><div class="co-levels">'+m.maturity.map(function(x){return '<div><span>'+coPersian(x.level)+'</span><b>'+coEsc(x.name)+'</b><small>'+coEsc(x.behavior)+'</small></div>'}).join('')+'</div></section>';
+
+function coRoleDefinitions(){return {
+ managers:{label:'مدیران ستاد',tasks:[
+  {title:'یک تعهد مهم این هفته را با مسئول، موعد و شرط انجام روشن می‌کنم.',caseId:4},
+  {title:'برای یک تصمیم تأخیردار، مرز اختیار و فرد پاسخگو را مشخص می‌کنم.',caseId:14},
+  {title:'در گفت‌وگوی تیمی، یک نگرانی را بدون سرزنش می‌شنوم و پیگیری می‌کنم.',caseId:13}
+ ]},
+ hq:{label:'کارکنان ستاد',tasks:[
+  {title:'برای یک درخواست، وضعیت واقعی و قدم بعدی را روشن اطلاع می‌دهم.',caseId:4},
+  {title:'در یک تحویل بین‌واحدی، دریافت و کامل‌بودن کار را تأیید می‌گیرم.',caseId:15},
+  {title:'وقتی اولویت‌ها تعارض دارند، به‌جای سه قول مبهم، تعیین اولویت می‌خواهم.',caseId:8}
+ ]},
+ operations:{label:'کارکنان عملیاتی',tasks:[
+  {title:'پیش از مأموریت، آخرین برنامه تأییدشده را مطابق رویه بررسی می‌کنم.',caseId:1},
+  {title:'هر نگرانی ایمنی یا عدم آمادگی را به‌موقع از مسیر HSE مطرح می‌کنم.',caseId:9},
+  {title:'در تحویل شیفت، موارد باز را ثبت و دریافت آن را تأیید می‌گیرم.',caseId:15}
+ ]}
+}}
+function coSelectedRole(){
+ var s=coState(),role=s.practiceRole;return Object.prototype.hasOwnProperty.call(coRoleDefinitions(),role)?role:'managers'
+}
+function coRolePlanInner(){
+ var role=coSelectedRole(),r=coRoleDefinitions()[role],s=coState(),done=s.habitChecks||{},checks=done[role]||{};
+ var count=r.tasks.filter(function(x,i){return !!checks[i]}).length;
+ return '<div class="co-habit-top"><b>تمرین یک‌هفته‌ای '+coEsc(r.label)+'</b><small>'+coPersian(count)+' از ۳ رفتار تمرین‌شده</small></div>'+
+ '<div class="co-habit-items">'+r.tasks.map(function(t,i){return '<div class="co-habit-item"><label><input type="checkbox" '+(checks[i]?'checked':'')+' onchange="coToggleHabit('+i+',this.checked)"><span>'+coEsc(t.title)+'</span></label><button onclick="openCase('+t.caseId+',\''+role+'\')">کیس '+coPersian(t.caseId)+' ←</button></div>'}).join('')+'</div>'+
+ '<p class="co-habit-footnote">این چک‌لیست فقط یادآور تمرین شخصی است؛ ثبت آن معادل تأیید انجام کار، ایمنی یا عملکرد سازمان نیست.</p>'
+}
+function coRolePlan(){
+ var roles=coRoleDefinitions(),current=coSelectedRole();
+ return '<section class="co-section co-start"><div class="co-heading"><h2>از این هفته چه کاری متفاوت انجام دهیم؟</h2><p>سه رفتار کوتاه، متناسب با شغل شما؛ به‌جای یک برنامه سنگین.</p></div><div class="co-role-picker" role="group" aria-label="انتخاب نقش">'+Object.keys(roles).map(function(role){return '<button type="button" class="'+(current===role?'active':'')+'" aria-pressed="'+(current===role)+'" onclick="coSelectRole(\''+role+'\')">'+coEsc(roles[role].label)+'</button>'}).join('')+'</div><div id="co-role-practice">'+coRolePlanInner()+'</div></section>'
+}
+function coRefreshRolePractice(){
+ var el=document.getElementById('co-role-practice');if(el)el.innerHTML=coRolePlanInner();
+ var tabs=document.querySelectorAll('.co-role-picker button'),role=coSelectedRole();
+ if(tabs&&tabs.forEach)tabs.forEach(function(btn){var selected=(btn.textContent||'')===coRoleDefinitions()[role].label;btn.classList.toggle('active',selected);btn.setAttribute('aria-pressed',String(selected))})
+}
+function coSelectRole(role){
+ if(!Object.prototype.hasOwnProperty.call(coRoleDefinitions(),role))return;
+ var s=coState();s.practiceRole=role;
+ if(!coSave(s)){announce('تنظیمات این دستگاه قابل ذخیره نیست.');return}
+ coRefreshRolePractice()
+}
+function coToggleHabit(i,checked){
+ var role=coSelectedRole(),tasks=coRoleDefinitions()[role].tasks;
+ if(!Number.isInteger(i)||i<0||i>=tasks.length)return;
+ var s=coState();if(!s.habitChecks)s.habitChecks={};if(!s.habitChecks[role])s.habitChecks[role]={};
+ s.habitChecks[role][i]=!!checked;
+ if(!coSave(s)){announce('ذخیره چک‌لیست ممکن نشد.');return}
+ coRefreshRolePractice()
+}
+function coQuickExample(){
+ return '<section class="co-simple-example"><div class="co-kicker">یک مثال از کار واقعی‌نما، نه گزارش یک رخداد تأییدشده</div>'+
+ '<h2>وقتی به یک خودرو، برای دو کار قول داده‌ایم...</h2>'+
+ '<div class="co-example-row"><div><small>چالش</small><b>دو قول؛ یک ظرفیت</b><p>تلفن و پیام‌ها با هم هماهنگ نیستند.</p></div><div><small>رفتار مطلوب</small><b>هر قول، صاحب و موعد دارد</b><p>قبل از وعده، ظرفیت و مسئول پاسخ‌گویی روشن می‌شود.</p></div><div><small>نشانه تغییر</small><b>تعهدهای قابل‌پیگیری</b><p>سهم قول‌های دارای مالک و موعد را می‌سنجیم؛ مقدار فعلی نامشخص است.</p></div></div>'+
+ '<div class="co-example-actions"><button onclick="openCase(1,\'managers\')">تجربه کیس ۱ ←</button><button onclick="cultureGo(\'okrs\')">دیدن هدف مرتبط ←</button></div></section>'
+}
+function coConceptHelp(){
+ return '<details class="co-glossary"><summary>North Star، OKR و KPI به زبان ساده یعنی چه؟</summary><div class="co-glossary-grid">'+
+ '<div><b>North Star · جهت حرکت</b><p>می‌خواهیم ناوصنعت به چه سازمانی تبدیل شود؟</p></div>'+
+ '<div><b>OKR · تغییری که می‌خواهیم ایجاد کنیم</b><p>در این دوره چه چیزی بهتر شود و از کجا بفهمیم؟</p></div>'+
+ '<div><b>KPI · علامت سلامت کار</b><p>کدام عدد را مرتب نگاه کنیم تا از کیفیت کار مطمئن شویم؟</p></div>'+
+ '<div><b>Initiative · اقدام عملی</b><p>این هفته چه کاری انجام دهیم تا نتیجه تغییر کند؟</p></div>'+
+ '</div></details>'
+}
+
+function coStrategyMap(){
+ var m=CULTURE_OKR_MODEL;
+ return '<section class="co-section"><div class="co-heading"><h2>اصل موضوع در یک نگاه</h2><p>بدون نیاز به آشنایی قبلی با OKR</p></div>'+
+ '<div class="co-simple-journey"><div><small>وضع موجود · فرضیه برای بررسی</small><b>کار به ارتباط شخصی و پیگیری فردی متکی است</b><p>قول‌های دوگانه، ابهام اختیار و فاصله بین ستاد و میدان در کیس‌ها مطرح شده‌اند.</p></div><span aria-hidden="true">←</span><div><small>وضع مطلوب · جهت مورد نظر</small><b>کار هماهنگ، ایمن و قابل‌اتکا پیش می‌رود</b><p>هر تعهد مالک دارد، نگرانی‌ها شنیده می‌شود و تحویل کار تأیید می‌شود.</p></div></div></section>'+
+ coQuickExample()+coRolePlan()+
+ '<section class="co-section"><div class="co-heading"><h2>چهار رفتار کلیدی برای ساختن این فرهنگ</h2><p>از شعار به رفتار قابل مشاهده می‌رسیم.</p></div><div class="co-simple-pillars">'+m.pillars.map(function(p){return '<details class="co-simple-pillar"><summary><span>'+coEsc(p.id)+'</span><b>'+coEsc(p.title)+'</b><small>مشاهده رفتارها</small></summary><p>'+coEsc(p.desired)+'</p><ul>'+p.behaviors.map(function(b){return '<li>'+coEsc(b)+'</li>'}).join('')+'</ul>'+coCasesInline(p.cases)+'</details>'}).join('')+'</div></section>'+
+ '<section class="co-section"><div class="co-heading"><h2>مسیر تحول در سه مرحله</h2></div><div class="co-three-stages"><div><b>۱. شناخت</b><span>هفته ۱ تا ۴</span><p>واقعیت را می‌سنجیم، حدس نمی‌زنیم.</p></div><div><b>۲. تمرین</b><span>هفته ۵ تا ۱۲</span><p>سه تغییر مهم را آزمایش می‌کنیم.</p></div><div><b>۳. تثبیت</b><span>هفته ۱۳ تا ۲۴</span><p>رفتارهای مؤثر را گسترش می‌دهیم.</p></div></div><div class="co-example-actions"><button onclick="cultureGo(\'roadmap\')">مشاهده برنامه اجرا ←</button></div></section>'+
+ '<details class="co-deeper"><summary>نقشه راهبرد کامل، North Star و سطوح بلوغ</summary>'+coNorth()+'<p class="co-description">'+coEsc(m.context.lifecycle)+' · '+coEsc(m.context.diagnostic)+'</p><div class="co-levels">'+m.maturity.map(function(x){return '<div><span>'+coPersian(x.level)+'</span><b>'+coEsc(x.name)+'</b><small>'+coEsc(x.behavior)+'</small></div>'}).join('')+'</div></details>'+coConceptHelp()
 }
 function coOkrs(){var m=CULTURE_OKR_MODEL;return '<section class="co-section"><div class="co-heading"><h2>سه OKR محدود برای Pilot نودروزه</h2><p>پیشنهاد آزمایشی، نه اهداف مصوب شرکت؛ Baseline ابتدا باید استخراج شود.</p></div><div class="co-objectives">'+m.okrs.map(function(o){var pillar=m.pillars.find(function(p){return p.id===o.pillar}),check=coState().checkins[o.id]||{};
  return '<article class="co-objective"><div class="co-objective-top"><span>'+coEsc(o.id)+' · '+coEsc(pillar.title)+'</span><span>'+coEsc(o.window)+'</span></div><h3>'+coEsc(o.title)+'</h3><p>'+coEsc(o.summary)+'</p><div class="co-owner"><b>مالک پاسخگویی:</b> '+coEsc(o.owner)+'</div><div class="co-kr-list">'+o.kr.map(function(k){return '<div class="co-kr"><div><b>'+coEsc(k.id)+' · '+coEsc(k.title)+'</b><small>متصل به KPI '+coEsc(k.metric)+' | Target پیشنهادی: '+coTarget(k.target)+'</small></div>'+coScoreProgress(k.metric,k.target)+'</div>'}).join('')+'</div><details class="co-check"><summary>Check-in و تصمیم دوره‌ای '+(check.period?'— آخرین دوره '+coEsc(check.period):'')+'</summary><form onsubmit="coSaveCheckin(event,\''+o.id+'\')"><label>دوره گزارش <input name="period" value="'+coEsc(check.period||'')+'" maxlength="40" placeholder="مثلاً هفته ۴"></label><label>سطح اطمینان به تحقق KRها <select name="confidence"><option value="" '+(!check.confidence?'selected':'')+'>هنوز ارزیابی نشده</option><option value="بالا" '+(check.confidence==='بالا'?'selected':'')+'>بالا</option><option value="متوسط" '+(check.confidence==='متوسط'?'selected':'')+'>متوسط</option><option value="پایین" '+(check.confidence==='پایین'?'selected':'')+'>پایین</option></select></label><label>مانع مهم و تصمیم بعدی<textarea name="decision" rows="3" maxlength="900" placeholder="بدون نام و داده محرمانه">'+coEsc(check.decision||'')+'</textarea></label><button class="co-primary" type="submit">ذخیره Check-in</button><span class="co-form-status" role="status"></span></form></details><div class="co-case-links"><span>یادگیری مرتبط:</span>'+o.cases.map(function(id){return '<button onclick="openCase('+id+',\'managers\')">کیس '+coPersian(id)+'</button>'}).join('')+'</div></article>'}).join('')+'</div></section>'+
