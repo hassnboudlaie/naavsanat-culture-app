@@ -14,7 +14,7 @@ function hqSaveProgress(update){
 function hqLearnGo(step){
  if(!Number.isInteger(step)||step<0||step>3)return;
  var state=hqLessonState();
- if(step===2&&(state.choice===null||!Number.isInteger(state.choice))){goRoute('hq-start/1');return}
+ if(step>=2&&(state.choice===null||!Number.isInteger(state.choice))){goRoute('hq-start/1');return}
  hqSaveProgress({step:step});goRoute('hq-start/'+step)
 }
 function hqLearnChoose(index){
@@ -30,7 +30,7 @@ function hqLessonFinish(){
  render()
 }
 function hqLessonHeader(step){
- var current=step+1,pct=(current/4)*100;
+ var current=step+1,pct=step*25+(step===3&&hqLessonState().completed?25:0);
  return '<div class="hq-guided-shell"><header class="hq-guided-header">'+
  '<button class="hq-subtle-back" onclick="goRoute(\'hq\')" aria-label="بازگشت به مسیر کارکنان ستاد">‹ مسیر کارکنان ستاد</button>'+
  '<span>جلسه اول · گام '+fa(current)+' از ۴</span></header>'+
@@ -38,6 +38,7 @@ function hqLessonHeader(step){
  '<div class="hq-progress" role="progressbar" aria-label="موقعیت در مسیر یادگیری" aria-valuenow="'+pct+'" aria-valuemin="0" aria-valuemax="100"><span style="width:'+pct+'%"></span></div>';
 }
 function hqLessonFooter(step){
+ if(step===3&&hqLessonState().completed)return '</div>';
  return '<nav class="hq-step-actions" aria-label="حرکت در جلسه">'+(step>0?'<button class="hq-text-back" onclick="hqLearnGo('+ (step-1)+')">مرحله قبل</button>':'<span></span>')+
  (step===0?'<button class="hq-main-action" onclick="hqLearnGo(1)">شروع جلسه ←</button>':
  step===1?'<span class="hq-step-hint">برای ادامه، یکی از واکنش‌ها را انتخاب کنید.</span>':
@@ -48,7 +49,7 @@ function hqLessonPage(step){
  chooseRole('hq');
  step=Number.isInteger(step)?Math.max(0,Math.min(3,step)):0;
  var progress=hqLessonState(),scenario=NAV_ROLE_LABS.hq[1];
- if(step===2&&(progress.choice===null||progress.choice===undefined))step=1;
+ if(step>=2&&(progress.choice===null||progress.choice===undefined))step=1;
  var main='';
  if(step===0){
   main='<section class="hq-guided-card hq-intro"><span class="hq-eyebrow">آموزش مستقل · بدون نیاز به مدرس</span>'+
@@ -95,7 +96,7 @@ function hqSimpleOverview(){
  '<section class="hq-primary-course"><span class="hq-eyebrow">جلسه ۱ از ۶</span><h2>نقش من در فرهنگ سازمان</h2>'+
  '<p>یک مثال ساده از کار ستاد، یک تصمیم و یک اقدام عملی.</p>'+
  '<div class="hq-mini-progress"><div><span style="width:'+(s.completed?100:((last)/4*100))+'%"></span></div><small>'+(s.completed?'این جلسه مرور شده است':'می‌توانید از جایی که مانده‌اید ادامه دهید')+'</small></div>'+
- '<button class="hq-main-action" onclick="hqLearnGo('+last+')">'+(s.completed?'مرور جلسه اول':'شروع / ادامه جلسه اول')+' ←</button></section>'+
+ '<button class="hq-main-action" onclick="hqLearnGo('+last+')">'+(s.completed?'مرور جلسه اول':last>0?'ادامه جلسه اول':'شروع جلسه اول')+' ←</button></section>'+
  '<details class="hq-extras"><summary>سایر جلسه‌ها و محتوای تکمیلی</summary>'+
  '<div class="hq-extra-items">'+hq.map(function(item,i){return '<button onclick="goRoute(\'hq-'+i+'\')"><b>جلسه '+fa(i+1)+'</b><span>'+esc(item.t)+'</span></button>'}).join('')+'</div>'+
  '<details><summary>کتابخانه ۱۵ کیس و منابع کامل</summary>'+roleCaseList('hq')+'</details></details>'+
