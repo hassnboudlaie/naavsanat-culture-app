@@ -209,3 +209,21 @@
  .nhq-journey-card button{font-size:10px}
 }
 @media(prefers-reduced-motion:reduce){.nhq-case-tile{transition:none}}
+
+/* Align existing four-stage lesson to the new rich visual language and expose the cases shortcut */
+.hp-header .hp-cases-shortcut{border:1px solid #e3bf8c80;border-radius:11px;background:linear-gradient(125deg,#f0c18d2e,#eed5aa1c);color:#ffdfb2;min-height:45px;padding:8px 13px;font-size:14px;font-weight:900;white-space:nowrap}
+.hp-header .hp-cases-shortcut:hover{background:#ffffff27}
+body.hq-learning-focus .hp-hero-image,
+body.hq-learning-focus .hp-overview-image{
+ background-image:url('https://images.pexels.com/photos/31721779/pexels-photo-31721779/free-photo-of-massive-open-pit-mine-with-haul-trucks.jpeg?auto=compress&fit=crop&w=1600&h=900'),url('./hq-industrial-hero.svg');
+ background-size:cover;background-position:center 55%;filter:saturate(1.05) contrast(1.04)
+}
+.hp-hero h1,.hp-overview h1{letter-spacing:0;font-weight:950}
+.hp-main-card{border-top:5px solid #b77e52}
+.hp-main-card h2{color:#0c5b46}
+.hp-choice:hover{background:#f8f2e8;border-color:#bf8a5d}
+@media(max-width:740px){
+ .hp-header .hp-cases-shortcut{font-size:11px;padding:7px 8px;min-height:40px}
+ .hp-brand b{font-size:15px}
+ .hp-brand small{font-size:9px}
+}
