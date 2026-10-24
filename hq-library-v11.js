@@ -80,11 +80,11 @@ function hqCasePage(id){
  '<button class="nhq-breadcrumb" onclick="goRoute(\'hq\');setTimeout(nhqJumpCases,70)">⌂ کارکنان ستاد / ۱۵ کیس</button>'+
  '<div class="nhq-case-label">📚 کیس '+fa(id)+' از ۱۵ <span>·</span> '+esc(meta.topic)+'</div>'+
  '<h1>'+meta.icon+' '+esc(meta.short)+'</h1><p>'+esc(meta.desc)+'</p></div></header>'+
- '<div class="nhq-case-content"><main class="nhq-case-main"><div class="nhq-context-pill">💬 موقعیت شغلی: '+esc(ROLES.hq.title)+' <span>•</span> ۳ واکنش قابل بررسی</div>'+
+ '<div class="nhq-case-content"><article class="nhq-case-main"><div class="nhq-context-pill">💬 موقعیت شغلی: '+esc(ROLES.hq.title)+' <span>•</span> ۳ واکنش قابل بررسی</div>'+
  decisionLab(c,'hq')+
  '<div class="nhq-case-lesson"><div><span>💡 نکته این کیس</span><p>'+esc(c.variants.hq.lesson)+'</p></div></div>'+
  '<details class="nhq-case-extra"><summary>📖 تحلیل کامل، تمرین و جزوه این کیس</summary><p>اگر می‌خواهید مسئله را عمیق‌تر مطالعه کنید، شش بخش آموزشی اصلی همچنان حفظ شده‌اند.</p>'+
- '<button onclick="goRoute(\''+caseRoute(id,'hq',0)+'\')">رفتن به تحلیل کامل کیس ←</button></details></main>'+
+ '<button onclick="goRoute(\''+caseRoute(id,'hq',0)+'\')">رفتن به تحلیل کامل کیس ←</button></details></article>'+
  '<aside class="nhq-case-side"><div class="nhq-side-card"><span>🎯 فقط روی یک موضوع تمرکز کنید</span><h2>تصمیم شما چه اثری روی اعتماد و هماهنگی دارد؟</h2><p>یک گزینه را انتخاب کنید؛ سپس نتیجه و گام عملی را در همان صفحه ببینید.</p></div>'+
  '<div class="nhq-side-progress"><span>📚 پیشرفت مطالعه</span><strong>'+fa(id)+' / ۱۵</strong><div><i style="width:'+(id/15*100)+'%"></i></div></div></aside></div>'+
  '<nav class="nhq-case-pagination" aria-label="جابجایی بین کیس‌ها">'+
