@@ -89,7 +89,8 @@ function coToggleHabit(i,checked){
  var s=coState();if(!s.habitChecks)s.habitChecks={};if(!s.habitChecks[role])s.habitChecks[role]={};
  s.habitChecks[role][i]=!!checked;
  if(!coSave(s)){announce('ذخیره چک‌لیست ممکن نشد.');return}
- coRefreshRolePractice()
+ var counter=document.querySelector('#co-role-practice .co-habit-top small');
+ if(counter){var count=Object.keys(s.habitChecks[role]).filter(function(j){return !!s.habitChecks[role][j]}).length;counter.textContent=coPersian(count)+' از ۳ رفتار تمرین‌شده'}
 }
 function coQuickExample(){
  return '<section class="co-simple-example"><div class="co-kicker">یک مثال از کار واقعی‌نما، نه گزارش یک رخداد تأییدشده</div>'+
