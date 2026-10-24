@@ -13,6 +13,7 @@ function hqPremiumShellMain(step,body){
  return '<div class="hp-app fade" dir="rtl">'+
  '<div class="hp-header"><div class="hp-brand"><div class="hp-mark" aria-hidden="true">◈</div><div><b>ناوصنعت مس</b><small>آکادمی یادگیری سازمانی</small></div></div>'+
  '<div class="hp-top-context">👥 کارکنان ستاد <span>·</span> جلسه اول</div>'+
+ '<button type="button" class="hp-cases-shortcut" onclick="goRoute(\'hq\');setTimeout(nhqJumpCases,70)">📚 ۱۵ کیس</button>'+
  '<button type="button" class="hp-top-back" onclick="goRoute(\'hq\')" aria-label="بازگشت به مسیر ستاد">‹ <span>بازگشت به درس‌ها</span></button></div>'+
  '<div class="hp-content-grid"><aside class="hp-rail">'+
  '<div class="hp-rail-brand">🎓 <span>مسیر آموزشی کارکنان ستاد</span></div>'+
