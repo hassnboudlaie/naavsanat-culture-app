@@ -26,7 +26,7 @@ function nsCaseRow(id,role){
  var c=CASES[id-1],isHQ=role==='hq',info=isHQ?NHQ_CASES[id-1]:null;
  var title=info?info.short:c.title;
  var desc=info?info.desc:c.concept;
- var href=isHQ?'hq-case/'+id:caseRoute(id,role,0);
+ var href=isHQ?'hq-case/'+id:'ns-case/'+role+'/'+id;
  return '<button type="button" class="ns-case-row" onclick="goRoute(\''+href+'\')" aria-label="کیس '+fa(id)+'، '+esc(title)+'">'+
  '<span class="ns-case-n">'+fa(id)+'</span><span class="ns-case-info"><b>'+esc(title)+'</b><small>'+esc(desc)+'</small></span><span class="ns-arrow">←</span></button>'
 }
@@ -109,3 +109,22 @@ function hqLessonPage(step){
  '<div class="ns-pagination"><button onclick="goRoute(\'hq\')">بازگشت به کارکنان ستاد</button>'+
  (step>0&&!(step===3&&s.completed)?'<button onclick="hqLearnGo('+(step-1)+')">مرحله قبل</button>':'')+'</div>'+nsPageEnd()+'</div>'
 }
+
+/* Shared simple case experience for managers, office staff and operations. */
+function nsCaseDetail(id,role){
+ id=Number(id);if(!ROLES[role]||!Number.isInteger(id)||id<1||id>15)return nsRolePage(ROLES[role]?role:'hq');
+ chooseRole(role);
+ var c=CASES[id-1],info=role==='hq'?NHQ_CASES[id-1]:null;
+ var title=info?info.short:c.title,desc=info?info.desc:c.concept;
+ var back=role, nextRoute=id<15?(role==='hq'?'hq-case/'+(id+1):'ns-case/'+role+'/'+(id+1)):null;
+ return '<div class="ns-simple ns-case fade" dir="rtl">'+nsTop(ROLES[role].title)+
+ '<div class="ns-case-top"><button class="ns-back" onclick="goRoute(\''+back+'\')">← همه ۱۵ کیس</button><span>کیس '+fa(id)+' از ۱۵</span></div>'+
+ '<section class="ns-case-heading"><h1>'+esc(title)+'</h1><p>'+esc(desc)+'</p></section>'+
+ '<section class="ns-case-content"><div class="ns-reading"><h2>شما چه می‌کنید؟</h2>'+decisionLab(c,role)+'</div>'+
+ '<details class="ns-resources"><summary>توضیحات و تمرین‌های تکمیلی</summary><p>'+esc(c.variants[role].lesson)+'</p>'+
+ '<button onclick="goRoute(\''+caseRoute(id,role,0)+'\')">مطالعه کامل کیس ←</button></details></section>'+
+ '<div class="ns-pagination"><button onclick="goRoute(\''+back+'\')">بازگشت به فهرست</button>'+
+ (nextRoute?'<button class="ns-primary" onclick="goRoute(\''+nextRoute+'\')">کیس بعدی ←</button>':'')+'</div>'+
+ nsPageEnd()+'</div>'
+}
+function hqCasePage(id){return nsCaseDetail(id,'hq')}
