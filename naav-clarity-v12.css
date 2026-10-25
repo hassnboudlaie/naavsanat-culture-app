@@ -163,3 +163,10 @@ body.ns-simple-route .app{width:100%!important;max-width:1240px!important;margin
  .ns-pagination .ns-primary{font-size:14px!important;padding:10px 14px!important}
 }
 @media(prefers-reduced-motion:reduce){.ns-simple *{scroll-behavior:auto!important;transition:none!important}}
+
+/* Final contrast and brand refinements */
+.ns-mark{padding:2px;background:#fff;border:2px solid #174c40;overflow:hidden}
+.ns-mark img{height:100%;width:100%;object-fit:contain;display:block;border-radius:50%}
+.ns-home .ns-header-home{display:none}
+.ns-track-text strong,.ns-role-intro h1,.ns-case-heading h1,.ns-lesson-sheet h1{color:#111a15}
+.ns-simple .ns-track:active,.ns-simple .ns-case-row:active{background:#e0e9dc}
