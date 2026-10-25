@@ -4,7 +4,7 @@
 */
 var NS_SIMPLE_ICONS={hq:'▦',managers:'◇',operations:'◉'};
 function nsTop(label){
- return '<header class="ns-header"><button class="ns-wordmark" onclick="goRoute(\'home\')" aria-label="ناوصنعت، خانه"><span class="ns-mark">نـ</span><span>ناوصنعت مس</span></button>'+
+ return '<header class="ns-header"><button class="ns-wordmark" onclick="goRoute(\'home\')" aria-label="ناوصنعت، خانه"><span class="ns-mark"><img src="'+LOGO_DATA+'" alt="نشان ناوصنعت مس"></span><span>ناوصنعت مس</span></button>'+
  '<span class="ns-header-label">'+esc(label||'آموزش رفتار سازمانی')+'</span>'+
  '<button class="ns-header-home" onclick="goRoute(\'home\')">خانه</button></header>'
 }
