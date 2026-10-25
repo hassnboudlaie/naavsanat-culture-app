@@ -258,3 +258,9 @@ body.ns-simple-route .app{max-width:1250px!important;padding:0 30px 50px!importa
  .ns-full-page .co-cadence{grid-template-columns:1fr}
 }
 @media(prefers-reduced-motion:reduce){body *,body *:before,body *:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
+/* Secondary strategy tools are discoverable without becoming six permanent navigation tabs. */
+.ns-full-page .ns-co-secondary{border-bottom:1px solid #bdc9ba;padding:0 0 15px;margin-top:-7px}
+.ns-full-page .ns-co-secondary summary{font-size:15px;color:#365441;font-weight:850;cursor:pointer}
+.ns-full-page .ns-co-secondary>div{display:flex;flex-wrap:wrap;gap:8px;padding:12px 0 2px}
+.ns-full-page .ns-co-secondary button{min-height:44px;font-size:15px;background:#fff;border:1px solid #bdcebd;border-radius:4px;padding:8px 14px;color:#25563b}
