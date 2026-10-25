@@ -1,0 +1,260 @@
+/* NAAVSANAT GLOBAL DESIGN SYSTEM v13
+ * BetterUp-inspired qualities: editorial scale, ink/paper contrast, deliberate space,
+ * one primary action, accessible tap areas, a single clear path.
+ * Original brand teal + copper are retained; pink is an intentional restrained CTA accent.
+ */
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap');
+:root{
+ --ns13-paper:#f8f7ef;
+ --ns13-ink:#171b17;
+ --ns13-dark:#092c27;
+ --ns13-teal:#145848;
+ --ns13-cta:#c91570;
+ --ns13-cta-hover:#a90c5e;
+ --ns13-white:#fff;
+ --ns13-border:#cfd3c8;
+ --ns13-gray:#4a564b;
+ --ns13-soft:#eef0e6;
+ --ns13-radius:8px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--ns13-paper)!important;color:var(--ns13-ink)!important;font-family:'Vazirmatn','Segoe UI',Tahoma,sans-serif!important;font-size:18px!important;line-height:1.86!important;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font-family:inherit!important}
+body .app{font-family:inherit}
+body.ns-unified-route .dashboard-sidebar,
+body.ns-unified-route .topbar,
+body.ns-unified-route .mobile-nav{display:none!important}
+body.ns-unified-route .app{max-width:1250px!important;width:auto!important;margin:0 auto!important;padding:0 30px 50px!important;min-height:100vh}
+body.ns-simple-route .app{max-width:1250px!important;padding:0 30px 50px!important}
+.ns-full-page{direction:rtl;text-align:right;font-family:inherit}
+.ns-full-page .ns-header{margin-bottom:38px}
+.ns-full-page .ns-page-foot{margin-top:55px}
+.ns-full-content{max-width:1170px}
+.ns-full-content>.fade>.footer,.ns-full-content .co-app>.footer{display:none!important}
+.ns-simple button,.ns-full-page button,.ns-simple a,.ns-full-page a{transition:background .16s,border-color .16s}
+.ns-simple button:focus-visible,.ns-full-page button:focus-visible,.ns-full-page a:focus-visible,.ns-full-page summary:focus-visible{outline:3px solid #d81677;outline-offset:3px}
+.ns-simple .ns-overline,.ns-full-page .ns-overline{font-size:15px!important;color:#715c43;font-weight:850}
+.ns-simple .ns-page-foot,.ns-full-page .ns-page-foot{font-size:13px!important;color:#667066}
+.ns-simple .ns-header,.ns-full-page .ns-header{border-color:#aab2a8;margin-bottom:38px}
+.ns-simple .ns-wordmark,.ns-full-page .ns-wordmark{font-size:25px!important;font-weight:900}
+.ns-simple .ns-wordmark .ns-mark,.ns-full-page .ns-wordmark .ns-mark{width:48px;height:48px;flex:0 0 48px}
+.ns-simple .ns-header-home,.ns-full-page .ns-header-home{font-size:16px!important;border-color:#20281f!important;color:#121a14!important;min-height:47px}
+.ns-simple .ns-header-label,.ns-full-page .ns-header-label{color:#313f32!important;font-size:16px!important;font-weight:750}
+.ns-simple .ns-home-intro h1{font-size:clamp(57px,8.3vw,110px)!important;line-height:1.13!important;letter-spacing:-1.5px!important;font-weight:900!important}
+.ns-simple .ns-home-intro>p{font-size:clamp(23px,2.5vw,31px)!important;color:#303b32!important}
+.ns-simple .ns-home-tracks{border-color:#22291f}
+.ns-simple .ns-track{min-height:138px!important}
+.ns-simple .ns-track-text strong{font-size:clamp(31px,3.4vw,43px)!important;font-weight:900!important;color:#121712!important}
+.ns-simple .ns-track-text small{font-size:19px!important;color:#455047!important}
+.ns-simple .ns-track-arrow{color:var(--ns13-cta)!important;font-size:40px!important}
+.ns-simple .ns-track:hover,.ns-simple .ns-case-row:hover{background:#ebece1!important}
+.ns-simple .ns-role-intro h1{font-size:clamp(48px,6.1vw,82px)!important;line-height:1.24!important;color:var(--ns13-ink)!important;font-weight:900!important}
+.ns-simple .ns-role-intro p{font-size:clamp(21px,2.45vw,29px)!important;color:#354238!important}
+.ns-simple .ns-start{background:var(--ns13-dark)!important;border-radius:3px!important;margin-bottom:54px!important}
+.ns-simple .ns-start>span{font-size:16px!important;color:#e0c0a2!important}
+.ns-simple .ns-start h2{font-size:clamp(31px,3.6vw,47px)!important}
+.ns-simple .ns-start p{font-size:19px!important;color:#e1eae2!important}
+.ns-simple .ns-primary,.ns-full-page .ns-primary{background:var(--ns13-cta)!important;border:1px solid var(--ns13-cta)!important;color:#fff!important;border-radius:100px!important;min-height:54px!important;padding:12px 27px!important;font-size:17px!important;font-weight:900!important;line-height:1.5!important;box-shadow:none!important;text-decoration:none!important}
+.ns-simple .ns-primary:hover,.ns-full-page .ns-primary:hover{background:var(--ns13-cta-hover)!important;border-color:var(--ns13-cta-hover)!important;color:#fff!important}
+.ns-simple .ns-cases-title h2{font-size:clamp(39px,4.7vw,57px)!important;font-weight:900!important}
+.ns-simple .ns-case-group h3{font-size:25px!important;color:#303f33!important}
+.ns-simple .ns-case-row{min-height:109px!important;border-color:#c9cec3!important}
+.ns-simple .ns-case-info b{font-size:clamp(21px,2.2vw,27px)!important;color:#121b15!important}
+.ns-simple .ns-case-info small{font-size:16px!important;color:#415044!important}
+.ns-simple .ns-case-n{font-size:18px!important}
+.ns-simple .ns-cases-note{font-size:18px!important;color:#435145!important}
+.ns-simple .ns-case-heading h1{font-size:clamp(46px,6.5vw,81px)!important;font-weight:900!important}
+.ns-simple .ns-case-heading p{font-size:clamp(20px,2.35vw,28px)!important;color:#354536!important}
+.ns-simple .ns-reading h2{font-size:clamp(29px,3.4vw,40px)!important}
+.ns-simple .ns-case .decision-line,.ns-simple .ns-case .decision-line:nth-child(2n){font-size:19px!important;color:#1c2e20!important}
+.ns-simple .ns-case .decision-choice{font-size:18px!important;border:1px solid #b7c6b9!important;min-height:76px!important}
+.ns-simple .ns-case .decision-feedback{font-size:18px!important}
+.ns-simple .ns-case .decision-feedback p{font-size:18px!important}
+.ns-simple .ns-lesson-sheet h1{font-size:clamp(43px,5.5vw,76px)!important}
+.ns-simple .ns-lesson-lead{font-size:clamp(20px,2.5vw,27px)!important}
+.ns-simple .ns-chat p,.ns-simple .ns-feedback p{font-size:19px!important}
+.ns-simple .ns-choices button{font-size:18px!important;min-height:79px!important}
+.ns-simple .ns-label{font-size:19px!important}
+.ns-simple .ns-pagination button:not(.ns-primary){font-size:16px!important}
+/* Shared reading flow for sessions */
+.ns-inline-back{background:none;border:0;padding:9px 0;color:var(--ns13-teal);font-size:17px;font-weight:800;text-align:right}
+.ns-inline-back:hover{text-decoration:underline}
+.ns-session{max-width:1000px}
+.ns-session-head{padding:29px 0 38px;border-bottom:2px solid #202a20}
+.ns-session-head h1{font-size:clamp(46px,6.4vw,80px);line-height:1.33;margin:10px 0 16px;font-weight:900;color:var(--ns13-ink)}
+.ns-session-head p{font-size:clamp(20px,2.2vw,27px);color:#435146;line-height:1.8;margin:0;max-width:890px}
+.ns-session-goal{padding:31px 0 35px;max-width:850px}
+.ns-session-goal>span{font-size:16px;font-weight:850;color:var(--ns13-teal)}
+.ns-session-goal h2{font-size:clamp(23px,3vw,35px);font-weight:850;line-height:1.7;margin:9px 0;color:#223327}
+.ns-session-list{margin:10px 0 40px}
+.ns-session-list>h2{font-size:clamp(32px,4vw,51px);font-weight:900;margin:0 0 7px;color:var(--ns13-ink)}
+.ns-session-list>p{font-size:18px;color:#47584b;margin:0 0 25px}
+.ns-session-case-list{border-top:2px solid #252e25}
+.ns-session-case{background:transparent;color:var(--ns13-ink);border:0;border-bottom:1px solid #cbd1c7;padding:18px 10px;display:flex;gap:22px;align-items:center;text-align:right;width:100%;min-height:112px}
+.ns-session-case:hover{background:#eceee4}
+.ns-session-index{font-size:18px;font-weight:850;color:#59685c;width:39px;text-align:center;flex:0 0 39px}
+.ns-session-case>span:nth-child(2){flex:1;min-width:0}
+.ns-session-case b{display:block;font-size:clamp(21px,2.4vw,28px);font-weight:900;color:#141c16}
+.ns-session-case small{display:block;font-size:16px;color:#435448;line-height:1.8}
+.ns-session-case>strong{font-size:28px;color:var(--ns13-cta);font-weight:750}
+.ns-session-extra,.ns-deep-more{max-width:950px;margin:33px 0;border-top:1px solid #c7cec4;border-bottom:1px solid #c7cec4;padding:18px 0}
+.ns-session-extra summary,.ns-deep-more summary{font-size:18px;font-weight:850;color:#274a33;cursor:pointer}
+.ns-session-extra li,.ns-session-extra p,.ns-deep-more p{font-size:17px;line-height:2}
+.ns-session-end{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;margin:45px 0}
+/* Deep six-part case reading: no heavy six-button menu by default */
+.ns-deep-case{max-width:1000px}
+.ns-deep-heading{padding:30px 0 35px;border-bottom:2px solid #252b24}
+.ns-deep-heading h1{font-size:clamp(43px,6vw,76px);line-height:1.38;color:var(--ns13-ink);font-weight:900;margin:12px 0}
+.ns-deep-heading p{font-size:clamp(20px,2vw,25px);color:#435145;line-height:1.8}
+.ns-deep-progress{margin:29px 0 37px;max-width:860px}
+.ns-deep-step{display:flex;justify-content:space-between;align-items:center;gap:20px;font-size:15px;color:#435547;margin-bottom:12px}
+.ns-deep-step strong{font-size:17px;color:#1c3828}
+.ns-deep-track{width:100%;height:7px;border-radius:50px;background:#d8e0d4;overflow:hidden}
+.ns-deep-track i{display:block;height:100%;background:var(--ns13-teal);border-radius:50px}
+.ns-deep-reading{padding:0;max-width:910px;font-size:18px;line-height:2}
+.ns-deep-reading>h2{font-size:clamp(34px,4vw,47px);color:var(--ns13-ink);margin:0 0 24px;font-weight:900}
+.ns-deep-reading p,.ns-deep-reading li{font-size:18px;line-height:2.03;color:#28392e}
+.ns-deep-reading h3{font-size:clamp(22px,2.3vw,29px);font-weight:900;color:#1c3725}
+.ns-deep-reading blockquote{margin:20px 0;padding:22px 26px;border-right:5px solid var(--ns13-teal);background:#e7eee5;font-size:24px;line-height:1.9;color:#1c3a29}
+.ns-deep-reading .decision-lab,.ns-deep-reading .roleplay-form{background:transparent;border:0;box-shadow:none;border-radius:0;padding:0}
+.ns-deep-reading .decision-choice{font-size:18px!important;padding:18px!important;border:1px solid #bfccc0!important;background:#fff!important;border-radius:5px!important;min-height:74px}
+.ns-deep-reading .decision-line{font-size:18px!important;line-height:2}
+.ns-deep-reading .decision-feedback{background:#e6efe6;border-right:5px solid var(--ns13-teal);border-radius:4px;padding:20px!important}
+.ns-deep-reading .key-takeaway{background:#e5ede3!important;color:#193b29!important;font-size:21px;padding:20px;border-right:5px solid var(--ns13-teal)}
+.ns-deep-reading :is(input,textarea,select){font-size:18px;border:1px solid #a9baaa;background:#fff;border-radius:5px}
+.ns-deep-reading details summary{font-size:18px;font-weight:900;color:#21533a;cursor:pointer}
+.ns-deep-actions{max-width:900px;display:flex;align-items:center;justify-content:space-between;gap:15px;margin:42px 0 24px;padding-top:21px;border-top:1px solid #bfcabe}
+.ns-light-action{border:1px solid #9fae9e;background:transparent;color:#294735;border-radius:50px;min-height:50px;padding:10px 20px;font-size:17px;font-weight:800}
+.ns-light-action:hover{background:#e9efe7}
+.ns-deep-jump{display:grid;gap:7px;padding:14px 0}
+.ns-deep-jump button{min-height:43px;border:0;border-bottom:1px solid #d4ddd2;background:none;text-align:right;color:#315f44;padding:9px;font-size:16px}
+.ns-deep-jump button.active{font-weight:900;color:#0c3d27;background:#e8eee4}
+.ns-deep-home{margin:35px 0}
+.ns-deep-home button{background:none;border:0;color:#235e41;text-decoration:underline;text-underline-offset:4px;font-size:16px}
+/* About page: override old gray, blue cards and shrink secondary cues */
+.ns-full-page .page-hero{background:transparent!important;border:0!important;box-shadow:none!important;color:var(--ns13-ink)!important;padding:10px 0 30px!important;border-bottom:2px solid #27302a!important;border-radius:0!important}
+.ns-full-page .page-hero h1{color:var(--ns13-ink)!important;font-size:clamp(45px,6.2vw,77px)!important;line-height:1.35!important;font-weight:900!important;max-width:1000px}
+.ns-full-page .page-hero p{font-size:clamp(19px,2.3vw,27px)!important;color:#384a3b!important;line-height:1.8!important}
+.ns-full-page .breadcrumb{font-size:15px!important;color:#465b4d!important}
+.ns-full-page .breadcrumb button{font-size:15px!important;color:var(--ns13-teal)!important}
+.ns-full-page .content-card{background:transparent!important;box-shadow:none!important;border:0!important;border-bottom:1px solid #cbd2c6!important;border-radius:0!important;padding:31px 0!important;margin:0!important;max-width:960px!important}
+.ns-full-page .content-card h2{font-size:clamp(29px,3.7vw,43px)!important;line-height:1.5!important;color:var(--ns13-ink)!important;font-weight:900!important}
+.ns-full-page .content-card :is(p,li){font-size:18px!important;line-height:2!important;color:#334334!important}
+.ns-full-page .content-card .source-link{font-size:16px!important;color:#0f5840!important;text-decoration:underline}
+/* OKR: give same warm/ink hierarchy rather than tiny product UI text */
+.ns-full-page .co-app{color:var(--ns13-ink)!important;max-width:1100px!important;font-size:18px!important;line-height:1.85}
+.ns-full-page .co-hero{background:var(--ns13-dark)!important;border:0!important;box-shadow:none!important;border-radius:3px!important;padding:43px 40px!important;min-height:240px!important}
+.ns-full-page .co-hero h1{font-size:clamp(39px,5vw,62px)!important;font-weight:900!important;line-height:1.35!important;color:white!important}
+.ns-full-page .co-hero p{font-size:clamp(19px,2vw,25px)!important;line-height:1.8!important;color:#e7f0e7!important}
+.ns-full-page .co-eyebrow{color:#d6b68c!important;font-size:15px!important}
+.ns-full-page .co-badges .co-pill{font-size:13px!important;color:white!important}
+.ns-full-page .co-notice,.ns-full-page .co-guard{background:#eeefe3!important;border:0!important;border-right:4px solid #1b6247!important;border-radius:3px!important;color:#24382c!important;font-size:16px!important;line-height:1.95!important}
+.ns-full-page .co-tabs{background:var(--ns13-paper)!important;border-bottom:1px solid #a9b7a7;box-shadow:none!important;top:0!important;overflow-x:auto;padding:13px 0 18px!important}
+.ns-full-page .co-tabs button{background:transparent!important;color:#314538!important;border:0!important;border-radius:0!important;box-shadow:none!important;font-size:17px!important;font-weight:800!important;min-height:50px}
+.ns-full-page .co-tabs button.active{border-bottom:4px solid var(--ns13-cta)!important;color:var(--ns13-ink)!important}
+.ns-full-page .co-section{margin:43px 0!important}
+.ns-full-page .co-heading{margin-bottom:22px!important}
+.ns-full-page .co-heading h2{font-size:clamp(31px,3.8vw,47px)!important;color:var(--ns13-ink)!important;line-height:1.43!important;font-weight:900!important}
+.ns-full-page .co-heading p,.ns-full-page .co-description{font-size:18px!important;line-height:1.9!important;color:#415142!important}
+.ns-full-page .co-pillar,.ns-full-page .co-objective,.ns-full-page .co-kpi,.ns-full-page .co-phase,
+.ns-full-page .co-evidence article,.ns-full-page .co-initiative,.ns-full-page .co-simple-example,
+.ns-full-page .co-simple-journey>div,.ns-full-page .co-start,
+.ns-full-page .co-deeper,.ns-full-page .co-glossary,
+.ns-full-page .co-case-item,.ns-full-page .co-simple-pillar{border:1px solid #cbd5c9!important;border-radius:5px!important;box-shadow:none!important;background:var(--ns13-white)!important}
+.ns-full-page .co-simple-journey>div{min-height:160px}
+.ns-full-page .co-simple-journey b{font-size:clamp(22px,2.4vw,29px)!important;line-height:1.6;color:#153825!important}
+.ns-full-page .co-simple-journey p,.ns-full-page .co-simple-pillar p,.ns-full-page .co-example-row p{font-size:16px!important;color:#3d4d41!important}
+.ns-full-page .co-example-row b{font-size:18px!important}
+.ns-full-page .co-role-picker button{font-size:16px!important;border-radius:4px!important;background:#eef0e9!important;color:#234533!important;min-height:48px!important}
+.ns-full-page .co-role-picker button.active{background:var(--ns13-teal)!important;color:#fff!important}
+.ns-full-page .co-habit-item label{font-size:17px!important}
+.ns-full-page .co-habit-item button{font-size:15px!important}
+.ns-full-page .co-simple-pillar summary b{font-size:19px!important;font-weight:900!important}
+.ns-full-page .co-simple-pillar summary small{font-size:13px!important;color:#667567!important}
+.ns-full-page .co-goal-slim h3{font-size:clamp(25px,3vw,34px)!important;color:#153320!important;font-weight:900!important}
+.ns-full-page .co-goal-details>summary,.ns-full-page .co-deeper>summary,.ns-full-page .co-glossary>summary{font-size:17px!important;color:#17563c!important}
+.ns-full-page .co-objective-top span,.ns-full-page .co-owner,.ns-full-page .co-measure,.ns-full-page .co-no-data,.ns-full-page .co-kpi-head,
+.ns-full-page .co-kpi-value span,.ns-full-page .co-initiative small,.ns-full-page .co-phase-head small,.ns-full-page .co-northmetric p{font-size:15px!important}
+.ns-full-page .co-kpi h3,.ns-full-page .co-phase-head b{font-size:20px!important;color:#152f1c!important;font-weight:900!important}
+.ns-full-page .co-kpi-value b{font-size:clamp(28px,3.4vw,42px)!important;color:#164f37!important}
+.ns-full-page .co-kpi-def,.ns-full-page .co-phase>p,.ns-full-page .co-phase li,.ns-full-page .co-cadence p,.ns-full-page .co-evidence p,.ns-full-page .co-role-buttons button,.ns-full-page .co-case-item small{font-size:16px!important;line-height:1.9!important;color:#3a4a3e!important}
+.ns-full-page .co-data-form label,.ns-full-page .co-check label{font-size:17px!important}
+.ns-full-page .co-data-form input,.ns-full-page .co-check input,.ns-full-page .co-check select,.ns-full-page .co-check textarea{font-size:17px!important}
+.ns-full-page .co-primary{background:var(--ns13-cta)!important;color:white!important;border:0!important;border-radius:90px!important;padding:13px 25px!important;font-size:17px!important;min-height:51px}
+.ns-full-page .co-secondary{border:1px solid var(--ns13-teal)!important;color:var(--ns13-teal)!important;border-radius:90px!important;font-size:16px!important}
+.ns-full-page .co-source-list a{font-size:16px!important}
+.ns-full-page .co-foot{font-size:12px!important}
+.ns-full-page .co-case-links button,.ns-full-page .co-role-buttons button{font-size:15px!important;min-height:43px}
+/* Shared real controls */
+.ns-full-page details>summary{cursor:pointer}
+.ns-full-page .worksheet{background:#fff;border:1px solid #cbd4ca;border-radius:5px;padding:20px}
+.ns-full-page .worksheet label{font-size:17px}
+.ns-full-page .worksheet input,.ns-full-page .worksheet textarea{font-size:17px;border-radius:4px;border:1px solid #afbdad}
+.ns-full-page .worksheet button,.ns-full-page .btn-copper{font-size:16px;background:var(--ns13-teal)!important;color:#fff!important;border-radius:70px;border:0;padding:11px 22px}
+@media(max-width:900px){
+ .ns-full-page .co-pillar-grid,.ns-full-page .co-metrics-grid,.ns-full-page .co-phase-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .ns-full-page .co-cadence{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px){
+ body.ns-simple-route .app,body.ns-unified-route .app{padding:0 20px 36px!important}
+ body{font-size:17px!important}
+ .ns-simple .ns-header,.ns-full-page .ns-header{padding:13px 0 17px!important;margin-bottom:28px!important}
+ .ns-simple .ns-wordmark,.ns-full-page .ns-wordmark{font-size:19px!important}
+ .ns-simple .ns-wordmark .ns-mark,.ns-full-page .ns-wordmark .ns-mark{width:39px!important;height:39px!important;flex:0 0 39px!important}
+ .ns-simple .ns-header-home,.ns-full-page .ns-header-home{font-size:14px!important;min-height:43px!important;padding:6px 14px!important}
+ .ns-simple .ns-home-intro h1{font-size:clamp(49px,11vw,70px)!important;letter-spacing:0!important}
+ .ns-simple .ns-home-intro>p{font-size:21px!important}
+ .ns-simple .ns-track{min-height:103px!important}
+ .ns-simple .ns-track-text strong{font-size:26px!important}
+ .ns-simple .ns-track-text small{font-size:15px!important}
+ .ns-simple .ns-track-arrow{font-size:27px!important}
+ .ns-simple .ns-role-intro h1{font-size:clamp(40px,9.5vw,56px)!important}
+ .ns-simple .ns-role-intro p{font-size:19px!important}
+ .ns-simple .ns-start{padding:26px 21px!important}
+ .ns-simple .ns-start h2{font-size:30px!important}
+ .ns-simple .ns-start p{font-size:17px!important}
+ .ns-simple .ns-cases-title h2{font-size:35px!important}
+ .ns-simple .ns-case-group h3{font-size:21px!important}
+ .ns-simple .ns-case-row{min-height:91px!important}
+ .ns-simple .ns-case-info b{font-size:20px!important}
+ .ns-simple .ns-case-info small{font-size:14px!important}
+ .ns-simple .ns-case-heading h1{font-size:clamp(38px,9vw,58px)!important}
+ .ns-simple .ns-case-heading p{font-size:18px!important}
+ .ns-simple .ns-reading h2{font-size:29px!important}
+ .ns-simple .ns-case .decision-line,.ns-simple .ns-case .decision-line:nth-child(2n){font-size:17px!important}
+ .ns-simple .ns-case .decision-choice{font-size:16px!important;min-height:68px!important}
+ .ns-simple .ns-lesson-sheet h1{font-size:clamp(38px,9vw,57px)!important}
+ .ns-simple .ns-chat p{font-size:17px!important}
+ .ns-simple .ns-choices button{font-size:16px!important}
+ .ns-session-head{padding:10px 0 29px}
+ .ns-session-head h1,.ns-deep-heading h1{font-size:clamp(41px,9vw,60px)!important}
+ .ns-session-head p,.ns-deep-heading p{font-size:19px!important}
+ .ns-session-goal h2{font-size:25px!important}
+ .ns-session-list>h2,.ns-deep-reading>h2{font-size:33px!important}
+ .ns-session-case{min-height:102px;padding:13px 4px;gap:12px}
+ .ns-session-index{flex:0 0 28px;width:28px;font-size:15px}
+ .ns-session-case b{font-size:20px}
+ .ns-session-case small{font-size:15px}
+ .ns-deep-reading p,.ns-deep-reading li{font-size:17px}
+ .ns-deep-reading .decision-line{font-size:17px!important}
+ .ns-deep-reading .decision-choice{font-size:16px!important;min-height:68px}
+ .ns-full-page .page-hero h1{font-size:42px!important}
+ .ns-full-page .content-card h2{font-size:31px!important}
+ .ns-full-page .content-card :is(p,li){font-size:17px!important}
+ .ns-full-page .co-hero{min-height:0!important;padding:28px 20px!important;border-radius:3px!important}
+ .ns-full-page .co-hero h1{font-size:clamp(36px,9vw,48px)!important}
+ .ns-full-page .co-hero p{font-size:18px!important}
+ .ns-full-page .co-tabs button{font-size:15px!important;min-height:47px}
+ .ns-full-page .co-heading h2{font-size:32px!important}
+ .ns-full-page .co-pillar-grid,.ns-full-page .co-metrics-grid,.ns-full-page .co-phase-grid,.ns-full-page .co-evidence{grid-template-columns:1fr!important}
+ .ns-full-page .co-simple-journey b{font-size:22px!important}
+ .ns-full-page .co-goal-slim h3{font-size:25px!important}
+ .ns-full-page .co-kpi-value b{font-size:30px!important}
+}
+@media(max-width:380px){
+ body.ns-simple-route .app,body.ns-unified-route .app{padding:0 15px 32px!important}
+ .ns-simple .ns-home-intro h1{font-size:45px!important}
+ .ns-session-head h1,.ns-deep-heading h1{font-size:38px!important}
+ .ns-full-page .co-cadence{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){body *,body *:before,body *:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
