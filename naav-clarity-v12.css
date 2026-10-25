@@ -1,0 +1,165 @@
+/* CLARITY V12 — restrained editorial visual system.
+   One strong action, clear hierarchy, large typography, high contrast, legible on phones.
+   Scoped to the simple entry routes; original deep curriculum stays available. */
+:root{--ns-paper:#f8f7ed;--ns-ink:#171b18;--ns-teal:#104f43;--ns-line:#d9dacf;--ns-gray:#58645e}
+body.ns-simple-route{background:var(--ns-paper)!important}
+body.ns-simple-route>.dashboard-sidebar,body.ns-simple-route>.topbar,body.ns-simple-route>.mobile-nav{display:none!important}
+body.ns-simple-route .app{width:100%!important;max-width:1240px!important;margin:0 auto!important;padding:0 30px 40px!important;min-height:100vh!important}
+.ns-simple{direction:rtl;text-align:right;color:var(--ns-ink);font-family:'Vazirmatn',Tahoma,'Segoe UI',sans-serif;font-size:18px;line-height:1.8}
+.ns-simple *{box-sizing:border-box}
+.ns-simple button{font:inherit;cursor:pointer}
+.ns-simple button:focus-visible,.ns-simple summary:focus-visible{outline:3px solid #b77d50;outline-offset:3px}
+.ns-header{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:20px 0 22px;border-bottom:1px solid #262b2322;margin:0 0 44px}
+.ns-wordmark{display:flex;align-items:center;gap:10px;border:none;background:transparent;color:#111914;padding:0;font-size:22px;font-weight:950;white-space:nowrap}
+.ns-mark{width:43px;height:43px;display:grid;place-items:center;background:#114b41;color:white;font-size:22px;font-weight:900;border-radius:50%}
+.ns-header-label{flex:1;text-align:center;font-size:15px;color:#5e6a62}
+.ns-header-home{background:transparent;border:1px solid #a4b0a6;color:#213e36;border-radius:999px;padding:7px 18px;font-size:14px;font-weight:850;min-height:43px}
+.ns-header-home:hover{background:#e9eee4}
+.ns-overline{color:#826a4a;font-size:13px;font-weight:850;letter-spacing:.2px;display:block}
+.ns-home-intro{padding:23px 0 37px;max-width:1000px}
+.ns-home-intro h1{font-size:clamp(48px,7vw,97px);line-height:1.17;color:#141b16;letter-spacing:-1.5px;font-weight:950;margin:12px 0 24px}
+.ns-home-intro h1 span{color:#166251}
+.ns-home-intro>p{font-size:clamp(20px,2.1vw,28px);line-height:1.7;color:#3f4d45;max-width:750px}
+.ns-home-tracks{border-top:2px solid #1b2520;border-bottom:2px solid #1b2520}
+.ns-track{display:flex;align-items:center;gap:24px;width:100%;text-align:right;border:0;border-bottom:1px solid #d7d9cc;background:transparent;min-height:121px;padding:16px 12px;color:#141b17}
+.ns-track:last-child{border-bottom:0}
+.ns-track:hover,.ns-track:focus-visible{background:#eff1e6}
+.ns-track-icon{font-size:18px;font-weight:900;color:#69766a;flex:0 0 52px;direction:ltr;text-align:center}
+.ns-track-text{flex:1;display:flex;flex-direction:column;gap:2px}
+.ns-track-text strong{font-size:clamp(26px,3vw,36px);font-weight:950;line-height:1.45;color:#121915}
+.ns-track-text small{font-size:17px;line-height:1.7;color:#536057}
+.ns-track-arrow,.ns-arrow{font-size:32px;color:#0c584a;font-weight:500;flex:0 0 auto}
+.ns-home-secondary{padding:25px 0 9px}
+.ns-home-secondary button{color:#2c6658;background:transparent;border:0;padding:4px 0;text-align:right;font-size:16px;text-decoration:underline;text-underline-offset:5px}
+.ns-home-secondary span{padding-right:9px}
+.ns-page-foot{margin:40px 0 20px;padding-top:20px;border-top:1px solid #d3d8cc;color:#707c70;font-size:12px}
+/* Role pages */
+.ns-role-intro{margin:0 0 34px;max-width:1000px}
+.ns-role-intro h1{font-size:clamp(39px,5.2vw,69px);font-weight:950;letter-spacing:-.5px;line-height:1.3;margin:14px 0 16px;color:#171c19}
+.ns-role-intro p{font-size:clamp(19px,2vw,25px);color:#506157;line-height:1.8;margin:0}
+.ns-start{background:#134c40;color:#fff;padding:clamp(23px,3vw,39px);border-radius:3px;margin:20px 0 50px;max-width:100%;display:flex;flex-direction:column;align-items:flex-start;position:relative;overflow:hidden}
+.ns-start:after{content:'';position:absolute;width:350px;height:350px;left:-150px;top:-120px;border:1px solid #ffffff26;border-radius:50%;pointer-events:none}
+.ns-start>span{color:#f0d9a8;font-size:15px;font-weight:900}
+.ns-start h2{font-size:clamp(29px,3.1vw,43px);color:white;font-weight:900;line-height:1.5;margin:10px 0 6px}
+.ns-start p{font-size:17px;color:#e1eae4;line-height:1.9;max-width:720px;margin:5px 0 22px}
+.ns-primary{background:#e8e8ce!important;color:#113c33!important;border:1px solid #e8e8ce!important;border-radius:100px!important;font-weight:950!important;min-height:52px!important;padding:11px 25px!important;box-shadow:none!important;font-size:17px!important;white-space:normal;text-align:center}
+.ns-primary:hover{background:#fff5d9!important}
+.ns-cases{scroll-margin-top:25px}
+.ns-cases-title{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;padding:6px 0 16px;border-bottom:2px solid #181c18}
+.ns-cases-title span{font-size:14px;color:#657269;font-weight:800}
+.ns-cases-title h2{font-size:clamp(33px,4vw,50px);margin:6px 0 0;color:#111812;font-weight:950}
+.ns-cases-title>strong{font-size:15px;font-weight:850;white-space:nowrap;color:#3d584c}
+.ns-cases-note{font-size:16px;color:#56655b;line-height:1.9;margin:13px 0 38px}
+.ns-case-group{margin-bottom:34px}
+.ns-case-group h3{font-size:19px;color:#475e4f;font-weight:850;margin:0 0 12px}
+.ns-case-rows{border-top:1px solid #d8dacd}
+.ns-case-row{display:flex;align-items:center;gap:18px;width:100%;min-height:92px;text-align:right;border:0;border-bottom:1px solid #d8dacd;background:transparent;color:#111a15;padding:14px 7px}
+.ns-case-row:hover,.ns-case-row:focus-visible{background:#f0f0e2}
+.ns-case-n{flex:0 0 40px;color:#627367;font-size:17px;text-align:center;font-weight:900}
+.ns-case-info{flex:1;min-width:0;display:flex;flex-direction:column}
+.ns-case-info b{font-size:clamp(18px,1.9vw,23px);font-weight:900;line-height:1.6;color:#172019}
+.ns-case-info small{font-size:14px;color:#5c6b5e;line-height:1.7}
+.ns-case-row .ns-arrow{font-size:25px}
+.ns-resources{border-top:1px solid #cbd3c7;border-bottom:1px solid #cbd3c7;padding:18px 0;margin:38px 0}
+.ns-resources summary{font-size:16px;color:#3b5848;font-weight:900;cursor:pointer}
+.ns-resources>p{font-size:15px;color:#54685b;margin:14px 0}
+.ns-resources button{display:block;text-align:right;width:100%;padding:12px 10px;border:none;border-bottom:1px solid #e1e5dc;background:transparent;color:#265c4b;font-size:15px}
+.ns-resources button:hover{background:#eff1e8}
+.ns-resources[open]{padding-bottom:12px}
+/* Focused case */
+.ns-case-top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:-11px 0 33px;font-size:14px;color:#617063}
+.ns-back{padding:0;background:none;border:0;color:#2d6753;text-decoration:underline;text-underline-offset:4px;font-size:15px}
+.ns-case-heading{max-width:890px;border-bottom:2px solid #1c251e;padding:0 0 21px}
+.ns-case-heading h1{font-size:clamp(39px,5.4vw,70px);font-weight:950;line-height:1.35;margin:0 0 11px;color:#101812}
+.ns-case-heading p{font-size:clamp(18px,2.1vw,23px);color:#4b6053;line-height:1.8;margin:0}
+.ns-case-content{max-width:950px;padding-top:24px}
+.ns-reading h2{font-size:clamp(27px,3vw,37px);color:#14261c;margin:0 0 18px;font-weight:950}
+.ns-case .decision-lab{background:transparent!important;border:0!important;box-shadow:none!important;border-radius:0!important;padding:0!important;margin:0!important}
+.ns-case .decision-kicker{display:none}
+.ns-case .decision-lab h3{font-size:clamp(22px,2.4vw,29px)!important;font-weight:800;color:#192c20;line-height:1.8;margin:8px 0 19px}
+.ns-case .decision-dialogue{display:grid;gap:0!important;margin-bottom:28px!important}
+.ns-case .decision-line,.ns-case .decision-line:nth-child(2n){border:0!important;border-bottom:1px solid #d1d8ca!important;margin:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;padding:14px 3px!important;font-size:17px!important;line-height:2}
+.ns-case .decision-line strong{font-size:15px;color:#195441;display:block;font-weight:950}
+.ns-case .decision-question{margin:18px 0!important;font-size:clamp(21px,2.4vw,27px)!important;font-weight:950!important;color:#142b1d!important}
+.ns-case .decision-choices{display:grid;gap:10px!important}
+.ns-case .decision-choice{width:100%;text-align:right;background:white!important;min-height:66px!important;border:1px solid #c9d2c8!important;border-radius:7px!important;box-shadow:none!important;padding:14px!important;color:#15271b!important;font-size:17px!important;font-weight:650!important;line-height:1.8}
+.ns-case .decision-choice.selected{background:#dcebe2!important;border:2px solid #155a44!important}
+.ns-case .decision-choice:hover{border-color:#145c45!important}
+.ns-case .choice-index{flex:0 0 30px}
+.ns-case .decision-feedback{background:#e6ede2!important;border:0!important;border-right:5px solid #175c44!important;border-radius:5px!important;padding:18px 22px!important;color:#172d21!important;margin-top:25px}
+.ns-case .decision-feedback h4{font-size:22px!important;color:#183e2c!important}
+.ns-case .decision-feedback p{font-size:17px!important;color:#264a33!important;line-height:1.9!important}
+.ns-case .decision-next{border-top:1px solid #c9d9ca;margin-top:14px;padding-top:12px;font-size:16px}
+.ns-pagination{max-width:950px;display:flex;justify-content:space-between;gap:12px;align-items:center;padding:20px 0;border-top:1px solid #d0d7ca;margin:30px 0}
+.ns-pagination>button:not(.ns-primary){border:none;background:none;color:#426657;font-size:15px;font-weight:850;padding:12px 0}
+.ns-pagination>button:not(.ns-primary):hover{text-decoration:underline}
+.ns-lesson-progress{max-width:800px;display:flex;align-items:center;gap:18px;color:#4a6754;font-size:15px;margin:0 0 28px}
+.ns-lesson-progress>div{height:6px;background:#d4ddd2;flex:1;overflow:hidden;border-radius:100px}
+.ns-lesson-progress i{height:100%;display:block;background:#15634c;transition:width .2s}
+.ns-lesson-sheet{max-width:890px;min-height:370px;padding:0 0 20px}
+.ns-lesson-sheet h1{font-size:clamp(36px,4.8vw,63px);line-height:1.35;margin:11px 0 24px;color:#101710;font-weight:950}
+.ns-lesson-sheet h2{font-size:clamp(23px,3vw,31px);font-weight:950;line-height:1.6;margin:20px 0}
+.ns-lesson-lead{font-size:clamp(20px,2.2vw,25px);color:#405648;line-height:1.95;max-width:800px}
+.ns-lesson-key{margin:25px 0;padding:19px 23px;background:#e2ebe1;border-right:5px solid #165e45;color:#213d2b;font-size:19px;line-height:1.9}
+.ns-lesson-key b{display:block;margin-bottom:3px}
+.ns-lesson-key p{margin:4px 0}
+.ns-lesson-sheet>.ns-primary{margin-top:20px}
+.ns-chat{display:grid;gap:0;margin:25px 0}
+.ns-chat>div{border-bottom:1px solid #cfd6cd;padding:14px 0}
+.ns-chat b{display:block;font-size:15px;color:#27624d}
+.ns-chat p{font-size:18px;line-height:1.95;margin:6px 0}
+.ns-choices{display:grid;gap:10px;margin:23px 0}
+.ns-choices button{display:flex;gap:14px;align-items:center;text-align:right;background:#fff;border:1px solid #cbd4ca;padding:16px;font-size:17px;color:#1c2d21;border-radius:7px;min-height:67px}
+.ns-choices button:hover{border-color:#0e6145;background:#eef3ea}
+.ns-choices span{background:#e6ede3;display:grid;place-items:center;border-radius:100px;width:30px;height:30px;flex:0 0 30px;font-weight:900;font-size:14px}
+.ns-choices b{font-weight:750;flex:1}
+.ns-choices i{font-size:20px;font-style:normal;color:#1a6246}
+.ns-feedback{border-right:5px solid #17694c;background:#e2eae1;padding:20px;margin:18px 0 26px}
+.ns-feedback b{font-size:19px;color:#19472f}
+.ns-feedback p{font-size:18px;color:#2c4a35;line-height:1.9}
+.ns-label{display:block;font-size:17px;font-weight:850;margin:25px 0 10px}
+.ns-lesson textarea{width:100%;min-height:130px;padding:15px;border:1px solid #bdcabc;border-radius:6px;background:white;font:inherit;font-size:17px;line-height:1.9;display:block;margin-bottom:20px}
+@media(max-width:760px){
+ body.ns-simple-route .app{padding:0 19px 40px!important}
+ .ns-header{padding:13px 0 17px;margin-bottom:29px}
+ .ns-wordmark{font-size:17px}
+ .ns-mark{width:35px;height:35px;font-size:18px}
+ .ns-header-label{display:none}
+ .ns-header-home{font-size:13px;padding:5px 13px}
+ .ns-home-intro{padding:9px 0 26px}
+ .ns-home-intro h1{font-size:clamp(45px,11.5vw,63px);letter-spacing:0;line-height:1.23;margin:8px 0 14px}
+ .ns-home-intro>p{font-size:20px}
+ .ns-track{min-height:99px;padding:14px 2px;gap:12px}
+ .ns-track-icon{flex:0 0 35px;font-size:13px}
+ .ns-track-text strong{font-size:25px}
+ .ns-track-text small{font-size:14px}
+ .ns-track-arrow{font-size:25px}
+ .ns-role-intro{margin-bottom:25px}
+ .ns-role-intro h1{font-size:clamp(38px,8.5vw,51px)}
+ .ns-role-intro p{font-size:18px}
+ .ns-start{margin:15px 0 38px;padding:23px 20px}
+ .ns-start h2{font-size:28px}
+ .ns-start p{font-size:16px}
+ .ns-cases-title{align-items:end}
+ .ns-cases-title h2{font-size:31px}
+ .ns-cases-title>strong{font-size:13px}
+ .ns-case-row{min-height:81px;gap:10px}
+ .ns-case-n{flex:0 0 27px;font-size:14px}
+ .ns-case-info b{font-size:18px}
+ .ns-case-info small{font-size:13px}
+ .ns-case-row .ns-arrow{font-size:20px}
+ .ns-case-top{margin-top:-8px}
+ .ns-case-heading h1{font-size:clamp(34px,8.4vw,46px)}
+ .ns-case-heading p{font-size:18px}
+ .ns-reading h2{font-size:26px}
+ .ns-case .decision-line,.ns-case .decision-line:nth-child(2n){font-size:16px!important}
+ .ns-case .decision-choice{font-size:15px!important;padding:12px!important}
+ .ns-lesson-sheet h1{font-size:clamp(34px,8.3vw,47px)}
+ .ns-lesson-lead{font-size:19px}
+ .ns-lesson-key{padding:16px;font-size:17px}
+ .ns-chat p{font-size:16px}
+ .ns-choices button{font-size:15px;padding:12px}
+ .ns-pagination{flex-wrap:wrap}
+ .ns-pagination .ns-primary{font-size:14px!important;padding:10px 14px!important}
+}
+@media(prefers-reduced-motion:reduce){.ns-simple *{scroll-behavior:auto!important;transition:none!important}}
