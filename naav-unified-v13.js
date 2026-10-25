@@ -61,3 +61,16 @@ function casePage(gi,ci,role,step){
  '<button onclick="printCase('+id+',\''+role+'\')">چاپ محتوای کیس</button></div></details>'+
  '<div class="ns-deep-home"><button onclick="goRoute(\''+role+'\')">بازگشت به ۱۵ کیس ←</button></div></div>';
 }
+
+
+/* Four primary OKR destinations; advanced tools remain available but never crowd the first view. */
+function coTabs(){
+ var primary=[['map','تصویر کلی'],['okrs','۳ هدف'],['metrics','سنجش'],['roadmap','برنامه اجرا']];
+ var support=[['cases','۱۵ کیس مرتبط'],['sources','راهنما و منابع']];
+ return '<nav class="co-tabs" aria-label="مسیر اصلی تحول">'+primary.map(function(t){
+ return '<button class="'+(cultureTab===t[0]?'active':'')+'" aria-pressed="'+(cultureTab===t[0])+'" onclick="cultureGo(\''+t[0]+'\')">'+coEsc(t[1])+'</button>';
+ }).join('')+'</nav>'+
+ '<details class="ns-co-secondary"><summary>بخش‌های تکمیلی</summary><div>'+support.map(function(t){
+ return '<button onclick="cultureGo(\''+t[0]+'\')">'+coEsc(t[1])+' ←</button>';
+ }).join('')+'</div></details>';
+}
