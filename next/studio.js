@@ -65,6 +65,9 @@ function lesson(r,num){
  '<section class="case-list"><h2>موقعیت‌های این جلسه</h2><div class="case-grid">'+ids.map(function(id){var c=CASES[id-1],d=depth(id);return '<a class="case-tile" href="#/case/'+r+'/'+id+'/0"><span class="tiny-label">کیس '+fa(id)+'</span><strong>'+safe(c.title)+'</strong><p>'+safe(c.concept)+'</p><span class="case-link">بررسی معمای رفتاری ←</span></a>'}).join("")+'</div></section>')+
  '<div class="page-bottom">'+a("track/"+r,"همه جلسات","text-link")+'</div>';
 }
+function caseStages(r,id,step){
+ return '<nav aria-label="مراحل کیس" class="case-steps">'+steps.map(function(s,i){return '<a class="step '+(i===step?"active":"")+'" href="#/case/'+r+'/'+id+'/'+i+'" '+(i===step?'aria-current="step"':'')+'><span>'+fa(i+1)+'</span><strong>'+s+'</strong></a>'}).join("")+'</nav>';
+}
 function scenario(c,v,l){
  var d=depth(c.id);
  return '<div class="content-section"><span class="kicker">موقعیت</span><h2>چه اتفاقی افتاده است؟</h2><div class="situation">'+safe(v.problem)+'</div>'+
