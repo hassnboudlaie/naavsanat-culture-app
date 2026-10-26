@@ -39,8 +39,18 @@ function glossary(r){
  shorthand[r].map(function(x){return '<div class="glossary-item"><bdi dir="ltr" class="glossary-code">'+x[0]+'</bdi><div><strong dir="ltr">'+x[1]+'</strong><span>'+x[2]+'</span></div></div>'}).join("")+
  '</div><p>این اصطلاحات آموزشی‌اند؛ به‌معنای وجود رویه مصوب در ناوصنعت نیستند.</p></details>';
 }
-function saved(k,def){try{var v=JSON.parse(localStorage.getItem(k));return v===null?def:v}catch(e){return def}}
-function store(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function saved(k,def){if(memoryState&&Object.prototype.hasOwnProperty.call(memoryState,k))return memoryState[k];try{var v=JSON.parse(localStorage.getItem(k));return v===null?def:v}catch(e){return def}}
+var memoryState={};
+function store(k,v){memoryState[k]=v;try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}
+function selection(k,count){var n=saved(k,-1);return Number.isInteger(n)&&n>=0&&n<count?n:-1}
+function sessionIndex(r,id){return sessions(r).findIndex(function(s){return s.ids.indexOf(id)>=0})}
+function sessionPath(r,id){var i=sessionIndex(r,id);return i<0?"track/"+r:"session/"+r+"/"+i}
+function caseExit(r,id){var i=sessionIndex(r,id),ss=sessions(r),ids=i>=0?ss[i].ids:[],n=ids.indexOf(id);return n>=0&&n<ids.length-1?["case/"+r+"/"+ids[n+1]+"/0","کیس بعدی ←"]:[sessionPath(r,id)+(r==="managers"?"/close":""),r==="managers"?"جمع‌بندی جلسه ←":"بازگشت به جلسه ←"]}
+function decisionNotes(id,i){var f=window.NAAV_MANAGER_FOCUS;return f&&f.decisionNotes&&f.decisionNotes[id-1][i]}
+function noteMarkup(id,i){var n=decisionNotes(id,i);return n?'<dl class="decision-notes"><dt>منطق تصمیم</dt><dd>'+safe(n[0])+'</dd><dt>محدودیت</dt><dd>'+safe(n[1])+'</dd><dt>چه زمانی مناسب است؟</dt><dd>'+safe(n[2])+'</dd></dl>':""}
+function techniqueDebrief(id){var f=window.NAAV_MANAGER_FOCUS,lines=f.dialogues[id-1],labels=f.techniques[id-1];return '<details class="fold"><summary>پس از اجرا: یک گفت‌وگوی ممکن و فنون آن</summary><p>این نمونه، پاسخ واحد یا متن حفظ‌کردنی نیست؛ با اجرای خود مقایسه کنید.</p>'+lines.map(function(t,i){return '<div class="voice"><strong>'+ (i===1?'نقش دوم':'نقش اول')+'</strong><p>«'+safe(t)+'»</p></div>'}).join('')+'<h3>چه رفتاری به گفت‌وگو کمک کرد؟</h3><p><strong>'+safe(labels[0])+'</strong> · در جمله اول، مسئله پیش از قضاوت روشن می‌شود.</p><p><strong>'+safe(labels[1])+'</strong> · جمله پایانی بحث را به تصمیم قابل پیگیری می‌رساند.</p><p>در اجرای شما کدام جمله اثر مشابه داشت؟ کجا هنوز توافق مبهم بود؟</p><p class="science-note">برای شنیدن فعال: بازتاب معنا، سؤال روشن‌کننده و بررسی فهم مشترک؛ منبع تکمیلی: فصل ارتباطات کتاب Managing Human Behavior، ویرایش پنجم.</p></details>'}
+function sessionClosing(r,num){var f=window.NAAV_MANAGER_FOCUS.sessionClose[num];return '<details class="fold session-close" id="session-close"><summary>جمع‌بندی و پیگیری جلسه</summary><h2>'+safe(f[0])+'</h2><p><strong>اقدام مدیریتی:</strong> '+safe(f[1])+'</p><p><strong>معیار مرور بعدی:</strong> '+safe(f[2])+'</p><p>هر مدیر یک اقدام از کیس‌های امروز را انتخاب کند؛ مسئول، موعد و نشانه اجرای آن را روشن بگوید.</p>'+sessions(r)[num].ids.map(function(id){var n=selection(actionKey(r,id),3),v=CASES[id-1].variants[r];return '<div class="session-record"><strong>'+safe(CASES[id-1].title)+'</strong><p>'+safe(n>=0?v.solution[n]:'هنوز اقدامی انتخاب نشده است.')+'</p><p>'+safe(saved(proofKey(r,id),''))+'</p>'+a('case/'+r+'/'+id+'/5','ثبت یا مرور اقدام','text-link')+'</div>'}).join('')+'</details>'}
+
 function safe(s){return String(s==null?"":s).replace(/[&<>"']/g,function(a){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[a]})}
 function rich(s){return safe(s).replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>")}
 function depth(id){return window.NAAV_DEPTH&&window.NAAV_DEPTH[id]||{}}
@@ -65,7 +75,7 @@ function sessions(r){
 }
 function header(p){
  var inner=p[0]!=="home",r=roleOf(p);
- var back=p[0]==="case"?"track/"+r:p[0]==="session"?"track/"+r:"home";
+ var back=p[0]==="case"?sessionPath(r,+p[2]):p[0]==="session"?"track/"+r:"home";
  return '<header class="mast"><div class="mast-inner"><a class="identity" href="#/home"><img src="'+LOGO_DATA+'" alt="نشان ناوصنعت مس"><span><strong>ناوصنعت مس</strong><small>رفتار و فرهنگ سازمانی</small></span></a>'+
  (inner?'<div class="mast-tools">'+a(back,'بازگشت','head-link')+a("home","تغییر گروه","head-link outline")+'</div>':'<span class="mast-caption">یادگیری از تجربه کار</span>')+'</div></header>';
 }
@@ -132,6 +142,7 @@ function lesson(r,num){
  '<section class="question-box"><span>پرسش محوری</span><strong>'+safe(s.topics[0]||"در این موقعیت چه رفتاری اهمیت دارد؟")+'</strong></section>'+
  (anchor.tension?'<div class="session-dilemma"><strong>چالش واقعی این بحث</strong><p>'+rich(anchor.tension)+'</p></div>':''))+
  '<section class="case-list"><h2>موقعیت‌های این جلسه</h2><div class="case-grid">'+ids.map(function(id){var c=CASES[id-1],d=depth(id);return '<a class="case-tile" href="#/case/'+r+'/'+id+'/0">'+caseTopline(id,'کیس '+fa(id))+'<strong>'+safe(c.title)+'</strong><p>'+safe(c.concept)+'</p><span class="case-link">بررسی این موقعیت ←</span></a>'}).join("")+'</div></section>')+
+ (mf?'<p class="session-pacing">برنامه پیشنهادی ۱۲۰ دقیقه‌ای: ۱۰ دقیقه شروع · '+(ids.length===3?'۳ کیس، هرکدام ۳۰ دقیقه':'۲ کیس، هرکدام ۴۵ دقیقه')+' · ۲۰ دقیقه جمع‌بندی و تعهد</p>'+sessionClosing(r,num):'')+
  '<div class="page-bottom">'+a("track/"+r,"همه جلسات","text-link")+'</div>';
 }
 function caseStages(r,id,step){
@@ -149,22 +160,23 @@ function scenario(c,v,l,r){
  '<p class="context-note">این موقعیت، بازسازی آموزشی از مسائل صنعت و سازمان است؛ جزئیات آن گزارش قطعی یک رخداد نیست.</p></section>';
 }
 function decision(c,r,l){
- var chosen=saved(choiceKey(r,c.id),-1);
+ var chosen=selection(choiceKey(r,c.id),l.o.length);
  return '<section class="content-section step-decision"><span class="kicker">گام ۲ · انتخاب</span><h2>'+safe(clearPrompt(r,c.id,1,l.q))+'</h2>'+
  '<div class="choices">'+l.o.map(function(o,i){return '<button type="button" class="pick '+(chosen===i?"chosen":"")+'" data-choice="'+i+'" data-role="'+r+'" data-case="'+c.id+'" aria-pressed="'+(chosen===i)+'"><span class="pick-letter">'+["الف","ب","ج"][i]+'</span><span>'+safe(o[0])+'</span></button>'}).join("")+'</div>'+
  '<div class="choice-status" data-choice-status aria-live="polite">'+(chosen<0?'یک گزینه را انتخاب کنید؛ پیامد آن در گام بعد دیده می‌شود.':'انتخاب ثبت شد: گزینه '+["الف","ب","ج"][chosen]+' · اکنون پیامد آن را ببینید.')+'</div>'+
  (r==="managers"?'<p class="manager-decision-hint">هیچ گزینه‌ای بی‌هزینه نیست؛ سرعت، اختیار، اعتماد و پیامد آن را بسنجید.</p>':'')+'</section>';
 }
 function consequence(c,r,l){
- var chosen=saved(choiceKey(r,c.id),-1),d=depth(c.id);
+ var chosen=selection(choiceKey(r,c.id),l.o.length),d=depth(c.id);
  if(chosen<0)return '<section class="content-section"><span class="kicker">گام ۳ · پیامد</span><h2>ابتدا یک تصمیم بگیریم.</h2><div class="empty-decision"><p>برای دیدن پیامد، از گام «انتخاب» یکی از سه تصمیم را انتخاب کنید.</p>'+a("case/"+r+"/"+c.id+"/1","رفتن به انتخاب ←","primary-btn")+'</div></section>';
  var picked=l.o[chosen];
  return '<section class="content-section step-impact"><span class="kicker">گام ۳ · پیامد</span><h2>این تصمیم چه چیزی را تغییر می‌دهد؟</h2>'+
  '<div class="selected-decision"><small>انتخاب گروه · گزینه '+["الف","ب","ج"][chosen]+'</small><strong>'+safe(picked[0])+'</strong></div>'+
- '<div class="impact-card"><span>پیامد محتمل</span><p>'+safe(picked[1])+'</p></div>'+
+ '<div class="impact-card"><span>مزیت و ریسک احتمالی</span><p>'+safe(picked[1])+'</p></div>'+
+ (r==="managers"?'<details class="fold"><summary>منطق، محدودیت و شرایط اجرای این تصمیم</summary>'+noteMarkup(c.id,chosen)+'</details>':'')+
  '<div class="impact-condition"><strong>نقطه حساس تصمیم</strong><p>'+safe(picked[2])+'</p></div>'+
  '<details class="fold discreet-fold"><summary>اگر مسیر دیگری انتخاب می‌کردیم چه می‌شد؟</summary>'+
- l.o.map(function(o,i){if(i===chosen)return "";return '<div class="alt-path"><strong>گزینه '+["الف","ب","ج"][i]+'</strong><p>'+safe(o[1])+'</p></div>'}).join("")+'</details>'+
+ l.o.map(function(o,i){if(i===chosen)return "";return '<div class="alt-path"><strong>گزینه '+["الف","ب","ج"][i]+'</strong><p>'+safe(o[0])+'</p><p>'+safe(o[1])+'</p><p>'+safe(o[2])+'</p>'+(r==="managers"?noteMarkup(c.id,i):'')+'</div>'}).join("")+'</details>'+
  '<div class="reflection"><span class="qmark">؟</span><p>آیا با دانستن این پیامد، باز هم همین تصمیم را انتخاب می‌کنیم؟</p></div></section>';
 }
 function practice(c,v,l,r){
@@ -176,6 +188,7 @@ function practice(c,v,l,r){
  '<div class="speech-task"><span>تمرین گفت‌وگو · ۲ تا ۳ دقیقه</span><strong>'+safe(clearPrompt(r,c.id,2,l.r||v.questions[0]))+'</strong></div>'+
  '<details class="pressure-reveal"><summary><span aria-hidden="true">⚡</span> اتفاق غیرمنتظره در گفت‌وگو را آشکار کنید</summary><div><p>'+rich(mf?mf.pressure:d.pressure||"طرف مقابل به تصمیم اعتراض جدی می‌کند.")+'</p><strong>گفت‌وگو را ادامه دهید؛ بدون عقب‌نشینی غیرموجه یا حمله شخصی.</strong></div></details>'+
  (mf?'<div class="manager-role-outcome"><span>خروجی این Role Play</span><strong>'+safe(mf.proof)+'</strong></div>':'')+
+ (mf?techniqueDebrief(c.id):'')+
  '<details class="fold discreet-fold"><summary>یک عبارت پیشنهادی برای شروع</summary><p>«'+safe(v.dialogue)+'»</p></details>'+
  '<div class="reflection"><span class="qmark">؟</span><p>'+(mf?'آیا در پایان، تصمیم و مسئول اجرا برای هر دو نفر روشن شد؟':'کدام جمله توانست هم رابطه را حفظ کند و هم مسئولیت را روشن کند؟')+'</p></div></section>';
 }
@@ -191,7 +204,7 @@ function reflect(c,r,v,g){
  '<div class="reflection"><span class="qmark">؟</span><p>'+rich(d.debrief||v.questions[0])+'</p></div></section>';
 }
 function conclude(c,r,v,g){
- var d=depth(c.id),old=saved(actionKey(r,c.id),-1),pr=saved(proofKey(r,c.id),"");
+ var d=depth(c.id),old=selection(actionKey(r,c.id),3),pr=saved(proofKey(r,c.id),"");
  var options=(v.solution||[]).slice(0,3);
  return '<section class="content-section step-action"><span class="kicker">گام ۶ · اقدام</span><h2>از این تجربه، چه رفتاری وارد کار کنیم؟</h2>'+
  '<div class="takeaway action-rule">'+rich(d.shift||g.rule)+'</div>'+
@@ -203,6 +216,7 @@ function conclude(c,r,v,g){
 }
 function caseView(r,id,step){
  var c=currCase(r,id);if(!c)return track(r);
+ var parent=sessionPath(r,id),exit=caseExit(r,id);
  var v=c.variants[r],l=lab(id,r),g=NAAV_GUIDE[id-1],s=Math.max(0,Math.min(5,step|0));
  if(!l||!g)return track(r);
  var screens=[
@@ -213,13 +227,13 @@ function caseView(r,id,step){
  function(){return reflect(c,r,v,g)},
  function(){return conclude(c,r,v,g)}
  ];
- return '<div class="crumb">'+a("track/"+r,roleNames[r],"text-link")+' <span> / </span> کیس '+fa(id)+'</div>'+
+ return '<div class="crumb">'+a(parent,"جلسه مربوط","text-link")+' <span> / </span> کیس '+fa(id)+'</div>'+
  '<section class="case-heading"><span class="kicker">کیس '+fa(id)+' از ۱۵ · '+safe(roleNames[r])+'</span><h1><span class="heading-sticker" aria-hidden="true">'+caseIcon(id)+'</span>'+safe(c.title)+'</h1></section>'+
  caseStages(r,id,s)+'<div class="case-content" data-current-stage="'+s+'">'+screens[s]()+'</div>'+
  '<nav class="stage-foot" aria-label="حرکت بین مراحل">'+
- (s>0?a("case/"+r+"/"+id+"/"+(s-1),"گام قبل","secondary-btn"):a("track/"+r,"بازگشت به جلسات","secondary-btn"))+
+ (s>0?a("case/"+r+"/"+id+"/"+(s-1),"گام قبل","secondary-btn"):a(parent,"بازگشت به جلسه","secondary-btn"))+
  '<span class="stage-progress">'+fa(s+1)+' / ۶</span>'+
- (s<5?a("case/"+r+"/"+id+"/"+(s+1),"ادامه: "+steps[s+1]+" ←","primary-btn"):a("track/"+r,"بازگشت به جلسه‌ها ←","primary-btn"))+'</nav>';
+ (s<5?a("case/"+r+"/"+id+"/"+(s+1),"ادامه: "+steps[s+1]+" ←","primary-btn"):a(exit[0],exit[1],"primary-btn"))+'</nav>';
 }
 function library(r){
  return '<section class="section-intro"><span class="kicker">'+roleNames[r]+'</span><h1>۱۵ کیس رفتار سازمانی</h1><p>یک موقعیت آشنا از کار را انتخاب کنید؛ ببینید شما چه تصمیمی می‌گیرید.</p></section>'+
@@ -237,24 +251,31 @@ function render(){
  document.getElementById("root").innerHTML=frame(p,body,p[0]==="home"?"home-view":"content-view");
  document.title=(p[0]==="case"?"کیس "+fa(+p[2]||1)+" | ":"")+"ناوصنعت مس — یادگیری رفتار سازمانی";
  window.scrollTo(0,0);
+ var main=document.getElementById("app");main.focus({preventScroll:true});
+ if(p[0]==="session"&&p[3]==="close"){var close=document.getElementById("session-close");if(close){close.open=true;close.scrollIntoView({block:"start"});close.querySelector("summary").focus({preventScroll:true})}}
 }
 document.addEventListener("click",function(e){
- var roleBtn=e.target.closest("[data-role]");if(roleBtn&&!roleBtn.hasAttribute("data-choice")){var r=roleBtn.getAttribute("data-role");if(roleNames[r]){role=r;store("ns_role",r);go("track/"+r)}return}
- var choice=e.target.closest("[data-choice]");if(choice){var r=choice.dataset.role,id=+choice.dataset.case,n=+choice.dataset.choice;store(choiceKey(r,id),n);
+ if(e.target.closest(".skip")){e.preventDefault();document.getElementById("app").focus();return}
+ var menu=document.querySelector(".mobile-dash[open]");if(menu&&!menu.contains(e.target))menu.open=false;
+
+
+ var choice=e.target.closest("[data-choice]");if(choice){var r=choice.dataset.role,id=+choice.dataset.case,n=+choice.dataset.choice;var persisted=store(choiceKey(r,id),n);
  document.querySelectorAll("[data-choice]").forEach(function(x){var sel=x===choice;x.classList.toggle("chosen",sel);x.setAttribute("aria-pressed",String(sel))});
- var status=document.querySelector("[data-choice-status]");if(status)status.textContent="انتخاب ثبت شد: گزینه "+["الف","ب","ج"][n]+" · اکنون پیامد آن را ببینید.";
+ var status=document.querySelector("[data-choice-status]");if(status)status.textContent=(persisted?"":"ذخیره مرورگر در دسترس نیست؛ انتخاب موقت است. ")+"انتخاب ثبت شد: گزینه "+["الف","ب","ج"][n]+" · اکنون پیامد آن را ببینید.";
  }
  var action=e.target.closest("[data-action-choice]");
- if(action){var ar=action.dataset.role,id=+action.dataset.case,i=+action.dataset.actionChoice;store(actionKey(ar,id),i);
+ if(action){var ar=action.dataset.role,id=+action.dataset.case,i=+action.dataset.actionChoice;var persisted=store(actionKey(ar,id),i);
  document.querySelectorAll("[data-action-choice]").forEach(function(x){var sel=x===action;x.classList.toggle("chosen",sel);x.setAttribute("aria-pressed",String(sel))});
- var info=document.querySelector(".proof-status");if(info)info.textContent="اقدام انتخاب‌شده: "+fa(i+1);
+ var info=document.querySelector(".proof-status");if(info)info.textContent="اقدام انتخاب‌شده: "+fa(i+1)+(persisted?"":" · موقت؛ ذخیره مرورگر در دسترس نیست.");
  }
  var save=e.target.closest("[data-save-proof]");
  if(save){var value=document.getElementById("proof-field").value.trim(),cr=save.dataset.role,id=+save.dataset.saveProof;
- store(proofKey(cr,id),value);var message=document.querySelector(".proof-status");if(message)message.textContent=value?"✓ نشانه تغییر در همین مرورگر ثبت شد.":"برای ثبت، یک نشانه قابل مشاهده بنویسید.";
+ var persisted=store(proofKey(cr,id),value);var message=document.querySelector(".proof-status");if(message)message.textContent=value?(persisted?"✓ نشانه تغییر در همین مرورگر ثبت شد.":"ذخیره مرورگر در دسترس نیست؛ نوشته فقط تا بستن صفحه حفظ می‌شود."):"برای ثبت، یک نشانه قابل مشاهده بنویسید.";
  }
 
 });
+document.addEventListener("keydown",function(e){if(e.key==="Escape"){var menu=document.querySelector(".mobile-dash[open]");if(menu){menu.open=false;menu.querySelector("summary").focus()}}});
+document.addEventListener("input",function(e){if(e.target.id==="proof-field"){var p=path();memoryState[proofKey(roleOf(p),+p[2])]=e.target.value}});
 window.addEventListener("hashchange",render);
 render();
 })();

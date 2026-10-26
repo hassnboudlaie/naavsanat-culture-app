@@ -69,6 +69,8 @@ function stageNav(type,r,id,step){
  return '<nav class="case-steps" aria-label="مراحل تمرین" style="grid-template-columns:repeat(4,1fr)">'+stageNames.map(function(t,i){return a(type+"/"+r+"/"+id+"/"+i,'<span>'+fa(i+1)+'</span><strong><span class="step-emoji" aria-hidden="true">'+stageEmoji[i]+'</span>'+t+'</strong>',"step "+(step===i?"active":""))}).join("")+'</nav>';
 }
 function illustration(x,med){
+ if(med){var base=location.pathname.indexOf('/next/')>=0?'./assets/medicator/':'./next/assets/medicator/';return '<figure class="module-illustration source-illustration"><a href="'+base+x.id+'.jpg" target="_blank" rel="noopener" aria-label="بازکردن تصویر در اندازه اصلی"><img src="'+base+x.id+'.jpg" alt="تصویر آموزشی مدیکاتور، اسلاید '+fa(x.id)+'؛ '+e(x.title)+'"></a><figcaption>از فایل ارسالی «مدیکاتور» · اسلاید '+fa(x.id)+' · برای دیدن جزئیات، تصویر را باز کنید. نشان و اعتبار منبع روی تصویر حفظ شده است.</figcaption></figure>'}
+
  var kind=med?x.motif:"conversation";
  var shapes={
  mail:'<rect x="40" y="55" width="110" height="82" rx="12" fill="#fff" stroke="#0e5262" stroke-width="5"/><path d="m44 63 50 37 52-37" fill="none" stroke="#aa603b" stroke-width="5"/><path d="M167 96h63" stroke="#0e5262" stroke-width="7"/><path d="m217 82 16 14-16 14" fill="none" stroke="#0e5262" stroke-width="5"/><rect x="255" y="62" width="105" height="74" rx="12" fill="#d8e7e0" stroke="#0e5262" stroke-width="5"/><path d="m275 97 18 16 47-39" fill="none" stroke="#aa603b" stroke-width="6"/>',

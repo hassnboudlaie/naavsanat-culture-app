@@ -79,3 +79,6 @@
 .module-illustration{margin:16px 0 24px;border:1px solid #d5e5df;background:#f5f9f6;border-radius:17px;padding:12px;max-width:800px}
 .module-illustration svg{display:block;width:100%;height:auto;max-height:235px}
 .module-illustration figcaption{text-align:center;color:#58736f;font-size:11px;line-height:1.8;margin-top:7px}
+
+.source-illustration img{display:block;max-width:100%;width:auto;max-height:420px;margin:auto;object-fit:contain}
+.source-illustration a{display:block;background:white;padding:12px}

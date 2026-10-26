@@ -297,7 +297,7 @@ p{color:var(--muted)}
 .pressure-reveal{background:#fff3eb;border:1.5px solid #d9af91;border-radius:13px;margin-top:16px;padding:0;overflow:hidden}
 .pressure-reveal>summary{padding:17px 19px;cursor:pointer;list-style:none;font-size:16px;font-weight:900;color:#793719;display:flex;gap:10px;align-items:center}
 .pressure-reveal>summary::-webkit-details-marker{display:none}
-.pressure-reveal>summary:after{content:"＋";margin-inline-start:auto;font-weight:900;font-size:18px}
+.pressure-reveal>summary:after{content:"+";margin-inline-start:auto;font-weight:900;font-size:18px}
 .pressure-reveal[open]>summary:after{content:"−"}
 .pressure-reveal>div{padding:0 19px 18px;font-size:17px;color:var(--ink)}
 .pressure-reveal p{color:var(--ink);line-height:1.95;font-size:17px}
@@ -456,3 +456,19 @@ p{color:var(--muted)}
  .manager-role-card p,.manager-role-outcome strong{font-size:16px}
 }
 @media print{.manager-lesson-brief{box-shadow:none}}
+
+/* Classroom audit: optional depth, clear session closure, visible keyboard focus. */
+.decision-notes{margin:16px 0;line-height:1.9}
+.decision-notes dt{font-weight:700;color:var(--navy);margin-top:12px}
+.decision-notes dd{margin:0;color:var(--ink)}
+.session-pacing{padding:18px 0;border-top:1px solid var(--line);font-size:17px}
+.session-record{border-top:1px solid var(--line);padding:20px 0}
+.session-record p{margin:8px 0}
+.session-close{scroll-margin-top:24px}
+textarea{font:inherit;color:var(--ink);max-width:100%}
+textarea:focus-visible{outline:3px solid var(--copper-dark);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+
+#app:focus{outline:none}
+
+body{font-family:"Vazirmatn",Tahoma,"Segoe UI",Arial,"Apple Color Emoji","Segoe UI Emoji","Noto Emoji",sans-serif}

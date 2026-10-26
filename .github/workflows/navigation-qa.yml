@@ -1,66 +1,32 @@
-name: Navigation QA
+name: Classroom QA
 on:
   push:
     branches: [main]
     paths:
-      - 'next/studio.js'
-      - 'next/studio.css'
+      - 'next/**'
       - 'index.html'
+      - 'tests/**'
       - '.github/workflows/navigation-qa.yml'
   workflow_dispatch:
 jobs:
-  test-navigation:
+  classroom:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 15
     steps:
-      - name: Set up Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install browser test engine
+      - name: Install test browser
         run: |
           npm install --no-save playwright@1.56.1
           npx playwright install --with-deps chromium
-      - name: Verify deployed site desktop and mobile
-        shell: bash
-        run: |
-          node <<'NODE'
-          const { chromium } = require('playwright');
-          const base = 'https://hassnboudlaie.github.io/naavsanat-culture-app/';
-          (async () => {
-            const browser = await chromium.launch({headless:true});
-            try {
-              const desktop = await browser.newPage({viewport:{width:1365,height:850},locale:'fa-IR'});
-              let deployed = false;
-              for(let attempt=0; attempt<9; attempt++) {
-                await desktop.goto(base+'#/track/managers',{waitUntil:'domcontentloaded',timeout:25000});
-                deployed = await desktop.locator('.dashboard-rail nav .dashboard-link').count() === 7;
-                if(deployed)break;
-                await desktop.waitForTimeout(15000);
-              }
-              if(!deployed)throw Error('Deployed site does not show the navigation.');
-              if(!await desktop.locator('.dashboard-rail').isVisible())throw Error('Desktop sidebar invisible');
-              const rail = await desktop.locator('.dashboard-rail').boundingBox();
-              const main = await desktop.locator('#app').boundingBox();
-              if(!rail || !main || rail.x <= main.x)throw Error('Sidebar is not on right');
-              await desktop.locator('.dashboard-rail a[href="#/track/hq"]').click();
-              if(!desktop.url().includes('#/track/hq'))throw Error('HQ group link failed');
-              await desktop.locator('.dashboard-rail a[href="#/culture/hq"]').click();
-              if(!desktop.url().includes('#/culture/hq'))throw Error('Desktop link failed');
-              const mobile = await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true,locale:'fa-IR'});
-              await mobile.goto(base+'#/track/managers',{waitUntil:'domcontentloaded',timeout:25000});
-              const details=mobile.locator('.mobile-dash');
-              if(!await details.isVisible())throw Error('Mobile bottom control invisible');
-              if(await details.getAttribute('open')!==null)throw Error('Mobile control must start closed');
-              const bounds=await details.locator('summary').boundingBox();
-              if(!bounds || bounds.height>63)throw Error('Mobile control is not a single row');
-              await details.locator('summary').click();
-              if(await details.getAttribute('open')===null)throw Error('Mobile menu not opened');
-              if(await mobile.locator('.mobile-dash-panel .dashboard-link').count()!==7)throw Error('Expected seven mobile choices including all three training groups');
-              await mobile.locator('.mobile-dash-panel a[href="#/track/operations"]').click();
-              if(!mobile.url().includes('#/track/operations'))throw Error('Operations group navigation failed');
-              if(await mobile.evaluate(() => document.documentElement.scrollWidth > innerWidth + 2))throw Error('Mobile horizontal overflow');
-              console.log('PASS desktop rail and mobile dropdown on live published website');
-            } finally {await browser.close()}
-          })().catch(e=>{console.error(e);process.exit(1)});
-          NODE
+      - name: Test this commit before relying on deployed state
+        run: node tests/classroom-qa.cjs
+        env:
+          QA_OUTPUT: qa-artifacts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: classroom-qa
+          path: qa-artifacts/
