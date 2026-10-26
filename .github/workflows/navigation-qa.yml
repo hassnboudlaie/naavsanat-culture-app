@@ -34,7 +34,7 @@ jobs:
               let deployed = false;
               for(let attempt=0; attempt<9; attempt++) {
                 await desktop.goto(base+'#/track/managers',{waitUntil:'domcontentloaded',timeout:25000});
-                deployed = await desktop.locator('.dashboard-rail nav .dashboard-link').count() === 5;
+                deployed = await desktop.locator('.dashboard-rail nav .dashboard-link').count() === 7;
                 if(deployed)break;
                 await desktop.waitForTimeout(15000);
               }
@@ -43,8 +43,10 @@ jobs:
               const rail = await desktop.locator('.dashboard-rail').boundingBox();
               const main = await desktop.locator('#app').boundingBox();
               if(!rail || !main || rail.x <= main.x)throw Error('Sidebar is not on right');
-              await desktop.locator('.dashboard-rail a[href="#/culture/managers"]').click();
-              if(!desktop.url().includes('#/culture/managers'))throw Error('Desktop link failed');
+              await desktop.locator('.dashboard-rail a[href="#/track/hq"]').click();
+              if(!desktop.url().includes('#/track/hq'))throw Error('HQ group link failed');
+              await desktop.locator('.dashboard-rail a[href="#/culture/hq"]').click();
+              if(!desktop.url().includes('#/culture/hq'))throw Error('Desktop link failed');
               const mobile = await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true,locale:'fa-IR'});
               await mobile.goto(base+'#/track/managers',{waitUntil:'domcontentloaded',timeout:25000});
               const details=mobile.locator('.mobile-dash');
@@ -54,9 +56,9 @@ jobs:
               if(!bounds || bounds.height>63)throw Error('Mobile control is not a single row');
               await details.locator('summary').click();
               if(await details.getAttribute('open')===null)throw Error('Mobile menu not opened');
-              if(await mobile.locator('.mobile-dash-panel .dashboard-link').count()!==5)throw Error('Expected five mobile choices');
-              await mobile.locator('.mobile-dash-panel a[href="#/medicator/managers"]').click();
-              if(!mobile.url().includes('#/medicator/managers'))throw Error('Mobile navigation failed');
+              if(await mobile.locator('.mobile-dash-panel .dashboard-link').count()!==7)throw Error('Expected seven mobile choices including all three training groups');
+              await mobile.locator('.mobile-dash-panel a[href="#/track/operations"]').click();
+              if(!mobile.url().includes('#/track/operations'))throw Error('Operations group navigation failed');
               if(await mobile.evaluate(() => document.documentElement.scrollWidth > innerWidth + 2))throw Error('Mobile horizontal overflow');
               console.log('PASS desktop rail and mobile dropdown on live published website');
             } finally {await browser.close()}
