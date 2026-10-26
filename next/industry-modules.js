@@ -16,7 +16,7 @@ function items(type){
 function a(url,text,cls){return '<a class="'+(cls||"text-link")+'" href="#/'+url+'">'+text+'</a>'}
 function list(type,r,all){
  var selected=items(type).filter(function(x){return all||x.role===r||x.role==="all"});
- return '<div class="crumb">'+a("track/"+r,roleNames[r])+'</div><section class="section-intro"><span class="kicker">تمرین‌های تکمیلی</span><h1>'+name[type]+'</h1><p>'+ (type==="medicator"?"از تصویر و موقعیت تا تصمیم و رفتار حرفه‌ای.":"مهارت گفت‌وگو در موقعیت‌های دشوار کاری.")+'</p></section>'+
+ return '<div class="crumb">'+a("home","پنج مسیر یادگیری")+'</div><section class="section-intro"><span class="kicker">ماژول مستقل</span><h1>'+name[type]+'</h1><p>'+ (type==="medicator"?"از تصویر و موقعیت تا تصمیم و رفتار حرفه‌ای.":"مهارت گفت‌وگو در موقعیت‌های دشوار کاری.")+'</p></section>'+
  '<div class="module-filter">'+a(type+"/"+r, "مناسب "+roleNames[r],!all?"module-pill active":"module-pill")+
  a(type+"/"+r+"/all","همه موقعیت‌ها",all?"module-pill active":"module-pill")+'</div>'+
  '<div class="case-grid">'+selected.map(function(x){return '<a class="case-tile" href="#/'+type+'/'+r+'/'+x.id+'/0"><span class="tiny-label">'+(type==="medicator"?"تصویر "+fa(x.id):"موقعیت "+fa(x.id))+'</span><strong>'+e(x.title)+'</strong><p>'+e(x.context)+'</p><span class="case-link">بازکردن موقعیت ←</span></a>'}).join("")+'</div>'+
@@ -52,14 +52,17 @@ function detail(type,r,id,stage){
   }else content+='<div class="situation">«'+e(x.quote)+'»</div><div class="reflection"><span class="qmark">؟</span><p>چه پاسخی هم احترام را حفظ می‌کند و هم مسئله واقعی را روشن می‌سازد؟</p></div><details class="fold"><summary>یک پاسخ پیشنهادی</summary><p>«'+e(x.line)+'»</p></details>';
  }
  if(s===2)content='<span class="kicker">فنون رفتار سازمانی</span><h2>'+e(x.technique)+'</h2>'+
- '<div class="takeaway">'+e(med?x.lens:x.line)+'</div>'+
+ '<div class="takeaway">'+e(med?x.lens:x.line)+'</div>'+ 
+ (med?'<div class="analysis-two"><div><strong>نقطه کور تصمیم</strong><p>اگر صرفاً رفتار یک واحد را مقصر بدانیم، وابستگی‌ها و معیارهای تصمیم را از قلم می‌اندازیم.</p></div><div><strong>نشانه موفقیت</strong><p>'+e(x.rule)+'</p></div></div>':
+ '<div class="analysis-two"><div><strong>رفتار قابل مشاهده، نه برچسب شخصیت</strong><p>«'+e(x.quote)+'»؛ روی رفتار و اثر آن بر همکاری متمرکز شویم، نه حدس‌زدن درباره نیت یا ویژگی پایدار فرد.</p></div><div><strong>مرز پاسخ حرفه‌ای</strong><p>'+e(x.pitfall)+'</p></div></div>')+
  (!med?'<div class="module-alert"><strong>چه رویکردی ممکن است تنش را افزایش دهد؟</strong><p>'+e(x.pitfall)+'</p></div>':'')+
  '<section class="rule"><span>قاعده رفتاری</span><p>'+e(x.rule)+'</p></section>';
  if(s===3)content='<span class="kicker">تمرین</span><h2>این گفت‌وگو را اجرا کنیم.</h2><div class="practice-problem">'+e(x.roleplay)+'</div>'+
  '<div class="line-example"><span>جمله پیشنهادی برای شروع</span><p>«'+e(x.line)+'»</p></div>'+
+ '<div class="role-pressure"><strong>معیار تمرین حرفه‌ای</strong><p>'+(med?'آیا مسئول تصمیم، نقطه وابستگی و زمان بازبینی روشن شد؛ بدون ساده‌سازی مسئله به مقصر فردی؟':'آیا گفت‌وگو هم‌زمان سه کار انجام داد: شنیدن نگرانی، تعیین مرز محترمانه، و رسیدن به تعهد قابل پیگیری؟')+'</p></div>'+
  '<div class="reflection"><span class="qmark">؟</span><p>چه چیزی در گفت‌وگو باعث شد مسئله روشن‌تر شود و همکاری ادامه پیدا کند؟</p></div>';
  var base=type+"/"+r+"/"+id+"/";
- return '<div class="crumb">'+a("track/"+r,roleNames[r])+' <span> / </span> '+a(type+"/"+r,name[type])+'</div>'+
+ return '<div class="crumb">'+a("home","پنج مسیر یادگیری")+' <span> / </span> '+a(type+"/"+r,name[type])+'</div>'+
  '<section class="case-heading"><span class="kicker">'+name[type]+'</span><h1>'+e(x.title)+'</h1></section>'+
  stageNav(type,r,id,s)+'<div class="case-content"><section class="content-section">'+content+'</section></div>'+
  '<nav class="stage-foot">'+(s>0?a(base+(s-1),"مرحله قبل","secondary-btn"):a(type+"/"+r,"همه موقعیت‌ها","secondary-btn"))+
