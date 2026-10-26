@@ -212,3 +212,10 @@ body.nv-field-mode .topbar,body.nv-field-mode .dashboard-sidebar,body.nv-field-m
 }
 @media(min-width:1450px){.nv-app{font-size:20px}.nv-dialogue-line p{font-size:20px}.nv-row-text b{font-size:22px}}
 @media(prefers-reduced-motion:reduce){.nv-app *{scroll-behavior:auto!important;transition:none!important}}
+
+/* Teaching ergonomics: a next-case action is available before and after the case. */
+.nv-quick-nav{display:flex;align-items:center;gap:13px}
+.nv-quick-nav>span{color:#59727b;font-size:14px;font-weight:850}
+.nv-quick-next{background:#eff4f3;border:1px solid #a5c5c9;border-radius:9px;color:#184c5b;font-size:15px;min-height:43px;padding:7px 15px;font-weight:900}
+.nv-quick-next:hover{background:#dfebeb}
+@media(max-width:760px){.nv-quick-nav{gap:6px}.nv-quick-nav>span{font-size:11px}.nv-quick-next{font-size:12px;min-height:39px;padding:6px 8px}}
