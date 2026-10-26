@@ -43,7 +43,7 @@ return '<div class="home-hero"><div class="home-copy"><span class="eyebrow">NAAV
 '<div class="section-head"><h2>منطق هر تجربه یادگیری</h2></div><div class="journey">'+[["۱. موقعیت","چه اتفاقی افتاده؟"],["۲. انتخاب","من چه می‌کنم؟"],["۳. واکاوی","چرا و با چه پیامدی؟"],["۴. تمرین","چگونه گفت‌وگو کنم؟"],["۵. انتقال","در کار چه تغییر می‌دهم؟"]].map(function(a){return '<div><b>'+a[0]+'</b><span>'+a[1]+'</span></div>'}).join("")+'</div>'+
 '<div class="intro-note"><span aria-hidden="true" style="font-size:27px">🎓</span><div><b>برای تسهیلگر کلاس طراحی شده است</b><div><span>هر کیس را می‌توان مستقل اجرا کرد؛ نقش‌آفرینی و تحلیل گزینه‌ها بدون خروج از جریان تدریس در دسترس است.</span></div></div></div>'}
 function sessions(r){
-if(r==="operations"){var obj=ops.filter(function(s){return !s.break});return obj.map(function(s,i){return {t:s.title,d:s.desc,k:"از تجربه عملیات به رفتار قابل اجرا",topics:s.items,ids:opsCaseBlocks[i],time:s.time}})}
+if(r==="operations"){var obj=ops.filter(function(s){return !s.break});return obj.map(function(s,i){return {t:s.title,d:s.desc,k:"از تجربه عملیات به رفتار قابل اجرا",topics:s.items,ids:opsCaseBlocks[i]||[12,14,15],time:s.time}})}
 var d=r==="managers"?managers:hq;return d.map(function(s,i){return {t:s.t,d:s.d,k:s.k,topics:s.topics,ids:sessionCases[r][i],time:"بخش آموزشی "+fa(i+1)}})
 }
 function track(r){
