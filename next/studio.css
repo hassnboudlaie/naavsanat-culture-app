@@ -207,3 +207,39 @@ p{color:var(--muted)}
 .module-alert strong{color:var(--copper-dark)}
 .module-alert p{color:var(--ink);margin:5px 0 0}
 @media(max-width:820px){.extra-tools>div{flex-direction:column;gap:10px}}
+
+/* v5 — scholarly content, visually restrained: five equal top-level journeys */
+.role-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.module-tile{border-color:#e4cbb8;background:#fffcf9}
+.module-tile .role-icon{background:#f8ebe2}
+.module-tag{font-size:12px;font-weight:900;color:var(--copper-dark);background:#f8ede5;padding:3px 9px;border-radius:99px;margin-top:9px}
+.module-tile:hover{background:#fff7f0}
+.depth-spotlight,.analysis-lead,.decision-nuance,.session-dilemma,.role-pressure{
+ padding:18px 22px;border-radius:13px;border:1px solid #e7ded5;
+ border-right:4px solid var(--copper);background:#fbf8f5;margin:23px 0;
+}
+.depth-spotlight>span,.analysis-lead>strong,.decision-nuance>strong,.session-dilemma>strong,.role-pressure>strong{
+ color:var(--copper-dark);font-size:13px;font-weight:900;display:block;margin-bottom:6px;
+}
+.depth-spotlight p,.analysis-lead p,.decision-nuance p,.session-dilemma p,.role-pressure p{
+ font-size:17px;line-height:1.95;color:var(--ink);margin:0;
+}
+.depth-spotlight strong,.analysis-lead p strong,.decision-nuance p strong,.session-dilemma p strong,.role-pressure p strong,
+.rule p strong,.reflection p strong{
+ font-weight:900;color:var(--navy);
+ text-decoration:underline;text-decoration-color:#ddb9a1;text-decoration-thickness:2px;text-underline-offset:5px;
+}
+.analysis-lead{background:#eaf1ef;border-color:#c8dad5;border-right-color:#19536a}
+.analysis-lead>strong{color:var(--navy)}
+.decision-nuance{background:#f8f6f2}
+.session-dilemma{margin:0 0 30px}
+.role-pressure{background:#f8ece8;margin-top:18px}
+.analysis-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:22px 0}
+.analysis-two>div{background:#f5f8f6;border:1px solid var(--line);border-radius:13px;padding:16px 19px}
+.analysis-two strong{font-size:14px;color:var(--navy);font-weight:900}
+.analysis-two p{color:var(--ink);margin:6px 0 0;font-size:15px;line-height:1.9}
+.science-note{font-size:13px!important;color:#4c6267!important}
+.outcomes>.outcome,.fold .outcome{margin:12px 0}
+.fold .outcome h3{font-size:16px}
+.takeaway{font-size:clamp(20px,2.3vw,27px)}
+@media(max-width:820px){.role-grid{grid-template-columns:1fr}.analysis-two{grid-template-columns:1fr}.role-tile{min-height:175px}}
