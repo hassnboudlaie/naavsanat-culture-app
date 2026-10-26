@@ -3,7 +3,8 @@
 "use strict";
 var roleNames={managers:"مدیران ستاد",hq:"کارکنان ستاد",operations:"کارکنان عملیاتی"};
 var roleIcons={managers:"🧭",hq:"🏢",operations:"⚙️"};
-var steps=["موقعیت","انتخاب","تحلیل","تمرین","جمع‌بندی"];
+var steps=["موقعیت","انتخاب","پیامد","نقش‌آفرینی","واکاوی","اقدام"];
+var stepIcons=["◈","✓","↗","☷","◎","✦"];
 var storedRole=saved("ns_role","managers");
 var role=roleNames[storedRole]?storedRole:"managers";
 function saved(k,def){try{var v=JSON.parse(localStorage.getItem(k));return v===null?def:v}catch(e){return def}}
@@ -16,6 +17,8 @@ function path(){return (location.hash||"#/home").replace(/^#\/?/,"").split("/")}
 function go(p){location.hash="#/"+p}
 function a(p,t,cls){return '<a class="'+(cls||"link")+'" href="#/'+p+'">'+t+'</a>'}
 function choiceKey(r,id){return "naav_studio_choice_"+r+"_"+id}
+function actionKey(r,id){return "naav_studio_action_"+r+"_"+id}
+function proofKey(r,id){return "naav_studio_proof_"+r+"_"+id}
 function roleOf(p){return roleNames[p[1]]?p[1]:role}
 function currCase(r,id){return CASES[id-1]&&CASES[id-1].variants[r]?CASES[id-1]:null}
 function lab(id,r){return NAV_ROLE_LABS[r]&&NAV_ROLE_LABS[r][String(id)]}
@@ -66,57 +69,86 @@ function lesson(r,num){
  '<div class="page-bottom">'+a("track/"+r,"همه جلسات","text-link")+'</div>';
 }
 function caseStages(r,id,step){
- return '<nav aria-label="مراحل کیس" class="case-steps">'+steps.map(function(s,i){return '<a class="step '+(i===step?"active":"")+'" href="#/case/'+r+'/'+id+'/'+i+'" '+(i===step?'aria-current="step"':'')+'><span>'+fa(i+1)+'</span><strong>'+s+'</strong></a>'}).join("")+'</nav>';
+ return '<nav aria-label="شش گام یادگیری" class="case-steps six-steps">'+steps.map(function(t,i){
+ return '<a class="step '+(i===step?"active":i<step?"visited":"")+'" href="#/case/'+r+'/'+id+'/'+i+'" '+(i===step?'aria-current="step"':'')+' title="گام '+fa(i+1)+': '+t+'"><span class="step-index">'+fa(i+1)+'</span><strong>'+t+'</strong></a>';
+ }).join("")+'</nav>';
 }
 function scenario(c,v,l){
- var d=depth(c.id);
- return '<div class="content-section"><span class="kicker">موقعیت</span><h2>چه اتفاقی افتاده است؟</h2><div class="situation">'+safe(v.problem)+'</div>'+
- '<div class="voices">'+(l.v||[]).map(function(u){return '<div class="voice"><strong>'+safe(u[0])+'</strong><p>«'+safe(u[1])+'»</p></div>'}).join("")+'</div>'+
- '<div class="depth-spotlight"><span>تعارض اصلی</span><p>'+rich(d.tension||"در این موقعیت، کدام دو خواسته مشروع با هم تعارض دارند؟")+'</p></div>'+
- '<div class="reflection"><span class="qmark">؟</span><p>'+safe(d.test||((v.questions&&v.questions[0])||l.q))+'</p></div></div>';
+ var lines=l.v||[];
+ return '<section class="content-section step-scene"><span class="kicker">گام ۱ · موقعیت</span><h2>اگر شما جای این افراد بودید…</h2>'+
+ '<div class="situation scene-focus">'+safe(v.problem)+'</div>'+
+ '<div class="people-conversation">'+lines.slice(0,2).map(function(x){return '<div class="voice"><strong>'+safe(x[0])+'</strong><p>«'+safe(x[1])+'»</p></div>'}).join("")+'</div>'+
+ (lines.length>2?'<details class="fold discreet-fold"><summary>صدای دیگر این موقعیت</summary><div class="voice extra-voice"><strong>'+safe(lines[2][0])+'</strong><p>«'+safe(lines[2][1])+'»</p></div></details>':'')+
+ '<div class="reflection"><span class="qmark">؟</span><p>پیش از قضاوت درباره افراد، چه اطلاعات مهمی در این روایت نداریم؟</p></div>'+
+ '<p class="context-note">این موقعیت، بازسازی آموزشی از مسائل صنعت و سازمان است؛ جزئیات آن گزارش قطعی یک رخداد نیست.</p></section>';
 }
 function decision(c,r,l){
- var d=depth(c.id),chosen=saved(choiceKey(r,c.id),-1);
- return '<div class="content-section"><span class="kicker">تصمیم</span><h2>'+safe(l.q)+'</h2><div class="choices">'+l.o.map(function(o,i){return '<button type="button" class="pick '+(chosen===i?"chosen":"")+'" data-choice="'+i+'" data-role="'+r+'" data-case="'+c.id+'" aria-pressed="'+(chosen===i)+'"><span class="pick-letter">'+["الف","ب","ج"][i]+'</span><span>'+safe(o[0])+'</span></button>'}).join("")+'</div>'+
- '<div class="decision-nuance"><strong>پیش از تصمیم، این Trade-off را ببینیم:</strong><p>'+rich(d.trade||"هر گزینه هم فرصت دارد و هم ریسک؛ کدام شواهد انتخاب را قابل دفاع می‌کند؟")+'</p></div>'+
- '<p class="quiet-note">یک پاسخِ ظاهراً خوب، بدون درنظرگرفتن زمینه و محدودیت‌ها، ممکن است پیامد نامطلوب ایجاد کند.</p></div>';
+ var chosen=saved(choiceKey(r,c.id),-1);
+ return '<section class="content-section step-decision"><span class="kicker">گام ۲ · انتخاب</span><h2>'+safe(l.q)+'</h2>'+
+ '<div class="choices">'+l.o.map(function(o,i){return '<button type="button" class="pick '+(chosen===i?"chosen":"")+'" data-choice="'+i+'" data-role="'+r+'" data-case="'+c.id+'" aria-pressed="'+(chosen===i)+'"><span class="pick-letter">'+["الف","ب","ج"][i]+'</span><span>'+safe(o[0])+'</span></button>'}).join("")+'</div>'+
+ '<div class="choice-status" data-choice-status aria-live="polite">'+(chosen<0?'یک گزینه را انتخاب کنید؛ پیامد آن در گام بعد دیده می‌شود.':'انتخاب ثبت شد: گزینه '+["الف","ب","ج"][chosen]+' · اکنون پیامد آن را ببینید.')+'</div></section>';
 }
-function analyse(c,r,v,l){
- var d=depth(c.id),chosen=saved(choiceKey(r,c.id),-1);
- var cards=l.o.map(function(o,i){return '<article class="outcome '+(i===chosen?"chosen":"")+'"><div class="outcome-title"><span class="mini-number">'+["الف","ب","ج"][i]+'</span><h3>'+safe(o[0])+'</h3></div><p>'+safe(o[1])+'</p><div class="better"><strong>شرط اثربخشی این انتخاب</strong><span>'+safe(o[2])+'</span></div></article>'});
- return '<div class="content-section"><span class="kicker">تحلیل مدیریتی</span><h2>پشت تصمیم چه سازوکاری فعال می‌شود؟</h2>'+
- '<div class="analysis-lead"><strong>نکته کلیدی</strong><p>'+rich(d.mechanism||c.theory.explanation)+'</p></div>'+
- (chosen>=0?'<h3>پیامد انتخاب شما</h3>'+cards[chosen]+'<details class="fold"><summary>دو تصمیم دیگر چه پیامدی دارند؟</summary>'+cards.filter(function(_,i){return i!==chosen}).join("")+'</details>':'<div class="outcomes">'+cards.join("")+'</div>')+
- '<div class="analysis-two"><div><strong>شواهد مورد نیاز</strong><p>'+rich(d.test||c.evidence)+'</p></div><div><strong>مرز تصمیم حرفه‌ای</strong><p>'+rich(d.trade||"محدودیت‌های اجرایی و معیارهای پاسخگویی باید روشن باشند.")+'</p></div></div>'+
- '<details class="fold"><summary>تحلیل عمیق‌تر: فرضیه‌های رفتاری</summary><ul>'+v.analysis.map(function(x){return '<li>'+safe(x)+'</li>'}).join("")+'</ul></details>'+
- '<details class="fold"><summary>پشتوانه علمی · '+safe(c.theory.name)+'</summary><p>'+safe(c.theory.explanation)+'</p><p class="science-note">نظریه، چارچوب تفسیر است؛ درباره علت واقعی در ناوصنعت فقط با داده و گفت‌وگو می‌توان قضاوت کرد.</p></details></div>';
+function consequence(c,r,l){
+ var chosen=saved(choiceKey(r,c.id),-1),d=depth(c.id);
+ if(chosen<0)return '<section class="content-section"><span class="kicker">گام ۳ · پیامد</span><h2>ابتدا یک تصمیم بگیریم.</h2><div class="empty-decision"><p>برای دیدن پیامد، از گام «انتخاب» یکی از سه تصمیم را انتخاب کنید.</p>'+a("case/"+r+"/"+c.id+"/1","رفتن به انتخاب ←","primary-btn")+'</div></section>';
+ var picked=l.o[chosen];
+ return '<section class="content-section step-impact"><span class="kicker">گام ۳ · پیامد</span><h2>این تصمیم چه چیزی را تغییر می‌دهد؟</h2>'+
+ '<div class="selected-decision"><small>انتخاب گروه · گزینه '+["الف","ب","ج"][chosen]+'</small><strong>'+safe(picked[0])+'</strong></div>'+
+ '<div class="impact-card"><span>پیامد محتمل</span><p>'+safe(picked[1])+'</p></div>'+
+ '<div class="impact-condition"><strong>نقطه حساس تصمیم</strong><p>'+safe(picked[2])+'</p></div>'+
+ '<details class="fold discreet-fold"><summary>اگر مسیر دیگری انتخاب می‌کردیم چه می‌شد؟</summary>'+
+ l.o.map(function(o,i){if(i===chosen)return "";return '<div class="alt-path"><strong>گزینه '+["الف","ب","ج"][i]+'</strong><p>'+safe(o[1])+'</p></div>'}).join("")+'</details>'+
+ '<div class="reflection"><span class="qmark">؟</span><p>آیا با دانستن این پیامد، باز هم همین تصمیم را انتخاب می‌کنیم؟</p></div></section>';
 }
 function practice(c,v,l){
  var d=depth(c.id),voices=(l.v||[]).slice(0,3);
- return '<div class="content-section"><span class="kicker">تمرین تعاملی · Role Play</span><h2>گفت‌وگوی دشوار؛ با فشار واقعی</h2>'+
- '<div class="practice-problem">'+safe(l.q)+'</div><div class="role-play-grid">'+voices.map(function(x,i){return '<div class="play-person"><small>نقش '+fa(i+1)+'</small><strong>'+safe(x[0])+'</strong><p>'+safe(x[1])+'</p></div>'}).join("")+'</div>'+
- '<div class="role-pressure"><strong>پیچ جدید در گفت‌وگو</strong><p>'+rich(d.pressure||"فرد مقابل نسبت به تصمیم اعتراض جدی می‌کند.")+'</p></div>'+
- '<div class="speech-task"><span>گره اصلی گفت‌وگو</span><strong>'+safe(l.r||v.questions[0])+'</strong></div>'+
- '<details class="fold"><summary>یک شروع پیشنهادی برای گفت‌وگو</summary><p>«'+safe(v.dialogue)+'»</p></details>'+
- '<div class="reflection"><span class="qmark">؟</span><p>'+rich(d.debrief||"کدام جمله یا سؤال نتیجه گفت‌وگو را تغییر داد؟")+'</p></div></div>';
+ return '<section class="content-section step-roleplay"><span class="kicker">گام ۴ · نقش‌آفرینی</span><h2>حالا در این موقعیت گفت‌وگو کنیم.</h2>'+
+ '<div class="role-play-grid">'+voices.map(function(x,i){return '<div class="play-person"><small>نقش '+fa(i+1)+'</small><strong>'+safe(x[0])+'</strong><p>«'+safe(x[1])+'»</p></div>'}).join("")+'</div>'+
+ '<div class="speech-task"><span>چالش اصلی گفت‌وگو</span><strong>'+safe(l.r||v.questions[0])+'</strong></div>'+
+ '<details class="pressure-reveal"><summary><span aria-hidden="true">⚡</span> اتفاق غیرمنتظره در گفت‌وگو را آشکار کنید</summary><div><p>'+rich(d.pressure||"طرف مقابل به تصمیم اعتراض جدی می‌کند.")+'</p><strong>گفت‌وگو را ادامه دهید؛ بدون عقب‌نشینی غیرموجه یا حمله شخصی.</strong></div></details>'+
+ '<details class="fold discreet-fold"><summary>یک عبارت پیشنهادی برای شروع</summary><p>«'+safe(v.dialogue)+'»</p></details>'+
+ '<div class="reflection"><span class="qmark">؟</span><p>کدام جمله توانست هم رابطه را حفظ کند و هم مسئولیت را روشن کند؟</p></div></section>';
 }
-function conclude(c,v,g){
+function reflect(c,r,v,g){
  var d=depth(c.id);
- return '<div class="content-section"><span class="kicker">جمع‌بندی</span><h2>از این تجربه چه رفتاری می‌سازیم؟</h2><div class="takeaway">'+safe(v.lesson)+'</div>'+
- '<section class="rule"><span>قاعده رفتاری پیشنهادی</span><p>'+rich(d.shift||g.rule)+'</p></section>'+
- '<div class="reflection"><span class="qmark">؟</span><p>'+rich(d.debrief||v.questions[1]||"در کار روزمره چه رفتاری را تغییر می‌دهیم؟")+'</p></div>'+
- '<details class="fold"><summary>اقدام‌های تکمیلی در موقعیت کار</summary><ul>'+v.solution.map(function(t){return '<li>'+safe(t)+'</li>'}).join("")+'</ul></details>'+
- '<details class="fold"><summary>پیوند با کتاب «حقایق تلخ»</summary><p><strong>'+safe(d.book||g.book)+'</strong></p><p>'+safe(g.bridge)+'</p><p class="science-note">اقتباس مفهومی از تجربه مدیریتی؛ رویداد کتاب به‌منزله گزارش واقعی از ناوصنعت نیست.</p></details></div>';
+ return '<section class="content-section step-reflect"><span class="kicker">گام ۵ · واکاوی</span><h2>ریشه رفتاری مسئله کجاست؟</h2>'+
+ '<div class="analysis-lead"><strong>بینش کلیدی</strong><p>'+rich(d.mechanism||c.theory.explanation)+'</p></div>'+
+ '<div class="depth-spotlight"><span>تعارضی که باید بشناسیم</span><p>'+rich(d.tension||"میان خواسته‌های مشروع ذی‌نفعان تعارض وجود دارد.")+'</p></div>'+
+ '<details class="fold"><summary>چه شواهدی برای قضاوت لازم است؟</summary><p>'+rich(d.test||c.evidence)+'</p></details>'+
+ '<details class="fold"><summary>مفهوم علمی · '+safe(c.theory.name)+'</summary><p>'+safe(c.theory.explanation)+'</p><p class="science-note">این مفهوم یک چارچوب تحلیل است، نه تشخیص قطعی علت رفتار افراد.</p></details>'+
+ '<details class="fold"><summary>از کتاب «حقایق تلخ» چه می‌آموزیم؟</summary><strong>'+safe(d.book||g.book)+'</strong><p>'+safe(g.bridge)+'</p><p class="science-note">اقتباس مفهومی است، نه ادعای وقوع داستان کتاب در شرکت.</p></details>'+
+ '<div class="reflection"><span class="qmark">؟</span><p>'+rich(d.debrief||v.questions[0])+'</p></div></section>';
+}
+function conclude(c,r,v,g){
+ var d=depth(c.id),old=saved(actionKey(r,c.id),-1),pr=saved(proofKey(r,c.id),"");
+ var options=(v.solution||[]).slice(0,3);
+ return '<section class="content-section step-action"><span class="kicker">گام ۶ · اقدام</span><h2>از این تجربه، چه رفتاری وارد کار کنیم؟</h2>'+
+ '<div class="takeaway action-rule">'+rich(d.shift||g.rule)+'</div>'+
+ '<p class="action-prompt">یک اقدام مشخص برای موقعیت کاری بعدی انتخاب کنیم:</p>'+
+ '<div class="action-choices">'+options.map(function(text,i){return '<button type="button" class="action-option '+(old===i?"chosen":"")+'" data-action-choice="'+i+'" data-role="'+r+'" data-case="'+c.id+'" aria-pressed="'+(old===i)+'"><span class="action-no">'+fa(i+1)+'</span><span>'+safe(text)+'</span></button>'}).join("")+'</div>'+
+ '<div class="proof-panel"><label for="proof-field">از کجا بفهمیم این رفتار واقعاً اجرا شده است؟</label><textarea id="proof-field" class="proof-field" rows="2" maxlength="240" placeholder="یک نشانه قابل مشاهده؛ مثلاً تأیید تحویل توسط شیفت بعد...">'+safe(pr)+'</textarea><div class="proof-bottom"><button type="button" class="save-proof" data-save-proof="'+c.id+'" data-role="'+r+'">ثبت نتیجه گروه</button><span class="proof-status" role="status">'+(old>=0?"اقدام انتخاب‌شده: "+fa(old+1):"")+'</span></div></div>'+
+ '<details class="fold discreet-fold"><summary>چند نکته تکمیلی برای انتقال به کار</summary><p>'+safe(v.lesson)+'</p><p>'+rich(d.trade||"نتیجه نیازمند پیگیری است.")+'</p></details>'+
+ '<p class="context-note">انتخاب و نوشته فقط در همین مرورگر ثبت می‌شود؛ اطلاعات به سرور ارسال نمی‌شود.</p></section>';
 }
 function caseView(r,id,step){
  var c=currCase(r,id);if(!c)return track(r);
- var v=c.variants[r],l=lab(id,r),g=NAAV_GUIDE[id-1],s=Math.max(0,Math.min(4,step|0));if(!l||!g)return track(r);
- var content=[function(){return scenario(c,v,l)},function(){return decision(c,r,l)},function(){return analyse(c,r,v,l)},function(){return practice(c,v,l)},function(){return conclude(c,v,g)}][s]();
+ var v=c.variants[r],l=lab(id,r),g=NAAV_GUIDE[id-1],s=Math.max(0,Math.min(5,step|0));
+ if(!l||!g)return track(r);
+ var screens=[
+ function(){return scenario(c,v,l)},
+ function(){return decision(c,r,l)},
+ function(){return consequence(c,r,l)},
+ function(){return practice(c,v,l)},
+ function(){return reflect(c,r,v,g)},
+ function(){return conclude(c,r,v,g)}
+ ];
  return '<div class="crumb">'+a("track/"+r,roleNames[r],"text-link")+' <span> / </span> کیس '+fa(id)+'</div>'+
- '<section class="case-heading"><span class="kicker">کیس '+fa(id)+' از ۱۵</span><h1>'+safe(c.title)+'</h1><p>'+safe(c.concept)+'</p></section>'+
- caseStages(r,id,s)+'<div class="case-content">'+content+'</div>'+
- '<nav class="stage-foot" aria-label="حرکت بین مراحل">'+(s>0?a("case/"+r+"/"+id+"/"+(s-1),"مرحله قبل","secondary-btn"):a("track/"+r,"بازگشت به جلسات","secondary-btn"))+
- (s<4?a("case/"+r+"/"+id+"/"+(s+1),"ادامه: "+steps[s+1]+" ←","primary-btn"):a("track/"+r,"بازگشت به جلسات ←","primary-btn"))+'</nav>';
+ '<section class="case-heading"><span class="kicker">کیس '+fa(id)+' از ۱۵ · '+safe(roleNames[r])+'</span><h1>'+safe(c.title)+'</h1></section>'+
+ caseStages(r,id,s)+'<div class="case-content" data-current-stage="'+s+'">'+screens[s]()+'</div>'+
+ '<nav class="stage-foot" aria-label="حرکت بین مراحل">'+
+ (s>0?a("case/"+r+"/"+id+"/"+(s-1),"مرحله قبل","secondary-btn"):a("track/"+r,"بازگشت به جلسه‌ها","secondary-btn"))+
+ '<span class="stage-progress">'+fa(s+1)+' / ۶</span>'+
+ (s<5?a("case/"+r+"/"+id+"/"+(s+1),"ادامه: "+steps[s+1]+" ←","primary-btn"):a("track/"+r,"بازگشت به جلسه‌ها ←","primary-btn"))+'</nav>';
 }
 function library(r){
  return '<section class="section-intro"><span class="kicker">'+roleNames[r]+'</span><h1>۱۵ کیس رفتار سازمانی</h1><p>از یک موقعیت شروع کنید و تصمیم‌ها را بررسی کنید.</p></section>'+
@@ -124,7 +156,7 @@ function library(r){
 }
 function culture(r){
  return '<section class="section-intro"><span class="kicker">'+roleNames[r]+'</span><h1>قواعد رفتار و فرهنگ</h1><p>۱۵ قاعده پیشنهادی برای گفت‌وگو و تمرین؛ نه دستورالعمل مصوب شرکت.</p></section>'+
- '<div class="rules-grid">'+CASES.map(function(c,i){return '<a href="#/case/'+r+'/'+c.id+'/4" class="rule-row"><span>'+fa(c.id)+'</span><div><strong>'+safe(c.title)+'</strong><p>'+safe(NAAV_GUIDE[i].rule)+'</p></div></a>'}).join("")+'</div>';
+ '<div class="rules-grid">'+CASES.map(function(c,i){return '<a href="#/case/'+r+'/'+c.id+'/5" class="rule-row"><span>'+fa(c.id)+'</span><div><strong>'+safe(c.title)+'</strong><p>'+safe(NAAV_GUIDE[i].rule)+'</p></div></a>'}).join("")+'</div>';
 }
 function render(){
  var p=path(),r=roleOf(p);if(p[0]==="home")r=role;
@@ -137,7 +169,19 @@ function render(){
 document.addEventListener("click",function(e){
  var roleBtn=e.target.closest("[data-role]");if(roleBtn&&!roleBtn.hasAttribute("data-choice")){var r=roleBtn.getAttribute("data-role");if(roleNames[r]){role=r;store("ns_role",r);go("track/"+r)}return}
  var choice=e.target.closest("[data-choice]");if(choice){var r=choice.dataset.role,id=+choice.dataset.case,n=+choice.dataset.choice;store(choiceKey(r,id),n);
- document.querySelectorAll("[data-choice]").forEach(function(x){var sel=x===choice;x.classList.toggle("chosen",sel);x.setAttribute("aria-pressed",String(sel))})}
+ document.querySelectorAll("[data-choice]").forEach(function(x){var sel=x===choice;x.classList.toggle("chosen",sel);x.setAttribute("aria-pressed",String(sel))});
+ var status=document.querySelector("[data-choice-status]");if(status)status.textContent="انتخاب ثبت شد: گزینه "+["الف","ب","ج"][n]+" · اکنون پیامد آن را ببینید.";
+ }
+ var action=e.target.closest("[data-action-choice]");
+ if(action){var ar=action.dataset.role,id=+action.dataset.case,i=+action.dataset.actionChoice;store(actionKey(ar,id),i);
+ document.querySelectorAll("[data-action-choice]").forEach(function(x){var sel=x===action;x.classList.toggle("chosen",sel);x.setAttribute("aria-pressed",String(sel))});
+ var info=document.querySelector(".proof-status");if(info)info.textContent="اقدام انتخاب‌شده: "+fa(i+1);
+ }
+ var save=e.target.closest("[data-save-proof]");
+ if(save){var value=document.getElementById("proof-field").value.trim(),cr=save.dataset.role,id=+save.dataset.saveProof;
+ store(proofKey(cr,id),value);var message=document.querySelector(".proof-status");if(message)message.textContent=value?"✓ نشانه تغییر در همین مرورگر ثبت شد.":"برای ثبت، یک نشانه قابل مشاهده بنویسید.";
+ }
+
 });
 window.addEventListener("hashchange",render);
 render();
