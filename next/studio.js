@@ -55,6 +55,7 @@ function roleOf(p){return roleNames[p[1]]?p[1]:role}
 function currCase(r,id){return CASES[id-1]&&CASES[id-1].variants[r]?CASES[id-1]:null}
 function lab(id,r){return NAV_ROLE_LABS[r]&&NAV_ROLE_LABS[r][String(id)]}
 function clearPrompt(r,id,index,fallback){var items=window.NAAV_CONTENT_CLARITY&&window.NAAV_CONTENT_CLARITY[r];return items&&items[id-1]&&items[id-1][index]||fallback}
+function simpleCore(id,fallback){var core=window.NAAV_CONTENT_CLARITY&&window.NAAV_CONTENT_CLARITY.core;return core&&core[id-1]||fallback}
 function sessions(r){
  if(r==="operations")return ops.filter(function(o){return !o.break}).map(function(o,i){return {title:o.title,desc:o.desc,topics:o.items,ids:i<5?(opsCaseBlocks[i]||[]):[],time:o.time,final:i===5}});
  var data=r==="managers"?managers:hq;
@@ -167,7 +168,7 @@ function practice(c,v,l,r){
  (l.v||[]).forEach(function(person){var existing=voices.find(function(x){return x[0]===person[0]});if(existing){existing[1]+=" "+person[1]}else voices.push([person[0],person[1]])});
  return '<section class="content-section step-roleplay"><span class="kicker">گام ۴ · نقش‌آفرینی</span><h2>حالا در این موقعیت گفت‌وگو کنیم.</h2>'+
  '<div class="role-play-grid">'+voices.map(function(x,i){return '<div class="play-person"><small>نقش '+fa(i+1)+'</small><strong>'+safe(x[0])+'</strong><p>«'+safe(x[1])+'»</p></div>'}).join("")+'</div>'+
- '<div class="speech-task"><span>تمرین گفت‌وگو · حدود ۹۰ ثانیه</span><strong>'+safe(clearPrompt(r,c.id,2,l.r||v.questions[0]))+'</strong></div>'+
+ '<div class="speech-task"><span>تمرین گفت‌وگو · ۲ تا ۳ دقیقه</span><strong>'+safe(clearPrompt(r,c.id,2,l.r||v.questions[0]))+'</strong></div>'+
  '<details class="pressure-reveal"><summary><span aria-hidden="true">⚡</span> اتفاق غیرمنتظره در گفت‌وگو را آشکار کنید</summary><div><p>'+rich(d.pressure||"طرف مقابل به تصمیم اعتراض جدی می‌کند.")+'</p><strong>گفت‌وگو را ادامه دهید؛ بدون عقب‌نشینی غیرموجه یا حمله شخصی.</strong></div></details>'+
  '<details class="fold discreet-fold"><summary>یک عبارت پیشنهادی برای شروع</summary><p>«'+safe(v.dialogue)+'»</p></details>'+
  '<div class="reflection"><span class="qmark">؟</span><p>کدام جمله توانست هم رابطه را حفظ کند و هم مسئولیت را روشن کند؟</p></div></section>';
@@ -175,8 +176,8 @@ function practice(c,v,l,r){
 function reflect(c,r,v,g){
  var d=depth(c.id);
  return '<section class="content-section step-reflect"><span class="kicker">گام ۵ · واکاوی</span><h2>ریشه رفتاری مسئله کجاست؟</h2>'+
- '<div class="analysis-lead"><strong>بینش کلیدی</strong><p>'+rich(d.mechanism||c.theory.explanation)+'</p></div>'+
- '<div class="depth-spotlight"><span>تعارضی که باید بشناسیم</span><p>'+rich(d.tension||"میان خواسته‌های مشروع ذی‌نفعان تعارض وجود دارد.")+'</p></div>'+
+ '<div class="analysis-lead"><strong>اصل ماجرا، در یک جمله</strong><p>'+safe(simpleCore(c.id,g.rule))+'</p></div>'+
+ '<details class="fold discreet-fold"><summary>بررسی عمیق‌تر رفتار و دلیل آن</summary><p>'+rich(d.mechanism||c.theory.explanation)+'</p><p>'+rich(d.tension||"میان خواسته‌های افراد تعارض وجود دارد.")+'</p></details>'+
  '<details class="fold"><summary>چه شواهدی برای قضاوت لازم است؟</summary><p>'+rich(d.test||c.evidence)+'</p></details>'+
  '<details class="fold"><summary>مفهوم علمی · '+safe(c.theory.name)+'</summary><p>'+safe(c.theory.explanation)+'</p><p class="science-note">این مفهوم یک چارچوب تحلیل است، نه تشخیص قطعی علت رفتار افراد.</p></details>'+
  '<details class="fold"><summary>از کتاب «حقایق تلخ» چه می‌آموزیم؟</summary><strong>'+safe(d.book||g.book)+'</strong><p>'+safe(g.bridge)+'</p><p class="science-note">اقتباس مفهومی است، نه ادعای وقوع داستان کتاب در شرکت.</p></details>'+
