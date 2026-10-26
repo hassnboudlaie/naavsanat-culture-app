@@ -97,3 +97,11 @@ Original IDs/titles and all role variants are preserved. All 45 manager options 
 - No uncaught page JavaScript errors. Physical projector/classroom testing is not performed.
 - Test runner and GitHub QA workflow now test the checked-out commit, avoiding the old workflow's race against a potentially stale live deployment.
 - Visual review found emoji glyphs missing in the clean Linux test browser. Added self-hosted Vazirmatn (regular/bold) and a Noto Emoji fallback, with their open-font licenses; system color emoji remains preferred when available. Both entry points load the same font assets from GitHub Pages. Removed the unintended browser outline around the entire focused main panel while retaining interactive focus outlines.
+
+## Facilitator feedback revision — 26 October
+User rejected the previous managers experience as too textbook-like and the typography/contrast as inadequate. This explicit feedback supersedes the previous visual acceptance.
+- Rewrote the visible titles, short situations, discussion questions, practical takeaway and workplace follow-through for all 15 manager cases; original IDs, option meanings, saved data and other role content retained.
+- Six session openings now begin with a concrete work dilemma and spoken question. Removed repeated descriptive intro and three-row objective table.
+- Scientific analysis remains available behind one optional entry, while the initial reflection view shows a plain takeaway and concrete action.
+- Increased key manager text to 20–23px (19–21px for mobile controls); inherited Persian font in controls and textarea; darker text, clearer borders and white-on-navy emphasis.
+- Regression passed: 270 stages, 135 consequences, 45 persistence checks and five widths. Separate screenshots reviewed for session opening and reflection on desktop/mobile; computed role-play text confirmed white on navy, Vazirmatn, 23px desktop. Physical projector testing remains unperformed.

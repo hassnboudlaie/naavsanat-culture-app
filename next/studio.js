@@ -49,7 +49,7 @@ function caseExit(r,id){var i=sessionIndex(r,id),ss=sessions(r),ids=i>=0?ss[i].i
 function decisionNotes(id,i){var f=window.NAAV_MANAGER_FOCUS;return f&&f.decisionNotes&&f.decisionNotes[id-1][i]}
 function noteMarkup(id,i){var n=decisionNotes(id,i);return n?'<dl class="decision-notes"><dt>منطق تصمیم</dt><dd>'+safe(n[0])+'</dd><dt>محدودیت</dt><dd>'+safe(n[1])+'</dd><dt>چه زمانی مناسب است؟</dt><dd>'+safe(n[2])+'</dd></dl>':""}
 function techniqueDebrief(id){var f=window.NAAV_MANAGER_FOCUS,lines=f.dialogues[id-1],labels=f.techniques[id-1];return '<details class="fold"><summary>پس از اجرا: یک گفت‌وگوی ممکن و فنون آن</summary><p>این نمونه، پاسخ واحد یا متن حفظ‌کردنی نیست؛ با اجرای خود مقایسه کنید.</p>'+lines.map(function(t,i){return '<div class="voice"><strong>'+ (i===1?'نقش دوم':'نقش اول')+'</strong><p>«'+safe(t)+'»</p></div>'}).join('')+'<h3>چه رفتاری به گفت‌وگو کمک کرد؟</h3><p><strong>'+safe(labels[0])+'</strong> · در جمله اول، مسئله پیش از قضاوت روشن می‌شود.</p><p><strong>'+safe(labels[1])+'</strong> · جمله پایانی بحث را به تصمیم قابل پیگیری می‌رساند.</p><p>در اجرای شما کدام جمله اثر مشابه داشت؟ کجا هنوز توافق مبهم بود؟</p><p class="science-note">برای شنیدن فعال: بازتاب معنا، سؤال روشن‌کننده و بررسی فهم مشترک؛ منبع تکمیلی: فصل ارتباطات کتاب Managing Human Behavior، ویرایش پنجم.</p></details>'}
-function sessionClosing(r,num){var f=window.NAAV_MANAGER_FOCUS.sessionClose[num];return '<details class="fold session-close" id="session-close"><summary>جمع‌بندی و پیگیری جلسه</summary><h2>'+safe(f[0])+'</h2><p><strong>اقدام مدیریتی:</strong> '+safe(f[1])+'</p><p><strong>معیار مرور بعدی:</strong> '+safe(f[2])+'</p><p>هر مدیر یک اقدام از کیس‌های امروز را انتخاب کند؛ مسئول، موعد و نشانه اجرای آن را روشن بگوید.</p>'+sessions(r)[num].ids.map(function(id){var n=selection(actionKey(r,id),3),v=CASES[id-1].variants[r];return '<div class="session-record"><strong>'+safe(CASES[id-1].title)+'</strong><p>'+safe(n>=0?v.solution[n]:'هنوز اقدامی انتخاب نشده است.')+'</p><p>'+safe(saved(proofKey(r,id),''))+'</p>'+a('case/'+r+'/'+id+'/5','ثبت یا مرور اقدام','text-link')+'</div>'}).join('')+'</details>'}
+function sessionClosing(r,num){var f=window.NAAV_MANAGER_FOCUS.sessionClose[num];return '<details class="fold session-close" id="session-close"><summary>جمع‌بندی و پیگیری جلسه</summary><h2>'+safe(f[0])+'</h2><p><strong>اقدام مدیریتی:</strong> '+safe(f[1])+'</p><p><strong>معیار مرور بعدی:</strong> '+safe(f[2])+'</p><p>هر مدیر یک اقدام از کیس‌های امروز را انتخاب کند؛ مسئول، موعد و نشانه اجرای آن را روشن بگوید.</p>'+sessions(r)[num].ids.map(function(id){var n=selection(actionKey(r,id),3),v=CASES[id-1].variants[r];return '<div class="session-record"><strong>'+safe(practical(id).title)+'</strong><p>'+safe(n>=0?v.solution[n]:'هنوز اقدامی انتخاب نشده است.')+'</p><p>'+safe(saved(proofKey(r,id),''))+'</p>'+a('case/'+r+'/'+id+'/5','ثبت یا مرور اقدام','text-link')+'</div>'}).join('')+'</details>'}
 
 function safe(s){return String(s==null?"":s).replace(/[&<>"']/g,function(a){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[a]})}
 function rich(s){return safe(s).replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>")}
@@ -65,6 +65,7 @@ function roleOf(p){return roleNames[p[1]]?p[1]:role}
 function currCase(r,id){return CASES[id-1]&&CASES[id-1].variants[r]?CASES[id-1]:null}
 function lab(id,r){return NAV_ROLE_LABS[r]&&NAV_ROLE_LABS[r][String(id)]}
 function managerFocus(id){return window.NAAV_MANAGER_FOCUS&&window.NAAV_MANAGER_FOCUS.cases[id-1]}
+function practical(id){return window.NAAV_MANAGER_FOCUS.practical[id-1]}
 function managerSession(i){return window.NAAV_MANAGER_FOCUS&&window.NAAV_MANAGER_FOCUS.sessions[i]}
 function clearPrompt(r,id,index,fallback){var items=window.NAAV_CONTENT_CLARITY&&window.NAAV_CONTENT_CLARITY[r];return items&&items[id-1]&&items[id-1][index]||fallback}
 function simpleCore(id,fallback){var core=window.NAAV_CONTENT_CLARITY&&window.NAAV_CONTENT_CLARITY.core;return core&&core[id-1]||fallback}
@@ -106,7 +107,7 @@ function mobileDashboard(p){
 }
 function frame(p,body,cls){
  return header(p)+'<div class="app-layout">'+dashboard(p)+
- '<main id="app" class="container '+(cls||"")+'" tabindex="-1">'+body+'</main></div>'+
+ '<main id="app" class="container '+(cls||"")+(p[1]==="managers"?" manager-classroom":"")+'" tabindex="-1">'+body+'</main></div>'+
  '<footer class="site-foot">ناوصنعت مس <span aria-hidden="true">·</span> یادگیری، گفت‌وگو، اقدام</footer>'+mobileDashboard(p);
 }
 function landing(){
@@ -126,7 +127,7 @@ function addOns(){return '<section class="module-bridges" aria-label="آزمای
 function track(r){
  var ss=sessions(r);
  return '<section class="section-intro"><div class="kicker">مسیر یادگیری</div><h1>'+roleNames[r]+'</h1><p>'+safe(ROLES[r].focus)+'</p></section>'+
- '<section class="session-list" aria-label="جلسات آموزشی">'+ss.map(function(s,i){return '<a class="session-tile" href="#/session/'+r+'/'+i+'"><span class="session-index" aria-hidden="true">'+sessionIcon(r,i)+'</span><span class="session-info"><strong>'+safe(s.title)+'</strong><span>'+safe(s.desc)+'</span></span><span class="session-end"><small>'+safe(s.time)+'</small><b aria-hidden="true">←</b></span></a>'}).join("")+'</section>'+
+ '<section class="session-list" aria-label="جلسات آموزشی">'+ss.map(function(s,i){return '<a class="session-tile" href="#/session/'+r+'/'+i+'"><span class="session-index" aria-hidden="true">'+sessionIcon(r,i)+'</span><span class="session-info"><strong>'+safe(s.title)+'</strong><span>'+safe(r==="managers"?managerSession(i).issue:s.desc)+'</span></span><span class="session-end"><small>'+safe(s.time)+'</small><b aria-hidden="true">←</b></span></a>'}).join("")+'</section>'+
  '<div class="subtle-footline">'+a("library/"+r,"مشاهده هر ۱۵ کیس","text-link")+a("culture/"+r,"قواعد رفتار و فرهنگ","text-link")+'</div>'+glossary(r);
 }
 function actionExercise(){
@@ -136,12 +137,12 @@ function lesson(r,num){
  var s=sessions(r)[num];if(!s)return track(r);
  var ids=s.ids||[],anchor=ids.length?depth(ids[0]):{},mf=r==="managers"?managerSession(num):null;
  return '<div class="crumb">'+a("track/"+r,roleNames[r],'text-link')+' <span> / </span> '+fa(num+1)+'</div>'+
- '<section class="section-intro lesson-intro"><div class="kicker">'+safe(s.time)+'</div><h1>'+safe(s.title)+'</h1><p>'+safe(s.desc)+'</p></section>'+
+ '<section class="section-intro lesson-intro"><div class="kicker">'+safe(s.time)+'</div><h1>'+safe(s.title)+'</h1>'+(mf?'':'<p>'+safe(s.desc)+'</p>')+'</section>'+
  (s.final?actionExercise():
- (mf?'<section class="manager-lesson-brief" aria-label="تمرکز این جلسه"><div class="manager-brief-row"><span>موقعیت مدیریتی</span><strong>'+safe(mf.issue)+'</strong></div><div class="manager-brief-row"><span>تصمیم امروز</span><strong>'+safe(mf.ask)+'</strong></div><div class="manager-brief-output"><span>خروجی عملی</span><strong>'+safe(mf.output)+'</strong></div></section>':
+ (mf?'<section class="classroom-opening"><span class="kicker">از اینجا شروع کنیم</span><p>'+safe(practical(ids[0]).scene)+'</p><h2>'+safe(practical(ids[0]).ask)+'</h2><span class="opening-instruction">اول نظر خودتان را بگویید؛ بعد تصمیم‌ها را مقایسه می‌کنیم.</span></section>':
  '<section class="question-box"><span>پرسش محوری</span><strong>'+safe(s.topics[0]||"در این موقعیت چه رفتاری اهمیت دارد؟")+'</strong></section>'+
  (anchor.tension?'<div class="session-dilemma"><strong>چالش واقعی این بحث</strong><p>'+rich(anchor.tension)+'</p></div>':''))+
- '<section class="case-list"><h2>موقعیت‌های این جلسه</h2><div class="case-grid">'+ids.map(function(id){var c=CASES[id-1],d=depth(id);return '<a class="case-tile" href="#/case/'+r+'/'+id+'/0">'+caseTopline(id,'کیس '+fa(id))+'<strong>'+safe(c.title)+'</strong><p>'+safe(c.concept)+'</p><span class="case-link">بررسی این موقعیت ←</span></a>'}).join("")+'</div></section>')+
+ '<section class="case-list"><h2>موقعیت‌های این جلسه</h2><div class="case-grid">'+ids.map(function(id){var c=CASES[id-1],d=depth(id);return '<a class="case-tile" href="#/case/'+r+'/'+id+'/0">'+caseTopline(id,'کیس '+fa(id))+'<strong>'+safe(r==="managers"?practical(id).title:c.title)+'</strong><p>'+safe(r==="managers"?practical(id).ask:c.concept)+'</p><span class="case-link">بررسی این موقعیت ←</span></a>'}).join("")+'</div></section>')+
  (mf?'<p class="session-pacing">برنامه پیشنهادی ۱۲۰ دقیقه‌ای: ۱۰ دقیقه شروع · '+(ids.length===3?'۳ کیس، هرکدام ۳۰ دقیقه':'۲ کیس، هرکدام ۴۵ دقیقه')+' · ۲۰ دقیقه جمع‌بندی و تعهد</p>'+sessionClosing(r,num):'')+
  '<div class="page-bottom">'+a("track/"+r,"همه جلسات","text-link")+'</div>';
 }
@@ -153,11 +154,11 @@ function caseStages(r,id,step){
 function scenario(c,v,l,r){
  var lines=l.v||[];
  return '<section class="content-section step-scene"><span class="kicker">گام ۱ · موقعیت</span><h2>اگر شما جای این افراد بودید…</h2>'+
- '<div class="situation scene-focus">'+safe(v.problem)+'</div>'+
+ '<div class="situation scene-focus">'+safe(r==="managers"?practical(c.id).scene:v.problem)+'</div>'+
  '<div class="people-conversation">'+lines.slice(0,2).map(function(x){return '<div class="voice"><strong>'+safe(x[0])+'</strong><p>«'+safe(x[1])+'»</p></div>'}).join("")+'</div>'+
  (lines.length>2?'<details class="fold discreet-fold"><summary>صدای دیگر این موقعیت</summary><div class="voice extra-voice"><strong>'+safe(lines[2][0])+'</strong><p>«'+safe(lines[2][1])+'»</p></div></details>':'')+
- '<div class="reflection"><span class="qmark">؟</span><p>'+safe(clearPrompt(r,c.id,0,"برای تصمیم درست، چه اطلاعاتی کم داریم؟"))+'</p></div>'+
- '<p class="context-note">این موقعیت، بازسازی آموزشی از مسائل صنعت و سازمان است؛ جزئیات آن گزارش قطعی یک رخداد نیست.</p></section>';
+ '<div class="reflection"><span class="qmark">؟</span><p>'+safe(r==="managers"?practical(c.id).ask:clearPrompt(r,c.id,0,"برای تصمیم درست، چه اطلاعاتی کم داریم؟"))+'</p></div>'+
+ '<p class="context-note">موقعیت فرضی برای گفت‌وگو؛ گزارش یک اتفاق واقعی شرکت نیست.</p></section>';
 }
 function decision(c,r,l){
  var chosen=selection(choiceKey(r,c.id),l.o.length);
@@ -187,30 +188,32 @@ function practice(c,v,l,r){
  '<div class="role-play-grid">'+voices.map(function(x,i){return '<div class="play-person"><small>نقش '+fa(i+1)+'</small><strong>'+safe(x[0])+'</strong><p>«'+safe(x[1])+'»</p></div>'}).join("")+'</div>')+
  '<div class="speech-task"><span>تمرین گفت‌وگو · ۲ تا ۳ دقیقه</span><strong>'+safe(clearPrompt(r,c.id,2,l.r||v.questions[0]))+'</strong></div>'+
  '<details class="pressure-reveal"><summary><span aria-hidden="true">⚡</span> اتفاق غیرمنتظره در گفت‌وگو را آشکار کنید</summary><div><p>'+rich(mf?mf.pressure:d.pressure||"طرف مقابل به تصمیم اعتراض جدی می‌کند.")+'</p><strong>گفت‌وگو را ادامه دهید؛ بدون عقب‌نشینی غیرموجه یا حمله شخصی.</strong></div></details>'+
- (mf?'<div class="manager-role-outcome"><span>خروجی این Role Play</span><strong>'+safe(mf.proof)+'</strong></div>':'')+
+ (mf?'<div class="manager-role-outcome"><span>در پایان روی این توافق کنید</span><strong>'+safe(mf.proof)+'</strong></div>':'')+
  (mf?techniqueDebrief(c.id):'')+
  '<details class="fold discreet-fold"><summary>یک عبارت پیشنهادی برای شروع</summary><p>«'+safe(v.dialogue)+'»</p></details>'+
  '<div class="reflection"><span class="qmark">؟</span><p>'+(mf?'آیا در پایان، تصمیم و مسئول اجرا برای هر دو نفر روشن شد؟':'کدام جمله توانست هم رابطه را حفظ کند و هم مسئولیت را روشن کند؟')+'</p></div></section>';
 }
 function reflect(c,r,v,g){
  var d=depth(c.id),mf=r==="managers"?managerFocus(c.id):null;
- return '<section class="content-section step-reflect"><span class="kicker">گام ۵ · واکاوی</span><h2>ریشه رفتاری مسئله کجاست؟</h2>'+
- '<div class="analysis-lead"><strong>اصل ماجرا، در یک جمله</strong><p>'+safe(simpleCore(c.id,g.rule))+'</p></div>'+
- (mf?'<p class="manager-evidence">نشانه تصمیم قابل اجرا: '+safe(mf.proof)+'</p>':'')+
+ return '<section class="content-section step-reflect"><span class="kicker">گام ۵ · واکاوی</span><h2>برای دفعه بعد چه چیزی را عوض کنیم؟</h2>'+
+ '<div class="analysis-lead"><strong>اصل ماجرا، در یک جمله</strong><p>'+safe(mf?practical(c.id).lesson:simpleCore(c.id,g.rule))+'</p></div>'+
+ (mf?'<p class="manager-evidence">در کار خودمان: '+safe(practical(c.id).action)+'</p>':'')+
+ (mf?'<details class="fold"><summary>اگر بخواهیم بیشتر بررسی کنیم</summary>':'')+
  '<details class="fold discreet-fold"><summary>بررسی عمیق‌تر رفتار و دلیل آن</summary><p>'+rich(d.mechanism||c.theory.explanation)+'</p><p>'+rich(d.tension||"میان خواسته‌های افراد تعارض وجود دارد.")+'</p></details>'+
  '<details class="fold"><summary>چه شواهدی برای قضاوت لازم است؟</summary><p>'+rich(d.test||c.evidence)+'</p></details>'+
  '<details class="fold"><summary>مفهوم علمی · '+safe(c.theory.name)+'</summary><p>'+safe(c.theory.explanation)+'</p><p class="science-note">این مفهوم یک چارچوب تحلیل است، نه تشخیص قطعی علت رفتار افراد.</p></details>'+
  '<details class="fold"><summary>از کتاب «حقایق تلخ» چه می‌آموزیم؟</summary><strong>'+safe(d.book||g.book)+'</strong><p>'+safe(g.bridge)+'</p><p class="science-note">اقتباس مفهومی است، نه ادعای وقوع داستان کتاب در شرکت.</p></details>'+
- '<div class="reflection"><span class="qmark">؟</span><p>'+rich(d.debrief||v.questions[0])+'</p></div></section>';
+ (mf?'</details>':'')+
+ '<div class="reflection"><span class="qmark">؟</span><p>'+ (mf?'آخرین بار این مسئله در کار شما کجا پیش آمد؟ دفعه بعد چه جمله یا تصمیمی را عوض می‌کنید؟':rich(d.debrief||v.questions[0]))+'</p></div></section>';
 }
 function conclude(c,r,v,g){
  var d=depth(c.id),old=selection(actionKey(r,c.id),3),pr=saved(proofKey(r,c.id),"");
  var options=(v.solution||[]).slice(0,3);
  return '<section class="content-section step-action"><span class="kicker">گام ۶ · اقدام</span><h2>از این تجربه، چه رفتاری وارد کار کنیم؟</h2>'+
- '<div class="takeaway action-rule">'+rich(d.shift||g.rule)+'</div>'+
- '<p class="action-prompt">'+(r==="managers"?'کدام رفتار مدیریتی را از جلسه بعد تغییر می‌دهیم؟':'یک اقدام مشخص برای موقعیت کاری بعدی انتخاب کنیم:')+'</p>'+
+ '<div class="takeaway action-rule">'+rich(r==="managers"?practical(c.id).lesson:d.shift||g.rule)+'</div>'+
+ '<p class="action-prompt">'+(r==="managers"?'این هفته کدام کار را انجام می‌دهید؟':'یک اقدام مشخص برای موقعیت کاری بعدی انتخاب کنیم:')+'</p>'+
  '<div class="action-choices">'+options.map(function(text,i){return '<button type="button" class="action-option '+(old===i?"chosen":"")+'" data-action-choice="'+i+'" data-role="'+r+'" data-case="'+c.id+'" aria-pressed="'+(old===i)+'"><span class="action-no">'+fa(i+1)+'</span><span>'+safe(text)+'</span></button>'}).join("")+'</div>'+
- '<div class="proof-panel"><label for="proof-field">'+(r==="managers"?'در جلسه بعد چه نشانه‌ای می‌بینیم که تصمیم اجرا شده؟':'از کجا بفهمیم این رفتار واقعاً اجرا شده است؟')+'</label><textarea id="proof-field" class="proof-field" rows="2" maxlength="240" placeholder="'+(r==="managers"?'یک کار مشخص، مسئول پیگیری و زمان مرور آن...':'یک نشانه قابل مشاهده؛ مثلاً تأیید تحویل توسط شیفت بعد...')+'">'+safe(pr)+'</textarea><div class="proof-bottom"><button type="button" class="save-proof" data-save-proof="'+c.id+'" data-role="'+r+'">ثبت نتیجه گروه</button><span class="proof-status" role="status">'+(old>=0?"اقدام انتخاب‌شده: "+fa(old+1):"")+'</span></div></div>'+
+ '<div class="proof-panel"><label for="proof-field">'+(r==="managers"?'با چه کسی، چه کاری و تا چه روزی؟':'از کجا بفهمیم این رفتار واقعاً اجرا شده است؟')+'</label><textarea id="proof-field" class="proof-field" rows="2" maxlength="240" placeholder="'+(r==="managers"?'مثلاً: فردا با مدیر سایت، زمان تحویل قطعه را قطعی می‌کنم.':'یک نشانه قابل مشاهده؛ مثلاً تأیید تحویل توسط شیفت بعد...')+'">'+safe(pr)+'</textarea><div class="proof-bottom"><button type="button" class="save-proof" data-save-proof="'+c.id+'" data-role="'+r+'">ثبت نتیجه گروه</button><span class="proof-status" role="status">'+(old>=0?"اقدام انتخاب‌شده: "+fa(old+1):"")+'</span></div></div>'+
  '<details class="fold discreet-fold"><summary>چند نکته تکمیلی برای انتقال به کار</summary><p>'+safe(v.lesson)+'</p><p>'+rich(d.trade||"نتیجه نیازمند پیگیری است.")+'</p></details>'+
  '<p class="context-note">انتخاب و نوشته فقط در همین مرورگر ثبت می‌شود؛ اطلاعات به سرور ارسال نمی‌شود.</p></section>';
 }
@@ -228,7 +231,7 @@ function caseView(r,id,step){
  function(){return conclude(c,r,v,g)}
  ];
  return '<div class="crumb">'+a(parent,"جلسه مربوط","text-link")+' <span> / </span> کیس '+fa(id)+'</div>'+
- '<section class="case-heading"><span class="kicker">کیس '+fa(id)+' از ۱۵ · '+safe(roleNames[r])+'</span><h1><span class="heading-sticker" aria-hidden="true">'+caseIcon(id)+'</span>'+safe(c.title)+'</h1></section>'+
+ '<section class="case-heading"><span class="kicker">کیس '+fa(id)+' از ۱۵ · '+safe(roleNames[r])+'</span><h1><span class="heading-sticker" aria-hidden="true">'+caseIcon(id)+'</span>'+safe(r==="managers"?practical(id).title:c.title)+'</h1></section>'+
  caseStages(r,id,s)+'<div class="case-content" data-current-stage="'+s+'">'+screens[s]()+'</div>'+
  '<nav class="stage-foot" aria-label="حرکت بین مراحل">'+
  (s>0?a("case/"+r+"/"+id+"/"+(s-1),"گام قبل","secondary-btn"):a(parent,"بازگشت به جلسه","secondary-btn"))+
@@ -237,7 +240,7 @@ function caseView(r,id,step){
 }
 function library(r){
  return '<section class="section-intro"><span class="kicker">'+roleNames[r]+'</span><h1>۱۵ کیس رفتار سازمانی</h1><p>یک موقعیت آشنا از کار را انتخاب کنید؛ ببینید شما چه تصمیمی می‌گیرید.</p></section>'+
- '<div class="case-grid">'+CASES.map(function(c){return '<a class="case-tile" href="#/case/'+r+'/'+c.id+'/0">'+caseTopline(c.id,'کیس '+fa(c.id))+'<strong>'+safe(c.title)+'</strong><p>'+safe(c.concept)+'</p><span class="case-link">بازکردن ←</span></a>'}).join("")+'</div>';
+ '<div class="case-grid">'+CASES.map(function(c){return '<a class="case-tile" href="#/case/'+r+'/'+c.id+'/0">'+caseTopline(c.id,'کیس '+fa(c.id))+'<strong>'+safe(r==="managers"?practical(c.id).title:c.title)+'</strong><p>'+safe(r==="managers"?practical(c.id).ask:c.concept)+'</p><span class="case-link">بازکردن ←</span></a>'}).join("")+'</div>';
 }
 function culture(r){
  return '<section class="section-intro"><span class="kicker">'+roleNames[r]+'</span><h1>قواعد رفتار و فرهنگ</h1><p>۱۵ نکته رفتاری برای کار روزمره؛ پیشنهاد آموزشی هستند، نه مقررات مصوب شرکت.</p></section>'+
