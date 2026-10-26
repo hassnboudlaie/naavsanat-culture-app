@@ -345,3 +345,6 @@ p{color:var(--muted)}
  .case-heading h1{font-size:24px}
 }
 @media(prefers-reduced-motion:reduce){.six-steps .step{transition:none}}
+
+/* Role-play shows each distinct stakeholder once, adapting card width to two or three roles. */
+@media(min-width:851px){.step-roleplay .role-play-grid{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}}
