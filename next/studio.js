@@ -34,11 +34,12 @@ function landing(){
  return '<section class="landing-head"><div class="copper-line"></div><span class="kicker">NAAVSANAT LEARNING EXPERIENCE</span><h1>رفتار سازمانی را<br><em>در موقعیت واقعی تمرین کنیم.</em></h1><p>مسئله را می‌بینیم، تصمیم می‌گیریم، پیامدها را بررسی می‌کنیم و گفت‌وگو را تمرین می‌کنیم.</p></section>'+
  '<section class="home-roles" aria-label="انتخاب گروه"><h2>گروه خود را انتخاب کنید</h2><div class="role-grid">'+roles.map(function(x){return '<button type="button" class="role-tile" data-role="'+x[0]+'"><span class="role-icon">'+roleIcons[x[0]]+'</span><strong>'+roleNames[x[0]]+'</strong><span class="role-desc">'+x[1]+'</span><span class="role-enter">ورود به مسیر <span aria-hidden="true">←</span></span></button>'}).join("")+'</div></section>';
 }
+function addOns(){return '<section class="module-bridges" aria-label="آزمایشگاه‌های مکمل"><h2>دو ماژول تکمیلی</h2><div class="module-bridge-list"><a href="#/medicator"><b>🎨 مدیکاتور</b><span>تصویر مدیریتی، تحلیل رفتار، تصمیم</span></a><a href="#/behavior"><b>💬 هنر رفتار</b><span>گفت‌وگو، موقعیت دشوار، نقش‌آفرینی</span></a></div></section>'}
 function track(r){
  var ss=sessions(r);
  return '<section class="section-intro"><div class="kicker">مسیر یادگیری</div><h1>'+roleNames[r]+'</h1><p>'+safe(ROLES[r].focus)+'</p></section>'+
  '<section class="session-list" aria-label="جلسات آموزشی">'+ss.map(function(s,i){return '<a class="session-tile" href="#/session/'+r+'/'+i+'"><span class="session-index">'+fa(i+1)+'</span><span class="session-info"><strong>'+safe(s.title)+'</strong><span>'+safe(s.desc)+'</span></span><span class="session-end"><small>'+safe(s.time)+'</small><b aria-hidden="true">←</b></span></a>'}).join("")+'</section>'+
- '<div class="subtle-footline">'+a("library/"+r,"مشاهده هر ۱۵ کیس","text-link")+a("culture/"+r,"قواعد رفتار و فرهنگ","text-link")+'</div>';
+ '<div class="subtle-footline">'+a("library/"+r,"مشاهده هر ۱۵ کیس","text-link")+a("culture/"+r,"قواعد رفتار و فرهنگ","text-link")+a("medicator","مدیکاتور","text-link")+a("behavior","هنر رفتار","text-link")+'</div>';
 }
 function actionExercise(){
  return '<div class="action-focus"><h2>یک رفتار را انتخاب کنیم</h2><div class="action-three">'+["شروع می‌کنم","متوقف می‌کنم","ادامه می‌دهم"].map(function(x,i){return '<div><span>'+fa(i+1)+'</span><strong>'+x+'</strong></div>'}).join("")+'</div><p class="prompt-question">در موقعیت کاری بعدی، چه رفتار مشخصی را تغییر می‌دهیم؟</p></div>';
@@ -104,7 +105,7 @@ function culture(r){
 function render(){
  var p=path(),r=roleOf(p);if(p[0]==="home")r=role;
  if(p[0]==="track"||p[0]==="case"||p[0]==="session"||p[0]==="library"||p[0]==="culture"){role=r;store("ns_role",r)}
- var body=p[0]==="home"?landing():p[0]==="track"?track(r):p[0]==="session"?lesson(r,+p[2]||0):p[0]==="case"?caseView(r,+p[2]||1,+p[3]||0):p[0]==="library"?library(r):p[0]==="culture"?culture(r):landing();
+ var body=p[0]==="home"?landing()+addOns():p[0]==="track"?track(r):p[0]==="session"?lesson(r,+p[2]||0):p[0]==="case"?caseView(r,+p[2]||1,+p[3]||0):p[0]==="library"?library(r):p[0]==="culture"?culture(r):p[0]==="medicator"?window.NaavIndustryModule.render("med",r,p[1]):p[0]==="behavior"?window.NaavIndustryModule.render("behavior",r,p[1]):landing();
  document.getElementById("root").innerHTML=frame(p,body,p[0]==="home"?"home-view":"content-view");
  document.title=(p[0]==="case"?"کیس "+fa(+p[2]||1)+" | ":"")+"ناوصنعت مس — یادگیری رفتار سازمانی";
  window.scrollTo(0,0);
