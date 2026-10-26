@@ -27,12 +27,12 @@ function btn(action,text,cls,attr){return '<button type="button" class="'+(cls||
 function label(t){return '<span class="tag">'+esc(t)+"</span>"}
 function brand(){return '<div class="brand"><img src="'+LOGO_DATA+'" alt="نشان اصلی ناوصنعت مس"><div><strong>ناوصنعت مس</strong><small>LEARNING STUDIO · ۲۰۲۶</small></div></div>'}
 function nav(p,r){
-var item=[["home","خانه یادگیری","⌂"],["track/"+r,"مسیر آموزشی","▤"],["library","کیس‌های واقعی","◫"],["culture","قواعد رفتاری","◎"]];
+var item=[["home","خانه یادگیری","⌂"],["track/"+r,"مسیر آموزشی","▤"],["library","کیس‌های واقعی","◫"],["medicator","مدیکاتور","🎨"],["behavior","هنر رفتار","💬"],["culture","قواعد رفتاری","◎"]];
 return '<aside class="navpanel" aria-label="ناوبری اصلی">'+brand()+'<div><div class="nav-label">فضای تدریس</div><nav class="navset">'+item.map(function(a){
 var active=p[0]===(a[0].split("/")[0])||a[0].startsWith("track")&&(p[0]==="session");
 return '<a class="navbtn'+(active?" current":"")+'" href="#/'+a[0]+'" '+(active?'aria-current="page"':"")+'><span class="navico" aria-hidden="true">'+a[2]+'</span>'+a[1]+'</a>'}).join("")+'</nav></div><div class="nav-foot"><div>مسیر فعال</div><b>'+names[r]+'</b><p style="color:#b3c5c6;font-size:11px;margin-top:7px">طراحی‌شده برای کلاس حضوری، گفت‌وگو و یادگیری از تجربه کار.</p></div></aside>'}
 function top(p,r){
-var title=p[0]==="home"?"شروع یادگیری":p[0]==="track"?"انتخاب جلسه":p[0]==="session"?"راهنمای جلسه":p[0]==="case"?"آزمایشگاه تصمیم":p[0]==="culture"?"قواعد رفتار و فرهنگ":"کتابخانه کیس‌ها";
+var title=p[0]==="home"?"شروع یادگیری":p[0]==="track"?"انتخاب جلسه":p[0]==="session"?"راهنمای جلسه":p[0]==="case"?"آزمایشگاه تصمیم":p[0]==="culture"?"قواعد رفتار و فرهنگ":p[0]==="medicator"?"مدیکاتور":p[0]==="behavior"?"هنر رفتار":"کتابخانه کیس‌ها";
 return '<header class="topstrip"><div class="crumbs">'+link("home","خانه","btn quiet small")+'<span>›</span><strong>'+title+'</strong><span class="tag">'+names[r]+'</span></div><div class="topactions"><label for="roleSelect" class="sr-only">انتخاب گروه</label><select class="btn" id="roleSelect" aria-label="تغییر گروه یادگیری"><option value="managers" '+(r==="managers"?"selected":"")+'>مدیران ستاد</option><option value="hq" '+(r==="hq"?"selected":"")+'>کارکنان ستاد</option><option value="operations" '+(r==="operations"?"selected":"")+'>کارکنان عملیاتی</option></select>'+btn("present",state.presentation?"خروج از نمایش":"◫ حالت تدریس","btn small",'aria-pressed="'+state.presentation+'"')+'</div></header>'}
 function layout(p,r,inner){return '<div class="shell">'+nav(p,r)+'<div class="work">'+top(p,r)+'<div class="page '+(p[0]==="case"?"case-screen":"")+'">'+inner+'</div></div></div>'}
 function home(){
@@ -99,7 +99,7 @@ GROUPS.map(function(g,i){var arr=CASES.slice(i*5,i*5+5);return '<div class="sect
 function render(){
 var p=parts(),r=currentRole(p); if(p[0]==="home"){r=state.role} else if(p[0]==="case"||p[0]==="session"||p[0]==="track"){state.role=r;put("naav_studio_role",r)}
 document.body.classList.toggle("presentation",state.presentation);
-var inner=p[0]==="home"?home():p[0]==="track"?track(r):p[0]==="session"?lesson(r,Math.max(0,+p[2]||0)):p[0]==="case"?casePage(r,+p[2]||1,+p[3]||0):p[0]==="library"?library(r):p[0]==="culture"?culture(r):home();
+var inner=p[0]==="home"?home():p[0]==="track"?track(r):p[0]==="session"?lesson(r,Math.max(0,+p[2]||0)):p[0]==="case"?casePage(r,+p[2]||1,+p[3]||0):p[0]==="library"?library(r):p[0]==="culture"?culture(r):p[0]==="medicator"?window.NaavIndustryModule.render("med",r,p[1]):p[0]==="behavior"?window.NaavIndustryModule.render("behavior",r,p[1]):home();
 document.getElementById("app").innerHTML=layout(p,r,inner);document.title=(p[0]==="case"?"کیس "+fa(+p[2]||1)+" | ":"")+"استودیوی یادگیری ناوصنعت مس";window.scrollTo(0,0)}
 function saveCase(r,id,type){
 var old=read(noteKey(r,id),{}),t=function(i){var el=document.getElementById(i);return el?el.value.trim():""};
