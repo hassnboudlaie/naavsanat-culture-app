@@ -101,7 +101,8 @@ function consequence(c,r,l){
  '<div class="reflection"><span class="qmark">؟</span><p>آیا با دانستن این پیامد، باز هم همین تصمیم را انتخاب می‌کنیم؟</p></div></section>';
 }
 function practice(c,v,l){
- var d=depth(c.id),voices=(l.v||[]).slice(0,3);
+ var d=depth(c.id),voices=[];
+ (l.v||[]).forEach(function(person){var existing=voices.find(function(x){return x[0]===person[0]});if(existing){existing[1]+=" "+person[1]}else voices.push([person[0],person[1]])});
  return '<section class="content-section step-roleplay"><span class="kicker">گام ۴ · نقش‌آفرینی</span><h2>حالا در این موقعیت گفت‌وگو کنیم.</h2>'+
  '<div class="role-play-grid">'+voices.map(function(x,i){return '<div class="play-person"><small>نقش '+fa(i+1)+'</small><strong>'+safe(x[0])+'</strong><p>«'+safe(x[1])+'»</p></div>'}).join("")+'</div>'+
  '<div class="speech-task"><span>چالش اصلی گفت‌وگو</span><strong>'+safe(l.r||v.questions[0])+'</strong></div>'+
