@@ -2,11 +2,43 @@
 (function(){
 "use strict";
 var roleNames={managers:"مدیران ستاد",hq:"کارکنان ستاد",operations:"کارکنان عملیاتی"};
-var roleIcons={managers:"🧭",hq:"🏢",operations:"⚙️"};
+var roleIcons={managers:"🧭",hq:"🗂️",operations:"🦺"};
 var steps=["موقعیت","انتخاب","پیامد","نقش‌آفرینی","واکاوی","اقدام"];
-var stepIcons=["◈","✓","↗","☷","◎","✦"];
+var stepIcons=["🧩","🧭","🔎","🎭","🧠","🎯"];
 var storedRole=saved("ns_role","managers");
 var role=roleNames[storedRole]?storedRole:"managers";
+/* Contextual icons and optional glossary: training aids, not official safety signage. */
+var caseIcons=["🏗️","🧭","⚖️","✅","🤝","🔗","🗣️","⏱️","🦺","🎛️","🪞","👥","🛡️","🎯","🔄"];
+var sessionIcons={
+ managers:["🏗️","🧭","⚖️","✅","🤝","🌱"],
+ hq:["🪞","📌","🔗","✅","🤝","🎯"],
+ operations:["🦺","🛡️","🔧","🚧","🎭","🎯"]
+};
+function caseIcon(id){return caseIcons[id-1]||"🧩"}
+function sessionIcon(r,i){return (sessionIcons[r]||[])[i]||"📘"}
+function caseTopline(id,caption){return '<span class="case-topline"><span class="tiny-label">'+safe(caption)+'</span><span class="case-sticker" aria-hidden="true">'+caseIcon(id)+'</span></span>'}
+var shorthand={
+ managers:[
+  ["RACI","Responsible · Accountable · Consulted · Informed","تعیین مسئول اجرا، پاسخگو، مشورت‌شونده و مطلع"],
+  ["OB","Organizational Behavior","رفتار افراد و گروه‌ها در محیط کار"],
+  ["OC","Organizational Culture","هنجارها و الگوهای رفتاری مشترک"]
+ ],
+ hq:[
+  ["RACI","Responsible · Accountable · Consulted · Informed","روشن‌کردن مسئولیت و مرز نقش‌ها"],
+  ["F/U","Follow-Up","پیگیری تعهد تا حصول نتیجه"],
+  ["SOP","Standard Operating Procedure","روش اجرایی استاندارد برای انجام کار"]
+ ],
+ operations:[
+  ["HSE","Health, Safety & Environment","بهداشت، ایمنی و محیط زیست"],
+  ["SOP","Standard Operating Procedure","روش اجرایی استاندارد"],
+  ["RP","Role Play","تمرین گفت‌وگو در یک موقعیت شغلی"]
+ ]
+};
+function glossary(r){
+ return '<details class="work-glossary"><summary>🔤 اختصارات کاربردی این مسیر <span aria-hidden="true">⌄</span></summary><div class="glossary-items">'+
+ shorthand[r].map(function(x){return '<div class="glossary-item"><bdi dir="ltr" class="glossary-code">'+x[0]+'</bdi><div><strong dir="ltr">'+x[1]+'</strong><span>'+x[2]+'</span></div></div>'}).join("")+
+ '</div><p>این اصطلاحات آموزشی‌اند؛ به‌معنای وجود رویه مصوب در ناوصنعت نیستند.</p></details>';
+}
 function saved(k,def){try{var v=JSON.parse(localStorage.getItem(k));return v===null?def:v}catch(e){return def}}
 function store(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 function safe(s){return String(s==null?"":s).replace(/[&<>"']/g,function(a){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[a]})}
@@ -37,13 +69,13 @@ function header(p){
 function learningLinks(p){
  var r=roleOf(p),page=p[0],rolePage=page==="track"||page==="case"||page==="session"||page==="library";
  var items=[
-  ["home","⌂","خانه","home",page==="home"],
+  ["home","🏠","خانه","home",page==="home"],
   ["managers","🧭","مدیران ستاد","track/managers",rolePage&&r==="managers"],
-  ["hq","🏢","کارکنان ستاد","track/hq",rolePage&&r==="hq"],
-  ["operations","⚙️","کارکنان عملیاتی","track/operations",rolePage&&r==="operations"],
-  ["culture","◇","قواعد رفتار و فرهنگ","culture/"+r,page==="culture"],
-  ["medicator","◈","مدیکاتور","medicator/"+r,page==="medicator"],
-  ["behavior","◎","هنر رفتار","behavior/"+r,page==="behavior"]
+  ["hq","🗂️","کارکنان ستاد","track/hq",rolePage&&r==="hq"],
+  ["operations","🦺","کارکنان عملیاتی","track/operations",rolePage&&r==="operations"],
+  ["culture","📜","قواعد رفتار و فرهنگ","culture/"+r,page==="culture"],
+  ["medicator","🖼️","مدیکاتور","medicator/"+r,page==="medicator"],
+  ["behavior","🎭","هنر رفتار","behavior/"+r,page==="behavior"]
  ];
  return items.map(function(item){
   var selected=item[4],cls="dashboard-link"+(selected?" is-active":"")+(item[0]==="culture"?" dashboard-section-start":"");
@@ -66,12 +98,12 @@ function frame(p,body,cls){
 function landing(){
  var items=[
   ["managers","🧭","مدیران ستاد","تصمیم، اختیار و پاسخگویی","track/managers",false],
-  ["hq","🏢","کارکنان ستاد","همکاری بین‌واحدی و تعهد حرفه‌ای","track/hq",false],
-  ["operations","⚙️","کارکنان عملیاتی","هماهنگی، تحویل کار و ایمنی","track/operations",false],
-  ["medicator","🎨","مدیکاتور","تصویر مدیریتی، تحلیل و تصمیم","medicator/"+role,true],
-  ["behavior","💬","هنر رفتار با افراد دشوار","موقعیت دشوار، گفت‌وگو و Role Play","behavior/"+role,true]
+  ["hq","🗂️","کارکنان ستاد","همکاری بین‌واحدی و تعهد حرفه‌ای","track/hq",false],
+  ["operations","🦺","کارکنان عملیاتی","هماهنگی، تحویل کار و ایمنی","track/operations",false],
+  ["medicator","🖼️","مدیکاتور","تصویر مدیریتی، تحلیل و تصمیم","medicator/"+role,true],
+  ["behavior","🎭","هنر رفتار با افراد دشوار","موقعیت دشوار، گفت‌وگو و Role Play","behavior/"+role,true]
  ];
- return '<section class="landing-head"><div class="copper-line"></div><span class="kicker">NAAVSANAT · CONTEXTUAL LEARNING</span><h1>رفتار سازمانی را<br><em>در موقعیت واقعی تمرین کنیم.</em></h1><p>تجربه واقعیِ کار، نقطه شروع یادگیری است؛ با انتخاب، تحلیل و گفت‌وگو به یک رفتار حرفه‌ای‌تر می‌رسیم.</p></section>'+
+ return '<section class="landing-head"><div class="copper-line"></div><div class="hero-stickers" aria-label="مفاهیم یادگیری"><span>⚙️ محیط صنعتی</span><span>🤝 همکاری</span><span>🎯 اقدام</span></div><span class="kicker">NAAVSANAT · CONTEXTUAL LEARNING</span><h1>رفتار سازمانی را<br><em>در موقعیت واقعی تمرین کنیم.</em></h1><p>تجربه واقعیِ کار، نقطه شروع یادگیری است؛ با انتخاب، تحلیل و گفت‌وگو به یک رفتار حرفه‌ای‌تر می‌رسیم.</p></section>'+
  '<section class="home-roles" aria-label="انتخاب مسیر"><h2>مسیر یادگیری را انتخاب کنید</h2><div class="role-grid">'+items.map(function(x){
  return '<a class="role-tile'+(x[5]?" module-tile":"")+'" href="#/'+x[4]+'"><span class="role-icon" aria-hidden="true">'+x[1]+'</span><strong>'+x[2]+'</strong><span class="role-desc">'+x[3]+'</span>'+(x[5]?'<span class="module-tag">ماژول مستقل</span>':'')+'<span class="role-enter">ورود <span aria-hidden="true">←</span></span></a>';
  }).join("")+'</div></section>';
@@ -80,8 +112,8 @@ function addOns(){return '<section class="module-bridges" aria-label="آزمای
 function track(r){
  var ss=sessions(r);
  return '<section class="section-intro"><div class="kicker">مسیر یادگیری</div><h1>'+roleNames[r]+'</h1><p>'+safe(ROLES[r].focus)+'</p></section>'+
- '<section class="session-list" aria-label="جلسات آموزشی">'+ss.map(function(s,i){return '<a class="session-tile" href="#/session/'+r+'/'+i+'"><span class="session-index">'+fa(i+1)+'</span><span class="session-info"><strong>'+safe(s.title)+'</strong><span>'+safe(s.desc)+'</span></span><span class="session-end"><small>'+safe(s.time)+'</small><b aria-hidden="true">←</b></span></a>'}).join("")+'</section>'+
- '<div class="subtle-footline">'+a("library/"+r,"مشاهده هر ۱۵ کیس","text-link")+a("culture/"+r,"قواعد رفتار و فرهنگ","text-link")+'</div>';
+ '<section class="session-list" aria-label="جلسات آموزشی">'+ss.map(function(s,i){return '<a class="session-tile" href="#/session/'+r+'/'+i+'"><span class="session-index" aria-hidden="true">'+sessionIcon(r,i)+'</span><span class="session-info"><strong>'+safe(s.title)+'</strong><span>'+safe(s.desc)+'</span></span><span class="session-end"><small>'+safe(s.time)+'</small><b aria-hidden="true">←</b></span></a>'}).join("")+'</section>'+
+ '<div class="subtle-footline">'+a("library/"+r,"مشاهده هر ۱۵ کیس","text-link")+a("culture/"+r,"قواعد رفتار و فرهنگ","text-link")+'</div>'+glossary(r);
 }
 function actionExercise(){
  return '<div class="action-focus"><h2>یک رفتار را انتخاب کنیم</h2><div class="action-three">'+["شروع می‌کنم","متوقف می‌کنم","ادامه می‌دهم"].map(function(x,i){return '<div><span>'+fa(i+1)+'</span><strong>'+x+'</strong></div>'}).join("")+'</div><p class="prompt-question">در موقعیت کاری بعدی، چه رفتار مشخصی را تغییر می‌دهیم؟</p></div>';
@@ -94,12 +126,12 @@ function lesson(r,num){
  (s.final?actionExercise():
  '<section class="question-box"><span>پرسش محوری</span><strong>'+safe(s.topics[0]||"در این موقعیت چه رفتاری اهمیت دارد؟")+'</strong></section>'+
  (anchor.tension?'<div class="session-dilemma"><strong>چالش واقعی این بحث</strong><p>'+rich(anchor.tension)+'</p></div>':'')+
- '<section class="case-list"><h2>موقعیت‌های این جلسه</h2><div class="case-grid">'+ids.map(function(id){var c=CASES[id-1],d=depth(id);return '<a class="case-tile" href="#/case/'+r+'/'+id+'/0"><span class="tiny-label">کیس '+fa(id)+'</span><strong>'+safe(c.title)+'</strong><p>'+safe(c.concept)+'</p><span class="case-link">بررسی معمای رفتاری ←</span></a>'}).join("")+'</div></section>')+
+ '<section class="case-list"><h2>موقعیت‌های این جلسه</h2><div class="case-grid">'+ids.map(function(id){var c=CASES[id-1],d=depth(id);return '<a class="case-tile" href="#/case/'+r+'/'+id+'/0">'+caseTopline(id,'کیس '+fa(id))+'<strong>'+safe(c.title)+'</strong><p>'+safe(c.concept)+'</p><span class="case-link">بررسی معمای رفتاری ←</span></a>'}).join("")+'</div></section>')+
  '<div class="page-bottom">'+a("track/"+r,"همه جلسات","text-link")+'</div>';
 }
 function caseStages(r,id,step){
  return '<nav aria-label="شش گام یادگیری" class="case-steps six-steps">'+steps.map(function(t,i){
- return '<a class="step '+(i===step?"active":i<step?"visited":"")+'" href="#/case/'+r+'/'+id+'/'+i+'" '+(i===step?'aria-current="step"':'')+' title="گام '+fa(i+1)+': '+t+'"><span class="step-index">'+fa(i+1)+'</span><strong>'+t+'</strong></a>';
+ return '<a class="step '+(i===step?"active":i<step?"visited":"")+'" href="#/case/'+r+'/'+id+'/'+i+'" '+(i===step?'aria-current="step"':'')+' title="گام '+fa(i+1)+': '+t+'"><span class="step-index">'+fa(i+1)+'</span><strong><span class="step-emoji" aria-hidden="true">'+stepIcons[i]+'</span>'+t+'</strong></a>';
  }).join("")+'</nav>';
 }
 function scenario(c,v,l){
@@ -173,7 +205,7 @@ function caseView(r,id,step){
  function(){return conclude(c,r,v,g)}
  ];
  return '<div class="crumb">'+a("track/"+r,roleNames[r],"text-link")+' <span> / </span> کیس '+fa(id)+'</div>'+
- '<section class="case-heading"><span class="kicker">کیس '+fa(id)+' از ۱۵ · '+safe(roleNames[r])+'</span><h1>'+safe(c.title)+'</h1></section>'+
+ '<section class="case-heading"><span class="kicker">کیس '+fa(id)+' از ۱۵ · '+safe(roleNames[r])+'</span><h1><span class="heading-sticker" aria-hidden="true">'+caseIcon(id)+'</span>'+safe(c.title)+'</h1></section>'+
  caseStages(r,id,s)+'<div class="case-content" data-current-stage="'+s+'">'+screens[s]()+'</div>'+
  '<nav class="stage-foot" aria-label="حرکت بین مراحل">'+
  (s>0?a("case/"+r+"/"+id+"/"+(s-1),"مرحله قبل","secondary-btn"):a("track/"+r,"بازگشت به جلسه‌ها","secondary-btn"))+
@@ -182,11 +214,11 @@ function caseView(r,id,step){
 }
 function library(r){
  return '<section class="section-intro"><span class="kicker">'+roleNames[r]+'</span><h1>۱۵ کیس رفتار سازمانی</h1><p>از یک موقعیت شروع کنید و تصمیم‌ها را بررسی کنید.</p></section>'+
- '<div class="case-grid">'+CASES.map(function(c){return '<a class="case-tile" href="#/case/'+r+'/'+c.id+'/0"><span class="tiny-label">کیس '+fa(c.id)+'</span><strong>'+safe(c.title)+'</strong><p>'+safe(c.concept)+'</p><span class="case-link">بازکردن ←</span></a>'}).join("")+'</div>';
+ '<div class="case-grid">'+CASES.map(function(c){return '<a class="case-tile" href="#/case/'+r+'/'+c.id+'/0">'+caseTopline(c.id,'کیس '+fa(c.id))+'<strong>'+safe(c.title)+'</strong><p>'+safe(c.concept)+'</p><span class="case-link">بازکردن ←</span></a>'}).join("")+'</div>';
 }
 function culture(r){
  return '<section class="section-intro"><span class="kicker">'+roleNames[r]+'</span><h1>قواعد رفتار و فرهنگ</h1><p>۱۵ قاعده پیشنهادی برای گفت‌وگو و تمرین؛ نه دستورالعمل مصوب شرکت.</p></section>'+
- '<div class="rules-grid">'+CASES.map(function(c,i){return '<a href="#/case/'+r+'/'+c.id+'/5" class="rule-row"><span>'+fa(c.id)+'</span><div><strong>'+safe(c.title)+'</strong><p>'+safe(NAAV_GUIDE[i].rule)+'</p></div></a>'}).join("")+'</div>';
+ '<div class="rules-grid">'+CASES.map(function(c,i){return '<a href="#/case/'+r+'/'+c.id+'/5" class="rule-row"><span class="rule-sticker" aria-hidden="true">'+caseIcon(c.id)+'</span><div><strong>'+safe(c.title)+'</strong><p>'+safe(NAAV_GUIDE[i].rule)+'</p></div></a>'}).join("")+'</div>';
 }
 function render(){
  var p=path(),r=roleOf(p);if(p[0]==="home")r=role;
