@@ -33,7 +33,28 @@ function header(p){
  return '<header class="mast"><div class="mast-inner"><a class="identity" href="#/home"><img src="'+LOGO_DATA+'" alt="نشان ناوصنعت مس"><span><strong>ناوصنعت مس</strong><small>رفتار و فرهنگ سازمانی</small></span></a>'+
  (inner?'<div class="mast-tools">'+a(back,'بازگشت','head-link')+a("home","تغییر گروه","head-link outline")+'</div>':'<span class="mast-caption">یادگیری از تجربه کار</span>')+'</div></header>';
 }
-function frame(p,body,cls){return header(p)+'<main id="app" class="container '+(cls||"")+'" tabindex="-1">'+body+'</main><footer class="site-foot">ناوصنعت مس <span aria-hidden="true">·</span> یادگیری، گفت‌وگو، اقدام</footer>'}
+/* Quiet navigation: right side on desktop and a single expandable row on smaller screens. */
+function learningLinks(p){
+ var r=roleOf(p),active=p[0]==="case"||p[0]==="session"||p[0]==="library"?"track":p[0];
+ var items=[["home","⌂","خانه","home"],["track","▤","جلسات آموزشی","track/"+r],["culture","◇","قواعد رفتار و فرهنگ","culture/"+r],["medicator","◈","مدیکاتور","medicator/"+r],["behavior","◎","هنر رفتار","behavior/"+r]];
+ return items.map(function(item){
+  return '<a class="dashboard-link'+(active===item[0]?' is-active':'')+'" href="#/'+item[3]+'"'+(active===item[0]?' aria-current="page"':'')+'><span class="dashboard-glyph" aria-hidden="true">'+item[1]+'</span><span>'+item[2]+'</span></a>';
+ }).join("");
+}
+function dashboard(p){
+ var r=roleOf(p);
+ return '<aside class="dashboard-rail" aria-label="داشبورد یادگیری"><div class="dashboard-heading"><span>بخش‌های یادگیری</span><small>'+roleNames[r]+'</small></div><nav aria-label="ناوبری اصلی">'+learningLinks(p)+'</nav></aside>';
+}
+function mobileDashboard(p){
+ var section=p[0],current=section==="case"?"کیس "+fa(+p[2]||1)+" · "+steps[Math.max(0,Math.min(5,+p[3]||0))]:section==="session"?"جلسه "+fa((+p[2]||0)+1):section==="track"?"جلسات آموزشی":section==="culture"?"قواعد رفتار و فرهنگ":section==="medicator"?"مدیکاتور":section==="behavior"?"هنر رفتار":"خانه";
+ return '<details class="mobile-dash"><summary><span class="mobile-dash-control">☰ بخش‌ها</span><strong class="mobile-dash-name">'+current+'</strong><span class="mobile-dash-chevron" aria-hidden="true">⌃</span></summary><nav class="mobile-dash-panel" aria-label="انتخاب بخش">'+learningLinks(p)+'</nav></details>';
+}
+function frame(p,body,cls){
+ var home=p[0]==="home";
+ return header(p)+'<div class="app-layout'+(home?' app-layout-home':'')+'">'+(home?'':dashboard(p))+
+ '<main id="app" class="container '+(cls||"")+'" tabindex="-1">'+body+'</main></div>'+
+ '<footer class="site-foot">ناوصنعت مس <span aria-hidden="true">·</span> یادگیری، گفت‌وگو، اقدام</footer>'+(home?'':mobileDashboard(p));
+}
 function landing(){
  var items=[
   ["managers","🧭","مدیران ستاد","تصمیم، اختیار و پاسخگویی","track/managers",false],
@@ -163,6 +184,7 @@ function render(){
  var p=path(),r=roleOf(p);if(p[0]==="home")r=role;
  if(p[0]==="track"||p[0]==="case"||p[0]==="session"||p[0]==="library"||p[0]==="culture"||p[0]==="medicator"||p[0]==="behavior"){role=r;store("ns_role",r)}
  var body=p[0]==="home"?landing():p[0]==="track"?track(r):p[0]==="session"?lesson(r,+p[2]||0):p[0]==="case"?caseView(r,+p[2]||1,+p[3]||0):p[0]==="library"?library(r):p[0]==="culture"?culture(r):(p[0]==="medicator"||p[0]==="behavior")&&window.NaavIndustryModule?window.NaavIndustryModule.render(p[0],r,p[2],+p[3]||0):landing();
+ document.body.classList.toggle("has-learning-dash",p[0]!=="home");
  document.getElementById("root").innerHTML=frame(p,body,p[0]==="home"?"home-view":"content-view");
  document.title=(p[0]==="case"?"کیس "+fa(+p[2]||1)+" | ":"")+"ناوصنعت مس — یادگیری رفتار سازمانی";
  window.scrollTo(0,0);
