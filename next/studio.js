@@ -35,10 +35,19 @@ function header(p){
 }
 /* Quiet navigation: right side on desktop and a single expandable row on smaller screens. */
 function learningLinks(p){
- var r=roleOf(p),active=p[0]==="case"||p[0]==="session"||p[0]==="library"?"track":p[0];
- var items=[["home","⌂","خانه","home"],["track","▤","جلسات آموزشی","track/"+r],["culture","◇","قواعد رفتار و فرهنگ","culture/"+r],["medicator","◈","مدیکاتور","medicator/"+r],["behavior","◎","هنر رفتار","behavior/"+r]];
+ var r=roleOf(p),page=p[0],rolePage=page==="track"||page==="case"||page==="session"||page==="library";
+ var items=[
+  ["home","⌂","خانه","home",page==="home"],
+  ["managers","🧭","مدیران ستاد","track/managers",rolePage&&r==="managers"],
+  ["hq","🏢","کارکنان ستاد","track/hq",rolePage&&r==="hq"],
+  ["operations","⚙️","کارکنان عملیاتی","track/operations",rolePage&&r==="operations"],
+  ["culture","◇","قواعد رفتار و فرهنگ","culture/"+r,page==="culture"],
+  ["medicator","◈","مدیکاتور","medicator/"+r,page==="medicator"],
+  ["behavior","◎","هنر رفتار","behavior/"+r,page==="behavior"]
+ ];
  return items.map(function(item){
-  return '<a class="dashboard-link'+(active===item[0]?' is-active':'')+'" href="#/'+item[3]+'"'+(active===item[0]?' aria-current="page"':'')+'><span class="dashboard-glyph" aria-hidden="true">'+item[1]+'</span><span>'+item[2]+'</span></a>';
+  var selected=item[4],cls="dashboard-link"+(selected?" is-active":"")+(item[0]==="culture"?" dashboard-section-start":"");
+  return '<a class="'+cls+'" href="#/'+item[3]+'"'+(selected?' aria-current="page"':'')+'><span class="dashboard-glyph" aria-hidden="true">'+item[1]+'</span><span>'+item[2]+'</span></a>';
  }).join("");
 }
 function dashboard(p){
@@ -46,7 +55,7 @@ function dashboard(p){
  return '<aside class="dashboard-rail" aria-label="داشبورد یادگیری"><div class="dashboard-heading"><span>بخش‌های یادگیری</span><small>'+roleNames[r]+'</small></div><nav aria-label="ناوبری اصلی">'+learningLinks(p)+'</nav></aside>';
 }
 function mobileDashboard(p){
- var section=p[0],current=section==="case"?"کیس "+fa(+p[2]||1)+" · "+steps[Math.max(0,Math.min(5,+p[3]||0))]:section==="session"?"جلسه "+fa((+p[2]||0)+1):section==="track"?"جلسات آموزشی":section==="culture"?"قواعد رفتار و فرهنگ":section==="medicator"?"مدیکاتور":section==="behavior"?"هنر رفتار":"خانه";
+ var section=p[0],current=section==="case"?"کیس "+fa(+p[2]||1)+" · "+steps[Math.max(0,Math.min(5,+p[3]||0))]:section==="session"?"جلسه "+fa((+p[2]||0)+1):section==="track"?roleNames[roleOf(p)]:section==="culture"?"قواعد رفتار و فرهنگ":section==="medicator"?"مدیکاتور":section==="behavior"?"هنر رفتار":"خانه";
  return '<details class="mobile-dash"><summary><span class="mobile-dash-control">☰ بخش‌ها</span><strong class="mobile-dash-name">'+current+'</strong><span class="mobile-dash-chevron" aria-hidden="true">⌃</span></summary><nav class="mobile-dash-panel" aria-label="انتخاب بخش">'+learningLinks(p)+'</nav></details>';
 }
 function frame(p,body,cls){
