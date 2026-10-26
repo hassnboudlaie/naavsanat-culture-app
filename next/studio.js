@@ -54,12 +54,14 @@ function proofKey(r,id){return "naav_studio_proof_"+r+"_"+id}
 function roleOf(p){return roleNames[p[1]]?p[1]:role}
 function currCase(r,id){return CASES[id-1]&&CASES[id-1].variants[r]?CASES[id-1]:null}
 function lab(id,r){return NAV_ROLE_LABS[r]&&NAV_ROLE_LABS[r][String(id)]}
+function managerFocus(id){return window.NAAV_MANAGER_FOCUS&&window.NAAV_MANAGER_FOCUS.cases[id-1]}
+function managerSession(i){return window.NAAV_MANAGER_FOCUS&&window.NAAV_MANAGER_FOCUS.sessions[i]}
 function clearPrompt(r,id,index,fallback){var items=window.NAAV_CONTENT_CLARITY&&window.NAAV_CONTENT_CLARITY[r];return items&&items[id-1]&&items[id-1][index]||fallback}
 function simpleCore(id,fallback){var core=window.NAAV_CONTENT_CLARITY&&window.NAAV_CONTENT_CLARITY.core;return core&&core[id-1]||fallback}
 function sessions(r){
  if(r==="operations")return ops.filter(function(o){return !o.break}).map(function(o,i){return {title:o.title,desc:o.desc,topics:o.items,ids:i<5?(opsCaseBlocks[i]||[]):[],time:o.time,final:i===5}});
  var data=r==="managers"?managers:hq;
- return data.map(function(s,i){return {title:s.t,desc:s.d,topics:s.topics,ids:sessionCases[r][i]||[],time:"جلسه "+fa(i+1),final:false}});
+ return data.map(function(s,i){return {title:s.t,desc:s.d,topics:s.topics,ids:sessionCases[r][i]||[],time:"جلسه "+fa(i+1)+(r==="managers"?" · ۲ ساعت":""),final:false}});
 }
 function header(p){
  var inner=p[0]!=="home",r=roleOf(p);
@@ -122,12 +124,13 @@ function actionExercise(){
 }
 function lesson(r,num){
  var s=sessions(r)[num];if(!s)return track(r);
- var ids=s.ids||[],anchor=ids.length?depth(ids[0]):{};
+ var ids=s.ids||[],anchor=ids.length?depth(ids[0]):{},mf=r==="managers"?managerSession(num):null;
  return '<div class="crumb">'+a("track/"+r,roleNames[r],'text-link')+' <span> / </span> '+fa(num+1)+'</div>'+
  '<section class="section-intro lesson-intro"><div class="kicker">'+safe(s.time)+'</div><h1>'+safe(s.title)+'</h1><p>'+safe(s.desc)+'</p></section>'+
  (s.final?actionExercise():
+ (mf?'<section class="manager-lesson-brief" aria-label="تمرکز این جلسه"><div class="manager-brief-row"><span>موقعیت مدیریتی</span><strong>'+safe(mf.issue)+'</strong></div><div class="manager-brief-row"><span>تصمیم امروز</span><strong>'+safe(mf.ask)+'</strong></div><div class="manager-brief-output"><span>خروجی عملی</span><strong>'+safe(mf.output)+'</strong></div></section>':
  '<section class="question-box"><span>پرسش محوری</span><strong>'+safe(s.topics[0]||"در این موقعیت چه رفتاری اهمیت دارد؟")+'</strong></section>'+
- (anchor.tension?'<div class="session-dilemma"><strong>چالش واقعی این بحث</strong><p>'+rich(anchor.tension)+'</p></div>':'')+
+ (anchor.tension?'<div class="session-dilemma"><strong>چالش واقعی این بحث</strong><p>'+rich(anchor.tension)+'</p></div>':''))+
  '<section class="case-list"><h2>موقعیت‌های این جلسه</h2><div class="case-grid">'+ids.map(function(id){var c=CASES[id-1],d=depth(id);return '<a class="case-tile" href="#/case/'+r+'/'+id+'/0">'+caseTopline(id,'کیس '+fa(id))+'<strong>'+safe(c.title)+'</strong><p>'+safe(c.concept)+'</p><span class="case-link">بررسی این موقعیت ←</span></a>'}).join("")+'</div></section>')+
  '<div class="page-bottom">'+a("track/"+r,"همه جلسات","text-link")+'</div>';
 }
@@ -149,7 +152,8 @@ function decision(c,r,l){
  var chosen=saved(choiceKey(r,c.id),-1);
  return '<section class="content-section step-decision"><span class="kicker">گام ۲ · انتخاب</span><h2>'+safe(clearPrompt(r,c.id,1,l.q))+'</h2>'+
  '<div class="choices">'+l.o.map(function(o,i){return '<button type="button" class="pick '+(chosen===i?"chosen":"")+'" data-choice="'+i+'" data-role="'+r+'" data-case="'+c.id+'" aria-pressed="'+(chosen===i)+'"><span class="pick-letter">'+["الف","ب","ج"][i]+'</span><span>'+safe(o[0])+'</span></button>'}).join("")+'</div>'+
- '<div class="choice-status" data-choice-status aria-live="polite">'+(chosen<0?'یک گزینه را انتخاب کنید؛ پیامد آن در گام بعد دیده می‌شود.':'انتخاب ثبت شد: گزینه '+["الف","ب","ج"][chosen]+' · اکنون پیامد آن را ببینید.')+'</div></section>';
+ '<div class="choice-status" data-choice-status aria-live="polite">'+(chosen<0?'یک گزینه را انتخاب کنید؛ پیامد آن در گام بعد دیده می‌شود.':'انتخاب ثبت شد: گزینه '+["الف","ب","ج"][chosen]+' · اکنون پیامد آن را ببینید.')+'</div>'+
+ (r==="managers"?'<p class="manager-decision-hint">هیچ گزینه‌ای بی‌هزینه نیست؛ سرعت، اختیار، اعتماد و پیامد آن را بسنجید.</p>':'')+'</section>';
 }
 function consequence(c,r,l){
  var chosen=saved(choiceKey(r,c.id),-1),d=depth(c.id);
@@ -164,19 +168,22 @@ function consequence(c,r,l){
  '<div class="reflection"><span class="qmark">؟</span><p>آیا با دانستن این پیامد، باز هم همین تصمیم را انتخاب می‌کنیم؟</p></div></section>';
 }
 function practice(c,v,l,r){
- var d=depth(c.id),voices=[];
+ var d=depth(c.id),mf=r==="managers"?managerFocus(c.id):null,voices=[];
  (l.v||[]).forEach(function(person){var existing=voices.find(function(x){return x[0]===person[0]});if(existing){existing[1]+=" "+person[1]}else voices.push([person[0],person[1]])});
  return '<section class="content-section step-roleplay"><span class="kicker">گام ۴ · نقش‌آفرینی</span><h2>حالا در این موقعیت گفت‌وگو کنیم.</h2>'+
- '<div class="role-play-grid">'+voices.map(function(x,i){return '<div class="play-person"><small>نقش '+fa(i+1)+'</small><strong>'+safe(x[0])+'</strong><p>«'+safe(x[1])+'»</p></div>'}).join("")+'</div>'+
+ (mf?'<div class="manager-role-grid"><div class="manager-role-card"><small>نقش اول · تصمیم‌گیر</small><p>'+safe(mf.lead)+'</p></div><div class="manager-role-card"><small>نقش دوم · طرف گفت‌وگو</small><p>'+safe(mf.counterpart)+'</p></div></div>':
+ '<div class="role-play-grid">'+voices.map(function(x,i){return '<div class="play-person"><small>نقش '+fa(i+1)+'</small><strong>'+safe(x[0])+'</strong><p>«'+safe(x[1])+'»</p></div>'}).join("")+'</div>')+
  '<div class="speech-task"><span>تمرین گفت‌وگو · ۲ تا ۳ دقیقه</span><strong>'+safe(clearPrompt(r,c.id,2,l.r||v.questions[0]))+'</strong></div>'+
- '<details class="pressure-reveal"><summary><span aria-hidden="true">⚡</span> اتفاق غیرمنتظره در گفت‌وگو را آشکار کنید</summary><div><p>'+rich(d.pressure||"طرف مقابل به تصمیم اعتراض جدی می‌کند.")+'</p><strong>گفت‌وگو را ادامه دهید؛ بدون عقب‌نشینی غیرموجه یا حمله شخصی.</strong></div></details>'+
+ '<details class="pressure-reveal"><summary><span aria-hidden="true">⚡</span> اتفاق غیرمنتظره در گفت‌وگو را آشکار کنید</summary><div><p>'+rich(mf?mf.pressure:d.pressure||"طرف مقابل به تصمیم اعتراض جدی می‌کند.")+'</p><strong>گفت‌وگو را ادامه دهید؛ بدون عقب‌نشینی غیرموجه یا حمله شخصی.</strong></div></details>'+
+ (mf?'<div class="manager-role-outcome"><span>خروجی این Role Play</span><strong>'+safe(mf.proof)+'</strong></div>':'')+
  '<details class="fold discreet-fold"><summary>یک عبارت پیشنهادی برای شروع</summary><p>«'+safe(v.dialogue)+'»</p></details>'+
- '<div class="reflection"><span class="qmark">؟</span><p>کدام جمله توانست هم رابطه را حفظ کند و هم مسئولیت را روشن کند؟</p></div></section>';
+ '<div class="reflection"><span class="qmark">؟</span><p>'+(mf?'آیا در پایان، تصمیم و مسئول اجرا برای هر دو نفر روشن شد؟':'کدام جمله توانست هم رابطه را حفظ کند و هم مسئولیت را روشن کند؟')+'</p></div></section>';
 }
 function reflect(c,r,v,g){
- var d=depth(c.id);
+ var d=depth(c.id),mf=r==="managers"?managerFocus(c.id):null;
  return '<section class="content-section step-reflect"><span class="kicker">گام ۵ · واکاوی</span><h2>ریشه رفتاری مسئله کجاست؟</h2>'+
  '<div class="analysis-lead"><strong>اصل ماجرا، در یک جمله</strong><p>'+safe(simpleCore(c.id,g.rule))+'</p></div>'+
+ (mf?'<p class="manager-evidence">نشانه تصمیم قابل اجرا: '+safe(mf.proof)+'</p>':'')+
  '<details class="fold discreet-fold"><summary>بررسی عمیق‌تر رفتار و دلیل آن</summary><p>'+rich(d.mechanism||c.theory.explanation)+'</p><p>'+rich(d.tension||"میان خواسته‌های افراد تعارض وجود دارد.")+'</p></details>'+
  '<details class="fold"><summary>چه شواهدی برای قضاوت لازم است؟</summary><p>'+rich(d.test||c.evidence)+'</p></details>'+
  '<details class="fold"><summary>مفهوم علمی · '+safe(c.theory.name)+'</summary><p>'+safe(c.theory.explanation)+'</p><p class="science-note">این مفهوم یک چارچوب تحلیل است، نه تشخیص قطعی علت رفتار افراد.</p></details>'+
@@ -188,9 +195,9 @@ function conclude(c,r,v,g){
  var options=(v.solution||[]).slice(0,3);
  return '<section class="content-section step-action"><span class="kicker">گام ۶ · اقدام</span><h2>از این تجربه، چه رفتاری وارد کار کنیم؟</h2>'+
  '<div class="takeaway action-rule">'+rich(d.shift||g.rule)+'</div>'+
- '<p class="action-prompt">یک اقدام مشخص برای موقعیت کاری بعدی انتخاب کنیم:</p>'+
+ '<p class="action-prompt">'+(r==="managers"?'کدام رفتار مدیریتی را از جلسه بعد تغییر می‌دهیم؟':'یک اقدام مشخص برای موقعیت کاری بعدی انتخاب کنیم:')+'</p>'+
  '<div class="action-choices">'+options.map(function(text,i){return '<button type="button" class="action-option '+(old===i?"chosen":"")+'" data-action-choice="'+i+'" data-role="'+r+'" data-case="'+c.id+'" aria-pressed="'+(old===i)+'"><span class="action-no">'+fa(i+1)+'</span><span>'+safe(text)+'</span></button>'}).join("")+'</div>'+
- '<div class="proof-panel"><label for="proof-field">از کجا بفهمیم این رفتار واقعاً اجرا شده است؟</label><textarea id="proof-field" class="proof-field" rows="2" maxlength="240" placeholder="یک نشانه قابل مشاهده؛ مثلاً تأیید تحویل توسط شیفت بعد...">'+safe(pr)+'</textarea><div class="proof-bottom"><button type="button" class="save-proof" data-save-proof="'+c.id+'" data-role="'+r+'">ثبت نتیجه گروه</button><span class="proof-status" role="status">'+(old>=0?"اقدام انتخاب‌شده: "+fa(old+1):"")+'</span></div></div>'+
+ '<div class="proof-panel"><label for="proof-field">'+(r==="managers"?'در جلسه بعد چه نشانه‌ای می‌بینیم که تصمیم اجرا شده؟':'از کجا بفهمیم این رفتار واقعاً اجرا شده است؟')+'</label><textarea id="proof-field" class="proof-field" rows="2" maxlength="240" placeholder="'+(r==="managers"?'یک کار مشخص، مسئول پیگیری و زمان مرور آن...':'یک نشانه قابل مشاهده؛ مثلاً تأیید تحویل توسط شیفت بعد...')+'">'+safe(pr)+'</textarea><div class="proof-bottom"><button type="button" class="save-proof" data-save-proof="'+c.id+'" data-role="'+r+'">ثبت نتیجه گروه</button><span class="proof-status" role="status">'+(old>=0?"اقدام انتخاب‌شده: "+fa(old+1):"")+'</span></div></div>'+
  '<details class="fold discreet-fold"><summary>چند نکته تکمیلی برای انتقال به کار</summary><p>'+safe(v.lesson)+'</p><p>'+rich(d.trade||"نتیجه نیازمند پیگیری است.")+'</p></details>'+
  '<p class="context-note">انتخاب و نوشته فقط در همین مرورگر ثبت می‌شود؛ اطلاعات به سرور ارسال نمی‌شود.</p></section>';
 }
