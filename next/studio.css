@@ -386,3 +386,46 @@ p{color:var(--muted)}
 }
 @media print{.dashboard-rail,.mobile-dash{display:none!important}.app-layout:not(.app-layout-home){display:block;padding:0}body.has-learning-dash{padding-bottom:0}}
 @media(prefers-reduced-motion:reduce){.mobile-dash-chevron{transition:none}}
+
+
+/* v10 — industry-aware visual language: small semantic stickers, not decorative clutter. */
+.hero-stickers{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 16px}
+.hero-stickers>span{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;min-height:30px;color:#31515a;background:#eaf2ee;border:1px solid #d2e4da;border-radius:99px;font-size:12px;font-weight:800;line-height:1.6}
+.hero-stickers>span:first-child{background:#fff2e7;border-color:#eacdb7;color:#784226}
+.role-icon{box-shadow:inset 0 0 0 1px #d9e8e1;font-size:30px}
+.module-tile .role-icon{box-shadow:inset 0 0 0 1px #efd5c0}
+.session-index{font-size:26px;border:1px solid #d1e4da;background:#eaf3ee}
+.case-topline{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%}
+.case-sticker{display:inline-grid;place-items:center;min-width:34px;width:34px;height:34px;flex:none;border:1px solid #e3d3c1;background:#fff5e9;border-radius:10px;font-size:19px;line-height:1}
+.heading-sticker{display:inline-grid;place-items:center;vertical-align:middle;width:44px;height:44px;background:#edf4ee;border:1px solid #d4e4db;border-radius:13px;font-size:26px;margin-inline-end:13px;line-height:1}
+.rule-sticker{display:inline-grid;place-items:center;min-width:40px;height:40px;flex:none;background:#edf4ee;border:1px solid #d7e4dc;border-radius:12px;font-size:21px;line-height:1}
+.six-steps .step strong,.case-steps .step strong{display:inline-flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;text-align:center}
+.step-emoji{font-size:16px;line-height:1;flex:none}
+.work-glossary{max-width:100%;margin:27px 0 0;border:1px solid #d8e4df;border-radius:13px;background:#fff;overflow:hidden}
+.work-glossary>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;font-size:14px;font-weight:800;line-height:1.7;color:var(--navy)}
+.work-glossary>summary::-webkit-details-marker{display:none}
+.work-glossary>summary span{font-size:19px;color:var(--copper-dark)}
+.work-glossary[open]>summary{border-bottom:1px solid #e4eae6}
+.work-glossary[open]>summary span{transform:rotate(180deg)}
+.glossary-items{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:15px}
+.glossary-item{display:flex;align-items:start;gap:11px;padding:11px;background:#f7faf8;border:1px solid #e5ece8;border-radius:11px;min-width:0}
+.glossary-code{display:inline-flex;align-items:center;justify-content:center;flex:none;min-width:48px;padding:4px 7px;border-radius:7px;background:#e3ede7;color:#164c53;direction:ltr;unicode-bidi:isolate;font:bold 12px/1.5 "Segoe UI",Tahoma,sans-serif;letter-spacing:.2px}
+.glossary-item>div{display:grid;gap:4px;min-width:0}
+.glossary-item strong{font:700 11px/1.65 "Segoe UI",Tahoma,sans-serif;color:#3c5054;text-align:left;unicode-bidi:isolate;word-break:normal}
+.glossary-item span{font-size:12px;font-weight:650;line-height:1.8;color:#38545a}
+.work-glossary>p{font-size:12px;line-height:1.85;color:#596f72;padding:0 17px 14px;margin:0}
+@media(max-width:1050px){
+ .mobile-dash-panel{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:10px;max-height:min(67vh,420px)}
+ .mobile-dash-panel .dashboard-link{border:1px solid #e3eae6;background:#f8faf8;min-height:51px;padding:8px 10px;gap:8px;font-size:13px;line-height:1.6}
+ .mobile-dash-panel .dashboard-link.is-active{border-color:#0a3744;background:#0a3744;color:#fff}
+ .mobile-dash-panel .dashboard-glyph{font-size:19px;width:22px}
+ .glossary-items{grid-template-columns:1fr}
+ .heading-sticker{width:39px;height:39px;font-size:22px;margin-inline-end:9px}
+}
+@media(max-width:390px){
+ .mobile-dash-panel .dashboard-link{padding:7px 8px;font-size:12px;gap:5px}
+ .mobile-dash-panel .dashboard-glyph{width:20px;font-size:17px}
+ .hero-stickers>span{font-size:11px;padding:5px 8px}
+ .step-emoji{font-size:14px}
+}
+@media print{.hero-stickers,.work-glossary{display:none}}
