@@ -64,3 +64,13 @@
 @media(max-width:1050px){.nvmod-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.nvmod-detailgrid{grid-template-columns:minmax(0,1fr)}.nvmod-sidecard{position:static}.nvmod-hero{grid-template-columns:1.25fr .75fr}}
 @media(max-width:700px){.nvmod-grid{grid-template-columns:1fr}.nvmod-hero{grid-template-columns:1fr}.nvmod-lead{padding:23px}.nvmod-heroart{min-height:auto;padding:5px 24px 18px}.nvmod-heroart .nvmod-svg{height:125px}.nvmod-controls input{flex:1 1 100%;margin:0}.nvmod-cardart .nvmod-svg{height:120px}.nvmod-detailhead h1{font-size:25px}.nvmod-return{align-items:start}.nvmod-panel,.nvmod-sidecard{padding:16px}.nvmod-next{flex-direction:column}}
 @media(prefers-reduced-motion:reduce){.nvmod-card{transition:none}.nvmod-card:hover{transform:none}}
+
+/* Compact entry cards shared with the simplified learner-facing homepage */
+.module-bridges{margin:35px auto 25px;max-width:960px}
+.module-bridges h2{text-align:center;font-size:clamp(21px,2.2vw,29px);color:var(--navy);margin-bottom:17px}
+.module-bridge-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.module-bridge-list>a{display:flex;flex-direction:column;gap:7px;border:1px solid #d8e4de;border-radius:17px;background:#fff;padding:20px 23px;box-shadow:0 8px 23px rgba(8,52,62,.055);min-height:135px}
+.module-bridge-list>a:hover,.module-bridge-list>a:focus-visible{border-color:#a9653e;background:#fffaf7}
+.module-bridge-list b{font-size:21px;color:#124a57}
+.module-bridge-list span{font-size:13px;color:#516b70;line-height:1.85}
+@media(max-width:620px){.module-bridge-list{grid-template-columns:1fr}.module-bridge-list>a{min-height:auto}}
