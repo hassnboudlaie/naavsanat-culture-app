@@ -1,125 +1,119 @@
-/* NavSanat Learning Studio | Instructor-led situated learning experience | 2026 */
+/* NAAVSANAT — Shared Learning Experience. All screens are learner-facing. */
 (function(){
 "use strict";
-var names={hq:"کارکنان ستاد",managers:"مدیران ستاد",operations:"کارکنان عملیاتی"};
-var icons={hq:"🏢",managers:"🧭",operations:"⚙️"};
-var stageNames=["موقعیت","تصمیم","واکاوی","نقش‌آفرینی","قاعده رفتاری","اقدام"];
-var people={managers:"مدیران و سرپرستان",hq:"همکاران ستاد",operations:"همکاران عملیاتی"};
-var state={role:read("naav_studio_role","managers"),presentation:false,query:"",group:"all"};
-if(!names[state.role])state.role="managers";
-function read(k,fall){try{var v=JSON.parse(localStorage.getItem(k));return v==null?fall:v}catch(e){return fall}}
-function put(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}
-function esc(v){return String(v==null?"":v).replace(/[&<>"']/g,function(m){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]})}
-function cut(v,n){var t=String(v||"");return t.length>n?t.slice(0,n)+"…":t}
-function fa(v){return String(v).replace(/[0-9]/g,function(s){return "۰۱۲۳۴۵۶۷۸۹"[+s]})}
-function safeRole(r){return names[r]?r:state.role}
-function notify(msg){document.getElementById("live").textContent=msg}
-function route(r){location.hash="#/"+r}
-function parts(){return (location.hash||"#/home").replace(/^#\/?/,"").split("/")}
-function currentRole(p){return safeRole(p[0]==="case"||p[0]==="session"||p[0]==="track"?p[1]:state.role)}
-function labFor(c,r){return NAV_ROLE_LABS[r]&&NAV_ROLE_LABS[r][String(c.id)]||NAV_ROLE_LABS.managers[String(c.id)]}
+var roleNames={managers:"مدیران ستاد",hq:"کارکنان ستاد",operations:"کارکنان عملیاتی"};
+var roleIcons={managers:"🧭",hq:"🏢",operations:"⚙️"};
+var steps=["موقعیت","انتخاب","تحلیل","تمرین","جمع‌بندی"];
+var storedRole=saved("ns_role","managers");
+var role=roleNames[storedRole]?storedRole:"managers";
+function saved(k,def){try{var v=JSON.parse(localStorage.getItem(k));return v===null?def:v}catch(e){return def}}
+function store(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function safe(s){return String(s==null?"":s).replace(/[&<>"']/g,function(a){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[a]})}
+function fa(n){return String(n).replace(/\d/g,function(d){return "۰۱۲۳۴۵۶۷۸۹"[+d]})}
+function path(){return (location.hash||"#/home").replace(/^#\/?/,"").split("/")}
+function go(p){location.hash="#/"+p}
+function a(p,t,cls){return '<a class="'+(cls||"link")+'" href="#/'+p+'">'+t+'</a>'}
 function choiceKey(r,id){return "naav_studio_choice_"+r+"_"+id}
-function noteKey(r,id){return "naav_studio_note_"+r+"_"+id}
-function countDone(r){return CASES.filter(function(c){return read(choiceKey(r,c.id),-1)!==-1||read(noteKey(r,c.id),null)!==null}).length}
-function isDone(r,id){return read(choiceKey(r,id),-1)!==-1||read(noteKey(r,id),null)!==null}
-function link(to,text,cls){return '<a class="'+(cls||"btn")+'" href="#/'+to+'">'+text+"</a>"}
-function btn(action,text,cls,attr){return '<button type="button" class="'+(cls||"btn")+'" data-action="'+action+'" '+(attr||"")+">"+text+"</button>"}
-function label(t){return '<span class="tag">'+esc(t)+"</span>"}
-function brand(){return '<div class="brand"><img src="'+LOGO_DATA+'" alt="نشان اصلی ناوصنعت مس"><div><strong>ناوصنعت مس</strong><small>LEARNING STUDIO · ۲۰۲۶</small></div></div>'}
-function nav(p,r){
-var item=[["home","خانه یادگیری","⌂"],["track/"+r,"مسیر آموزشی","▤"],["library","کیس‌های واقعی","◫"],["medicator","مدیکاتور","🎨"],["behavior","هنر رفتار","💬"],["culture","قواعد رفتاری","◎"]];
-return '<aside class="navpanel" aria-label="ناوبری اصلی">'+brand()+'<div><div class="nav-label">فضای تدریس</div><nav class="navset">'+item.map(function(a){
-var active=p[0]===(a[0].split("/")[0])||a[0].startsWith("track")&&(p[0]==="session");
-return '<a class="navbtn'+(active?" current":"")+'" href="#/'+a[0]+'" '+(active?'aria-current="page"':"")+'><span class="navico" aria-hidden="true">'+a[2]+'</span>'+a[1]+'</a>'}).join("")+'</nav></div><div class="nav-foot"><div>مسیر فعال</div><b>'+names[r]+'</b><p style="color:#b3c5c6;font-size:11px;margin-top:7px">طراحی‌شده برای کلاس حضوری، گفت‌وگو و یادگیری از تجربه کار.</p></div></aside>'}
-function top(p,r){
-var title=p[0]==="home"?"شروع یادگیری":p[0]==="track"?"انتخاب جلسه":p[0]==="session"?"راهنمای جلسه":p[0]==="case"?"آزمایشگاه تصمیم":p[0]==="culture"?"قواعد رفتار و فرهنگ":p[0]==="medicator"?"مدیکاتور":p[0]==="behavior"?"هنر رفتار":"کتابخانه کیس‌ها";
-return '<header class="topstrip"><div class="crumbs">'+link("home","خانه","btn quiet small")+'<span>›</span><strong>'+title+'</strong><span class="tag">'+names[r]+'</span></div><div class="topactions"><label for="roleSelect" class="sr-only">انتخاب گروه</label><select class="btn" id="roleSelect" aria-label="تغییر گروه یادگیری"><option value="managers" '+(r==="managers"?"selected":"")+'>مدیران ستاد</option><option value="hq" '+(r==="hq"?"selected":"")+'>کارکنان ستاد</option><option value="operations" '+(r==="operations"?"selected":"")+'>کارکنان عملیاتی</option></select>'+btn("present",state.presentation?"خروج از نمایش":"◫ حالت تدریس","btn small",'aria-pressed="'+state.presentation+'"')+'</div></header>'}
-function layout(p,r,inner){return '<div class="shell">'+nav(p,r)+'<div class="work">'+top(p,r)+'<div class="page '+(p[0]==="case"?"case-screen":"")+'">'+inner+'</div></div></div>'}
-function home(){
-var cards=[["managers","هدایت تصمیم‌ها، انصاف و الگوی رفتاری مدیر"],["hq","همکاری بین‌واحدی، مسئولیت و پیگیری تا نتیجه"],["operations","کار در شیفت، تحویل مسئولانه و همکاری در میدان"]];
-return '<div class="home-hero"><div class="home-copy"><span class="eyebrow">NAAVSANAT · CONTEXTUAL LEARNING</span><h1>رفتار سازمانی،<br><em>از موقعیت واقعی تا رفتار بهتر</em></h1><p>اینجا آموزش با تجربه روزمره ناوصنعت آغاز می‌شود؛ تصمیم می‌گیریم، پیامدها را می‌سنجیم، گفت‌وگو را تمرین می‌کنیم و با یک اقدام روشن به کار برمی‌گردیم.</p><div class="hero-meta"><span>آموزش هدایت‌شده توسط مدرس</span><span>۱۵ کیس تخصصی</span><span>۳ مسیر یادگیری</span></div><p style="font-size:13px;margin-top:20px;margin-bottom:0">مدرس و تسهیلگر: دکتر حسن بودلایی</p></div><div class="hero-photo" role="img" aria-label="تصویر معرفی شرکت ناوصنعت مس"><span class="photo-credit">منبع تصویر: صفحه معرفی شرکت</span></div></div>'+
-'<div class="section-head"><div><span class="eyebrow">از اینجا شروع کنید</span><h2>در کدام نقش یاد می‌گیرید؟</h2><p>محتوا یکسان و عمومی نیست؛ هر مسیر بر موقعیت همان گروه تکیه دارد.</p></div></div>'+
-'<section class="rolegrid" aria-label="انتخاب نقش">'+cards.map(function(a){return '<button class="rolecard" data-action="select-role" data-role="'+a[0]+'"><span class="mark" aria-hidden="true">'+icons[a[0]]+'</span><strong>'+names[a[0]]+'</strong><p>'+a[1]+'</p><span class="link">ورود به مسیر ←</span></button>'}).join("")+'</section>'+
-'<div class="section-head"><h2>منطق هر تجربه یادگیری</h2></div><div class="journey">'+[["۱. موقعیت","چه اتفاقی افتاده؟"],["۲. انتخاب","من چه می‌کنم؟"],["۳. واکاوی","چرا و با چه پیامدی؟"],["۴. تمرین","چگونه گفت‌وگو کنم؟"],["۵. انتقال","در کار چه تغییر می‌دهم؟"]].map(function(a){return '<div><b>'+a[0]+'</b><span>'+a[1]+'</span></div>'}).join("")+'</div>'+
-'<div class="intro-note"><span aria-hidden="true" style="font-size:27px">🎓</span><div><b>برای تسهیلگر کلاس طراحی شده است</b><div><span>هر کیس را می‌توان مستقل اجرا کرد؛ نقش‌آفرینی و تحلیل گزینه‌ها بدون خروج از جریان تدریس در دسترس است.</span></div></div></div>'}
+function roleOf(p){return roleNames[p[1]]?p[1]:role}
+function currCase(r,id){return CASES[id-1]&&CASES[id-1].variants[r]?CASES[id-1]:null}
+function lab(id,r){return NAV_ROLE_LABS[r]&&NAV_ROLE_LABS[r][String(id)]}
 function sessions(r){
-if(r==="operations"){var obj=ops.filter(function(s){return !s.break});return obj.map(function(s,i){return {t:s.title,d:s.desc,k:"از تجربه عملیات به رفتار قابل اجرا",topics:s.items,ids:opsCaseBlocks[i]||[12,14,15],time:s.time}})}
-var d=r==="managers"?managers:hq;return d.map(function(s,i){return {t:s.t,d:s.d,k:s.k,topics:s.topics,ids:sessionCases[r][i],time:"بخش آموزشی "+fa(i+1)}})
+ if(r==="operations")return ops.filter(function(o){return !o.break}).map(function(o,i){return {title:o.title,desc:o.desc,topics:o.items,ids:i<5?(opsCaseBlocks[i]||[]):[],time:o.time,final:i===5}});
+ var data=r==="managers"?managers:hq;
+ return data.map(function(s,i){return {title:s.t,desc:s.d,topics:s.topics,ids:sessionCases[r][i]||[],time:"جلسه "+fa(i+1),final:false}});
+}
+function header(p){
+ var inner=p[0]!=="home",r=roleOf(p);
+ var back=p[0]==="case"?"track/"+r:p[0]==="session"?"track/"+r:"home";
+ return '<header class="mast"><div class="mast-inner"><a class="identity" href="#/home"><img src="'+LOGO_DATA+'" alt="نشان ناوصنعت مس"><span><strong>ناوصنعت مس</strong><small>رفتار و فرهنگ سازمانی</small></span></a>'+
+ (inner?'<div class="mast-tools">'+a(back,'بازگشت','head-link')+a("home","تغییر گروه","head-link outline")+'</div>':'<span class="mast-caption">یادگیری از تجربه کار</span>')+'</div></header>';
+}
+function frame(p,body,cls){return header(p)+'<main id="app" class="container '+(cls||"")+'" tabindex="-1">'+body+'</main><footer class="site-foot">ناوصنعت مس <span aria-hidden="true">·</span> یادگیری، گفت‌وگو، اقدام</footer>'}
+function landing(){
+ var roles=[["managers","تصمیم‌گیری، مسئولیت و الگوی رفتاری"],["hq","همکاری، تعهد و ارتباط بین واحدها"],["operations","رفتار حرفه‌ای، هماهنگی و ایمنی در کار"]];
+ return '<section class="landing-head"><div class="copper-line"></div><span class="kicker">NAAVSANAT LEARNING EXPERIENCE</span><h1>رفتار سازمانی را<br><em>در موقعیت واقعی تمرین کنیم.</em></h1><p>مسئله را می‌بینیم، تصمیم می‌گیریم، پیامدها را بررسی می‌کنیم و گفت‌وگو را تمرین می‌کنیم.</p></section>'+
+ '<section class="home-roles" aria-label="انتخاب گروه"><h2>گروه خود را انتخاب کنید</h2><div class="role-grid">'+roles.map(function(x){return '<button type="button" class="role-tile" data-role="'+x[0]+'"><span class="role-icon">'+roleIcons[x[0]]+'</span><strong>'+roleNames[x[0]]+'</strong><span class="role-desc">'+x[1]+'</span><span class="role-enter">ورود به مسیر <span aria-hidden="true">←</span></span></button>'}).join("")+'</div></section>';
 }
 function track(r){
-var ss=sessions(r);
-return '<div class="breadcrumb-title"><div><span class="eyebrow">LEARNING PATH · '+(r==="operations"?"FIELD":"STAFF")+'</span><h1>مسیر '+names[r]+'</h1><p class="lead">'+ROLES[r].focus+'؛ از مسئله کار آغاز می‌کنیم و با گفت‌وگو و اقدام جمع‌بندی می‌کنیم.</p><div class="statline">'+label(fa(ss.length)+" جلسه / بخش")+label("۱۵ کیس قابل انتخاب")+label(fa(countDone(r))+" کیس تمرین‌شده")+'</div></div>'+link("library","مشاهده کتابخانه ۱۵ کیس","btn")+'</div>'+
-'<div class="section-head"><div><h2>نقشه تدریس</h2><p>جلسه را انتخاب کنید؛ کیس‌ها داخل همان جلسه قرار دارند، نه در یک منوی جداگانه و گیج‌کننده.</p></div></div><section class="sessiongrid">'+ss.map(function(s,i){return '<article class="sessioncard"><div class="stoph"><span class="sessionno">'+fa(i+1)+'</span>'+label(s.time)+'</div><h3>'+esc(s.t)+'</h3><p>'+esc(s.d)+'</p><div class="session-topics">'+s.ids.map(function(id){return '<span class="tag copper">کیس '+fa(id)+'</span>'}).join("")+'</div><div style="margin-top:15px">'+link("session/"+r+"/"+i,"ورود به جلسه ←","btn primary")+'</div></article>'}).join("")+'</section><div class="intro-note"><span style="font-size:27px">🗣️</span><div><b>یادگیری زمینه‌محور</b><div><span>پاسخ فنی جای تحلیل رفتار را نمی‌گیرد. هر کیس درباره رابطه، نقش، تصمیم، اعتماد، همکاری و فرهنگ کار است.</span></div></div></div>'}
-function lesson(r,index){
-var ss=sessions(r),s=ss[index];if(!s)return track(r);
-var ids=s.ids;
-return '<div class="breadcrumb-title"><div><span class="eyebrow">INSTRUCTOR GUIDE · جلسه '+fa(index+1)+'</span><h1>'+esc(s.t)+'</h1><p class="lead">'+esc(s.d)+'</p>'+label(names[r])+' '+label(s.time)+'</div>'+link("track/"+r,"بازگشت به نقشه جلسات","btn")+'</div>'+
-'<div class="lesson-layout"><article class="maincard"><span class="eyebrow">پیشنهاد اجرای کلاس</span><h2>از گفت‌وگو شروع کنیم، نه از اسلاید</h2><div class="promptblock"><b>Opening Question · پرسش آغاز</b><p>'+esc(s.topics[0]||"این موقعیت در تجربه شما چه معنایی دارد؟")+' — در ناوصنعت کجا با این مسئله روبه‌رو شده‌اید؟</p></div><h3>مسیر پیشنهادی جلسه</h3><div class="lesson-guide">'+[["فعال‌سازی تجربه","از مخاطبان بخواهید نمونه مشابه را بدون نام اشخاص مطرح کنند."],["تحلیل وضعیت واقعی","کیس را بخوانید؛ مشاهدات را از برداشت‌ها و فرضیه‌ها تفکیک کنید."],["تصمیم و گفت‌وگو","سه انتخاب را بررسی کنید؛ برای هر انتخاب پیامد و نقطه کور را بشناسید."],["نقش‌آفرینی","در سه نقش گفت‌وگو، مشاهده و بازخورد را تمرین کنید."],["تعهد اجرایی","یک رفتار مشخص، موقعیت اجرا و شاهد تغییر تعریف کنید."]].map(function(a,i){return '<div class="numberline"><b>'+fa(i+1)+'</b><span><strong>'+a[0]+': </strong>'+a[1]+'</span></div>'}).join("")+'</div><h3 style="margin:24px 0 9px">پیام محوری</h3><div class="keyquote"><p>'+esc(s.k)+'</p></div><div class="library-entry">'+link("case/"+r+"/"+ids[0]+"/0","شروع با کیس "+fa(ids[0])+" ←","btn primary")+'</div></article>'+
-'<aside class="sidecard"><span class="eyebrow">کیس‌های همین جلسه</span><h3>آماده برای اجرا</h3><p class="smallprint">هر کیس مسیر مستقل موقعیت ← تصمیم ← تحلیل ← تمرین ← اقدام دارد.</p><div class="case-pills">'+ids.map(function(id){return '<a class="casepill" href="#/case/'+r+"/"+id+'/0"><span>'+fa(id).padStart(2,"۰")+'</span><strong>'+esc(CASES[id-1].title)+'</strong></a>'}).join("")+'</div><details><summary>موضوع‌های گفتگو</summary><ul>'+s.topics.map(function(t){return '<li>'+esc(t)+'</li>'}).join("")+'</ul></details></aside></div>'}
+ var ss=sessions(r);
+ return '<section class="section-intro"><div class="kicker">مسیر یادگیری</div><h1>'+roleNames[r]+'</h1><p>'+safe(ROLES[r].focus)+'</p></section>'+
+ '<section class="session-list" aria-label="جلسات آموزشی">'+ss.map(function(s,i){return '<a class="session-tile" href="#/session/'+r+'/'+i+'"><span class="session-index">'+fa(i+1)+'</span><span class="session-info"><strong>'+safe(s.title)+'</strong><span>'+safe(s.desc)+'</span></span><span class="session-end"><small>'+safe(s.time)+'</small><b aria-hidden="true">←</b></span></a>'}).join("")+'</section>'+
+ '<div class="subtle-footline">'+a("library/"+r,"مشاهده هر ۱۵ کیس","text-link")+a("culture/"+r,"قواعد رفتار و فرهنگ","text-link")+'</div>';
+}
+function actionExercise(){
+ return '<div class="action-focus"><h2>یک رفتار را انتخاب کنیم</h2><div class="action-three">'+["شروع می‌کنم","متوقف می‌کنم","ادامه می‌دهم"].map(function(x,i){return '<div><span>'+fa(i+1)+'</span><strong>'+x+'</strong></div>'}).join("")+'</div><p class="prompt-question">در موقعیت کاری بعدی، چه رفتار مشخصی را تغییر می‌دهیم؟</p></div>';
+}
+function lesson(r,num){
+ var s=sessions(r)[num];if(!s)return track(r);
+ return '<div class="crumb">'+a("track/"+r,roleNames[r],'text-link')+' <span> / </span> '+fa(num+1)+'</div>'+
+ '<section class="section-intro lesson-intro"><div class="kicker">'+safe(s.time)+'</div><h1>'+safe(s.title)+'</h1><p>'+safe(s.desc)+'</p></section>'+
+ (s.final?actionExercise():
+ '<section class="question-box"><span>پرسش محوری</span><strong>'+safe(s.topics[0]||"در این موقعیت چه رفتاری اهمیت دارد؟")+'</strong></section>'+
+ '<section class="case-list"><h2>موقعیت‌های این جلسه</h2><div class="case-grid">'+s.ids.map(function(id){var c=CASES[id-1];return '<a class="case-tile" href="#/case/'+r+'/'+id+'/0"><span class="tiny-label">کیس '+fa(id)+'</span><strong>'+safe(c.title)+'</strong><p>'+safe(c.concept)+'</p><span class="case-link">بازکردن موقعیت <span aria-hidden="true">←</span></span></a>'}).join("")+'</div></section>')+
+ '<div class="page-bottom">'+a("track/"+r,"همه جلسات","text-link")+'</div>';
+}
+function caseStages(r,id,step){return '<nav aria-label="مراحل کیس" class="case-steps">'+steps.map(function(s,i){return '<a class="step '+(i===step?"active":"")+'" href="#/case/'+r+'/'+id+'/'+i+'" '+(i===step?'aria-current="step"':'')+'><span>'+fa(i+1)+'</span><strong>'+s+'</strong></a>'}).join("")+'</nav>'}
+function scenario(c,v,l){
+ return '<div class="content-section"><span class="kicker">موقعیت</span><h2>چه اتفاقی افتاده است؟</h2><div class="situation">'+safe(v.problem)+'</div>'+
+ '<div class="voices">'+(l.v||[]).map(function(u){return '<div class="voice"><strong>'+safe(u[0])+'</strong><p>«'+safe(u[1])+'»</p></div>'}).join("")+'</div>'+
+ '<div class="reflection"><span class="qmark">؟</span><p>'+safe((v.questions&&v.questions[0])||l.q)+'</p></div></div>';
+}
+function decision(c,r,l){
+ var chosen=saved(choiceKey(r,c.id),-1);
+ return '<div class="content-section"><span class="kicker">تصمیم</span><h2>'+safe(l.q)+'</h2><div class="choices">'+l.o.map(function(o,i){return '<button type="button" class="pick '+(chosen===i?"chosen":"")+'" data-choice="'+i+'" data-role="'+r+'" data-case="'+c.id+'" aria-pressed="'+(chosen===i)+'"><span class="pick-letter">'+["الف","ب","ج"][i]+'</span><span>'+safe(o[0])+'</span></button>'}).join("")+'</div><p class="quiet-note">سه رویکرد، با پیامدهای متفاوت؛ انتخاب خود را بررسی کنید.</p></div>';
+}
+function analyse(c,r,v,l){
+ var chosen=saved(choiceKey(r,c.id),-1);
+ return '<div class="content-section"><span class="kicker">تحلیل تصمیم‌ها</span><h2>هر انتخاب چه پیامدی دارد؟</h2><div class="outcomes">'+l.o.map(function(o,i){return '<article class="outcome '+(i===chosen?"chosen":"")+'"><div class="outcome-title"><span class="mini-number">'+["الف","ب","ج"][i]+'</span><h3>'+safe(o[0])+'</h3></div><p>'+safe(o[1])+'</p><div class="better"><strong>چگونه می‌توان بهتر عمل کرد؟</strong><span>'+safe(o[2])+'</span></div></article>'}).join("")+'</div>'+
+ '<details class="fold"><summary>ریشه‌های احتمالی مسئله</summary><ul>'+v.analysis.map(function(x){return '<li>'+safe(x)+'</li>'}).join("")+'</ul></details>'+
+ '<details class="fold"><summary>مفهوم علمی: '+safe(c.theory.name)+'</summary><p>'+safe(c.theory.explanation)+'</p></details></div>';
+}
+function practice(c,v,l){
+ var voices=(l.v||[]).slice(0,3);
+ return '<div class="content-section"><span class="kicker">تمرین تعاملی</span><h2>گفت‌وگو را در این موقعیت تجربه کنیم.</h2>'+
+ '<div class="practice-problem">'+safe(l.q)+'</div><div class="role-play-grid">'+voices.map(function(x,i){return '<div class="play-person"><small>نقش '+fa(i+1)+'</small><strong>'+safe(x[0])+'</strong><p>'+safe(x[1])+'</p></div>'}).join("")+'</div>'+
+ '<div class="speech-task"><span>چالش گفت‌وگو</span><strong>'+safe(l.r||v.questions[0])+'</strong></div>'+
+ '<div class="line-example"><span>یک شروع پیشنهادی</span><p>«'+safe(v.dialogue)+'»</p></div>'+
+ '<div class="reflection"><span class="qmark">؟</span><p>کدام جمله، رفتار یا پرسش می‌تواند نتیجه این گفت‌وگو را تغییر دهد؟</p></div></div>';
+}
+function conclude(c,v,g){
+ return '<div class="content-section"><span class="kicker">جمع‌بندی</span><h2>چه چیزی از این موقعیت می‌آموزیم؟</h2><div class="takeaway">'+safe(v.lesson)+'</div>'+
+ '<section class="rule"><span>قاعده رفتاری</span><p>'+safe(g.rule)+'</p></section>'+
+ '<div class="reflection"><span class="qmark">؟</span><p>'+safe(v.questions[1]||"در کار روزمره چه رفتاری را تغییر می‌دهیم؟")+'</p></div>'+
+ '<details class="fold"><summary>اقدام‌های پیشنهادی</summary><ul>'+v.solution.map(function(s){return '<li>'+safe(s)+'</li>'}).join("")+'</ul></details>'+
+ '<details class="fold"><summary>ارتباط با یک داستان مدیریتی</summary><strong>'+safe(g.book)+'</strong><p>'+safe(g.bridge)+'</p></details></div>';
+}
+function caseView(r,id,step){
+ var c=currCase(r,id);if(!c)return track(r);
+ var v=c.variants[r],l=lab(id,r),g=NAAV_GUIDE[id-1],s=Math.max(0,Math.min(4,step|0));if(!l||!g)return track(r);
+ var content=[function(){return scenario(c,v,l)},function(){return decision(c,r,l)},function(){return analyse(c,r,v,l)},function(){return practice(c,v,l)},function(){return conclude(c,v,g)}][s]();
+ return '<div class="crumb">'+a("track/"+r,roleNames[r],"text-link")+' <span> / </span> کیس '+fa(id)+'</div>'+
+ '<section class="case-heading"><span class="kicker">کیس '+fa(id)+' از ۱۵</span><h1>'+safe(c.title)+'</h1><p>'+safe(c.concept)+'</p></section>'+
+ caseStages(r,id,s)+'<div class="case-content">'+content+'</div>'+
+ '<nav class="stage-foot" aria-label="حرکت بین مراحل">'+(s>0?a("case/"+r+"/"+id+"/"+(s-1),"مرحله قبل","secondary-btn"):a("track/"+r,"بازگشت به جلسات","secondary-btn"))+
+ (s<4?a("case/"+r+"/"+id+"/"+(s+1),"ادامه: "+steps[s+1]+" ←","primary-btn"):a("track/"+r,"بازگشت به جلسات ←","primary-btn"))+'</nav>';
+}
 function library(r){
-return '<div class="breadcrumb-title"><div><span class="eyebrow">CONTEXTUAL CASE LIBRARY</span><h1>۱۵ موقعیت از زندگی کاری ناوصنعت</h1><p class="lead">همان ۱۵ موضوع اصلی؛ برای هر کدام روایت و Decision Lab متناسب با نقش '+names[r]+'.</p></div>'+link("track/"+r,"رفتن به جلسات","btn")+'</div>'+
-'<div class="librarytools"><label class="sr-only" for="caseSearch">جست‌وجوی کیس</label><input class="search" type="search" id="caseSearch" placeholder="جست‌وجو بر اساس موضوع، عنوان یا مفهوم…" value="'+esc(state.query)+'">'+["all","0","1","2"].map(function(g){return btn("filter",g==="all"?"همه ۱۵ کیس":GROUPS[+g], "chip"+(state.group===g?" active":""),'data-group="'+g+'"')}).join("")+'</div><div id="library-cases">'+libraryCards(r)+'</div><p class="smallprint" style="margin-top:20px">این موقعیت‌ها روایت آموزشی و ترکیبی‌اند؛ ادعای وقوع عینی هر جزئیات در شرکت ندارند. تشخیص واقعی نیازمند شنیدن کارکنان و بررسی شواهد است.</p>'}
-function libraryCards(r){
-var items=CASES.filter(function(c){
-var visible=state.group==="all"||Math.floor((c.id-1)/5)===+state.group;
-var q=state.query.trim();return visible&&(!q||(c.title+" "+c.concept+" "+c.variants[r].problem).includes(q))});
-return items.length?'<section class="casegrid" aria-label="فهرست کیس‌ها">'+items.map(function(c){var done=isDone(r,c.id);return '<a class="casecard" href="#/case/'+r+"/"+c.id+'/0"><span class="caseno">'+fa(c.id)+'</span><span><strong>'+esc(c.title)+'</strong><p>'+esc(c.concept)+'</p><small>'+esc(cut(c.variants[r].problem,95))+'</small><br><small class="'+(done?"done":"")+'">'+(done?"✓ تمرین‌شده":"ورود به موقعیت ←")+'</small></span></a>'}).join("")+'</section>':'<div class="maincard">با این فیلتر، موردی پیدا نشد. عبارت دیگری جست‌وجو کنید.</div>'}
-function list(arr,cls,ordered){return "<"+(ordered?"ol":"ul")+' class="'+(cls||"analysislist")+'">'+(arr||[]).map(function(v){return "<li>"+esc(v)+"</li>"}).join("")+"</"+(ordered?"ol":"ul")+">"}
-function labDialogue(l){return '<div class="dialogue">'+(l.v||[]).map(function(p){return '<div class="say"><b>'+esc(p[0])+'</b><p>'+esc(p[1])+'</p></div>'}).join("")+'</div>'}
-function caseStage(c,r,s){
-var v=c.variants[r],l=labFor(c,r),g=NAAV_GUIDE[c.id-1],chosen=read(choiceKey(r,c.id),-1),note=read(noteKey(r,c.id),{});
-if(s===0)return '<span class="eyebrow">01 / THE CONTEXT</span><h2>چه اتفاقی افتاده است؟</h2><div class="scene">'+esc(v.problem)+'</div><h3>صداهای این موقعیت</h3>'+labDialogue(l)+'<div class="reflect"><b>ابتدا از مخاطب بپرسید</b><p>چه چیزی واقعیت مشاهده‌شده است؟ کدام برداشت صرفاً فرضیه است؟ چه کسی در این موقعیت شنیده نشده؟</p></div><details><summary>اطلاعات تکمیلی برای مدرس</summary><p>این روایت برای آموزش طراحی شده و به‌منزله گزارش رخداد قطعی در ناوصنعت نیست. مسئله را از زاویه رفتار سازمانی تحلیل کنید، نه جایگزین تصمیم‌های تخصصی ایمنی یا فنی.</p></details>';
-if(s===1)return '<span class="eyebrow">02 / DECISION LAB</span><h2>شما چه تصمیمی می‌گیرید؟</h2><p class="question">'+esc(l.q)+'</p><p>قبل از انتخاب، از گروه بخواهید درباره ریسک و پیامد هر گزینه گفت‌وگو کند.</p><div class="options">'+l.o.map(function(o,i){return btn("choice",'<span class="letter">'+String.fromCharCode(65+i)+'</span><span>'+esc(o[0])+'</span>',"option"+(chosen===i?" selected":""),'data-id="'+c.id+'" data-role="'+r+'" data-n="'+i+'" aria-pressed="'+(chosen===i)+'"')}).join("")+'</div>'+(chosen>=0?'<div class="reflect"><b>انتخاب ثبت شد: گزینه '+String.fromCharCode(65+chosen)+'</b><p>اکنون تحلیل کنید: این گزینه چه چیزی را بهبود می‌دهد و چه Trade-off یا ریسک تازه‌ای ایجاد می‌کند؟</p>'+link("case/"+r+"/"+c.id+"/2","رفتن به تحلیل پیامدها ←","btn primary")+'</div>':'<p class="smallprint">هیچ‌کدام از گزینه‌ها به‌طور خودکار «نمره اخلاقی» ندارند؛ تحلیل پیامد و زمینه تصمیم مهم‌تر است.</p>');
-if(s===2)return '<span class="eyebrow">03 / REFLECT & UNPACK</span><h2>پیامد و ریشه رفتار را بررسی کنیم</h2>'+(chosen>=0?'<div class="banner-note">انتخاب شما: گزینه '+String.fromCharCode(65+chosen)+' · تحلیل همان گزینه در ابتدا برجسته شده است.</div>':'<div class="banner-note">برای مقایسه تصمیم‌ها، می‌توانید ابتدا در مرحله قبل یک گزینه انتخاب کنید.</div>')+
-'<h3 style="margin-top:22px">تحلیل سه گزینه</h3>'+l.o.map(function(o,i){return '<section class="feedback '+(chosen===i?"selected":"")+'"><span class="f-label">گزینه '+String.fromCharCode(65+i)+(chosen===i?" · انتخاب‌شده":"")+'</span><b>'+esc(o[0])+'</b><p><strong>پیامد قابل انتظار:</strong> '+esc(o[1])+'</p><p><strong>برای ارتقای تصمیم:</strong> '+esc(o[2])+'</p></section>'}).join("")+
-'<h3 style="margin-top:25px">ریشه‌های احتمالی، نه برچسب به افراد</h3>'+list(v.analysis)+
-'<div class="panel shaded"><h3>🔎 نظریه مرتبط: '+esc(c.theory.name)+'</h3><p>'+esc(c.theory.explanation)+'</p><p class="smallprint">چارچوب نظری کمک می‌کند فرضیه بسازیم؛ به‌تنهایی وقوع یک علت خاص در شرکت را اثبات نمی‌کند.</p></div><div class="reflect"><b>چه شواهدی کم داریم؟</b><p>'+esc(c.evidence)+'</p></div>';
-if(s===3)return '<span class="eyebrow">04 / LIVE ROLE PLAY</span><h2>تمرین گفت‌وگو، نه اجرای نمایشی</h2><p class="lead">صورت مسئله واقعی می‌ماند. هدف، تمرین شنیدن فعال، گفت‌وگوی دشوار، وضوح انتظار و پاسخگویی است.</p><div class="roleplay-people">'+(l.v||[]).map(function(a){return '<span class="person"><b>'+esc(a[0])+'</b> · نقش گفت‌وگو</span>'}).join("")+'<span class="person"><b>مشاهده‌گر</b> · بازخورد رفتاری</span></div>'+
-'<div class="numbered"><div><b>۱</b><span><strong>شروع · ۲ دقیقه</strong><br>دو نفر وارد گفت‌وگو شوند. نفر اول مسئله را مطرح کند؛ نفر دوم پیش از ارائه راه‌حل، برداشت طرف مقابل و شواهد را روشن کند.</span></div><div><b>۲</b><span><strong>فشار واقعی · ۳ دقیقه</strong><br>نفر مقابل یکی از نگرانی‌های موجود در کیس را با فشار بیشتر مطرح کند. پاسخ باید هم حرفه‌ای بماند و هم مرز اختیار را روشن کند.</span></div><div><b>۳</b><span><strong>بازخورد · ۳ دقیقه</strong><br>مشاهده‌گر روی رفتارها بازخورد بدهد: سؤال باز، بازتاب منظور، تفکیک واقعیت/برداشت، توافق روی مسئول، پیگیری و موعد.</span></div></div>'+
-'<div class="twocol" style="margin-top:16px"><div class="panel"><h3>جمله پیشنهادی برای تمرین</h3><p>'+esc(v.dialogue)+'</p></div><div class="panel shaded"><h3>پرسش De-brief مدرس</h3><p>'+esc(l.r||v.questions[0])+'</p><p class="smallprint">اگر گفت‌وگو دوباره انجام شود، کدام جمله یا رفتار را متفاوت انتخاب می‌کنید؟</p></div></div>'+
-'<div class="notebox"><label for="rpNote"><strong>مشاهده و بازخورد شخصی</strong></label><textarea id="rpNote" class="entry" placeholder="چه چیزی در گفت‌وگو مؤثر بود و کجا باید بهتر عمل کنیم؟">'+esc(note.roleplay||"")+'</textarea>'+btn("save-roleplay","ذخیره یادداشت تمرین","btn dark",'data-role="'+r+'" data-id="'+c.id+'"')+'</div>';
-if(s===4)return '<span class="eyebrow">05 / BEHAVIOR & CULTURE</span><h2>قاعده رفتاری چه باشد؟</h2><div class="keyquote"><p>'+esc(v.lesson)+'</p></div><div class="teach-rule"><b>قاعده پیشنهادی برای گفت‌وگوی ناوصنعت</b><p>'+esc(g.rule)+'</p></div><div class="reflect"><b>نکته‌ای که نباید از دست برود</b><p>'+esc(v.note)+'</p></div>'+
-'<div class="panel shaded" style="margin-top:16px"><h3>📖 پیوند با کتاب «حقایق تلخ»</h3><p><strong>'+esc(g.book)+'</strong></p><p>'+esc(g.bridge)+'</p><p class="smallprint">این ارتباط، استفاده مفهومی از داستان کتاب در تدریس است و به معنای وقوع همان داستان در ناوصنعت نیست.</p></div>'+
-'<h3 style="margin-top:25px">پرسش‌های بحث کلاسی</h3>'+list(v.questions,"analysislist",true);
-return '<span class="eyebrow">06 / TRANSFER TO WORK</span><h2>از آگاهی به تغییر رفتار</h2><p class="lead">در پایان، صرفاً یک اقدام واقعی انتخاب کنیم؛ با مالک، زمان پیگیری و شاهد قابل مشاهده.</p><div class="panel shaded"><h3>گزینه‌های اقدام مرتبط با این کیس</h3>'+list(v.solution,"analysislist",true)+'</div>'+
-'<div class="maincard" style="padding:22px;margin-top:17px;box-shadow:none"><div class="field"><label for="actionText">رفتار مشخصی که تمرین می‌کنم</label><textarea id="actionText" class="entry" placeholder="در موقعیت ... به جای ... رفتار ... را انجام می‌دهم.">'+esc(note.action||"")+'</textarea></div>'+
-'<div class="twocol"><div class="field"><label for="actionWhen">موقعیت / زمان پیگیری</label><input id="actionWhen" class="textline" value="'+esc(note.when||"")+'" placeholder="مثلاً جلسه بعد / شیفت بعد"></div><div class="field"><label for="actionEvidence">شاهد انجام و بازخورد</label><input id="actionEvidence" class="textline" value="'+esc(note.proof||"")+'" placeholder="از کجا می‌فهمیم رفتار تغییر کرده؟"></div></div>'+btn("save-action","✓ ثبت برنامه اقدام","btn primary",'data-role="'+r+'" data-id="'+c.id+'"')+btn("export","خروجی یادداشت‌ها","btn",'data-role="'+r+'" data-id="'+c.id+'"')+'<div class="resultline" id="saveResult"></div></div><p class="smallprint">ذخیره‌سازی فقط در همین مرورگر انجام می‌شود؛ داده‌ها به سرور منتقل نمی‌شوند. برای استفاده گروهی، خروجی شخصی را ذخیره کنید.</p>'}
-function casePage(r,id,stage){
-var c=CASES[id-1];if(!c)return library(r);var s=Math.max(0,Math.min(5,stage||0)),chosen=read(choiceKey(r,c.id),-1),g=NAAV_GUIDE[c.id-1];
-return '<div class="case-title"><div class="breadcrumb-title"><div><span class="eyebrow">CASE '+fa(c.id)+' / 15 · '+names[r]+'</span><h1>'+esc(c.title)+'</h1><div class="statline">'+label(c.concept)+label(GROUPS[Math.floor((id-1)/5)])+'</div></div>'+link("library","همه کیس‌ها","btn")+'</div></div>'+
-'<nav aria-label="مراحل بررسی کیس" class="stagebar">'+stageNames.map(function(t,i){return '<a class="stagebtn '+(i===s?"current":i<s?"complete":"")+'" href="#/case/'+r+"/"+id+"/"+i+'" '+(i===s?'aria-current="step"':"")+'>'+fa(i+1)+' · '+t+'</a>'}).join("")+'</nav>'+
-'<div class="case-layout"><article class="case-main" aria-label="محتوای مرحله '+stageNames[s]+'"><div class="smallprint">موضوع: '+esc(c.concept)+' · '+esc(names[r])+'</div>'+caseStage(c,r,s)+
-'<div class="casefooter">'+(s>0?link("case/"+r+"/"+id+"/"+(s-1),"← مرحله قبل","btn"):(link("library","بازگشت به کیس‌ها","btn")))+'<span class="smallprint">مرحله '+fa(s+1)+' از ۶</span>'+(s<5?link("case/"+r+"/"+id+"/"+(s+1),"مرحله بعد ←","btn primary"):link("library","انتخاب کیس بعدی ←","btn primary"))+'</div></article>'+
-'<aside class="case-aside"><span class="eyebrow">FACILITATOR DESK</span><h3>راهنمای مدرس</h3><p class="smallprint">موضوع محوری: '+esc(c.concept)+'</p><div class="info-cards"><div class="info-card"><b>روش اجرا</b><div>'+(s===0?"شرح صحنه و گردآوری برداشت‌ها":s===1?"گفت‌وگو قبل از انتخاب":s===2?"تحلیل پیامد و فرضیه‌ها":s===3?"تمرین دو یا سه‌نفره":s===4?"جمع‌بندی قاعده رفتاری":"تعهد و پیگیری")+'</div></div><div class="info-card"><b>یادآوری مهم</b><div>از راه‌حل فنی به بحث رفتار، فرهنگ و پاسخگویی برگردید.</div></div><div class="info-card"><b>تکمیل</b><div>'+(isDone(r,id)?"✓ برای این کیس پاسخ یا اقدامی ثبت شده":"آماده برای گفت‌وگوی کلاسی")+'</div></div></div>'+
-'<details><summary>پرسش چالشی مدرس</summary><p>'+esc(labFor(c,r).r||c.variants[r].questions[0])+'</p></details><details><summary>قواعد زمینه‌محور</summary><p>'+esc(g.rule)+'</p></details><div class="library-entry">'+btn("present",state.presentation?"خروج از حالت تدریس":"◫ بزرگ‌نمایی برای کلاس","btn dark")+'</div></aside></div>'}
+ return '<section class="section-intro"><span class="kicker">'+roleNames[r]+'</span><h1>۱۵ کیس رفتار سازمانی</h1><p>از یک موقعیت شروع کنید و تصمیم‌ها را بررسی کنید.</p></section>'+
+ '<div class="case-grid">'+CASES.map(function(c){return '<a class="case-tile" href="#/case/'+r+'/'+c.id+'/0"><span class="tiny-label">کیس '+fa(c.id)+'</span><strong>'+safe(c.title)+'</strong><p>'+safe(c.concept)+'</p><span class="case-link">بازکردن ←</span></a>'}).join("")+'</div>';
+}
 function culture(r){
-return '<div class="breadcrumb-title"><div><span class="eyebrow">BEHAVIORAL CULTURE MAP</span><h1>از ۱۵ کیس تا قواعد رفتار مشترک</h1><p class="lead">این قواعد، پیشنهادهای آموزشی برای بحث و اعتبارسنجی با افراد ناوصنعت هستند؛ هنوز به‌عنوان دستورالعمل مصوب شرکت معرفی نمی‌شوند.</p></div>'+link("track/"+r,"بازگشت به کلاس","btn")+'</div>'+
-GROUPS.map(function(g,i){var arr=CASES.slice(i*5,i*5+5);return '<div class="section-head"><h2>'+g+'</h2></div><div class="casegrid">'+arr.map(function(c){return '<a class="casecard" href="#/case/'+r+"/"+c.id+'/4"><span class="caseno">'+fa(c.id)+'</span><span><strong>'+esc(c.title)+'</strong><p>'+esc(NAAV_GUIDE[c.id-1].rule)+'</p><small>مشاهده شواهد و تمرین گفت‌وگو ←</small></span></a>'}).join("")+'</div>'}).join("")+
-'<div class="intro-note"><span style="font-size:27px">🧩</span><div><b>ماژول تکمیلی تحول فرهنگ / OKR</b><div><span>برای حفظ مدل تفصیلی و داده‌های نسخه پیشین، دسترسی به آن در نسخه آرشیوی محفوظ است.</span> <a href="/naavsanat-culture-app/legacy-pre-rebuild.html#culture-okr" target="_blank" rel="noopener" style="text-decoration:underline;color:var(--copper-dark)">بازکردن مدل تفصیلی</a></div></div></div>'}
+ return '<section class="section-intro"><span class="kicker">'+roleNames[r]+'</span><h1>قواعد رفتار و فرهنگ</h1><p>۱۵ قاعده پیشنهادی برای گفت‌وگو و تمرین؛ نه دستورالعمل مصوب شرکت.</p></section>'+
+ '<div class="rules-grid">'+CASES.map(function(c,i){return '<a href="#/case/'+r+'/'+c.id+'/4" class="rule-row"><span>'+fa(c.id)+'</span><div><strong>'+safe(c.title)+'</strong><p>'+safe(NAAV_GUIDE[i].rule)+'</p></div></a>'}).join("")+'</div>';
+}
 function render(){
-var p=parts(),r=currentRole(p); if(p[0]==="home"){r=state.role} else if(p[0]==="case"||p[0]==="session"||p[0]==="track"){state.role=r;put("naav_studio_role",r)}
-document.body.classList.toggle("presentation",state.presentation);
-var inner=p[0]==="home"?home():p[0]==="track"?track(r):p[0]==="session"?lesson(r,Math.max(0,+p[2]||0)):p[0]==="case"?casePage(r,+p[2]||1,+p[3]||0):p[0]==="library"?library(r):p[0]==="culture"?culture(r):p[0]==="medicator"?window.NaavIndustryModule.render("med",r,p[1]):p[0]==="behavior"?window.NaavIndustryModule.render("behavior",r,p[1]):home();
-document.getElementById("app").innerHTML=layout(p,r,inner);document.title=(p[0]==="case"?"کیس "+fa(+p[2]||1)+" | ":"")+"استودیوی یادگیری ناوصنعت مس";window.scrollTo(0,0)}
-function saveCase(r,id,type){
-var old=read(noteKey(r,id),{}),t=function(i){var el=document.getElementById(i);return el?el.value.trim():""};
-if(type==="roleplay")old.roleplay=t("rpNote");else{old.action=t("actionText");old.when=t("actionWhen");old.proof=t("actionEvidence")}
-if(put(noteKey(r,id),old)){notify("یادداشت در مرورگر ذخیره شد.");var el=document.getElementById("saveResult");if(el)el.textContent="✓ یادداشت در همین مرورگر ذخیره شد."}else notify("امکان ذخیره در مرورگر وجود ندارد.")
+ var p=path(),r=roleOf(p);if(p[0]==="home")r=role;
+ if(p[0]==="track"||p[0]==="case"||p[0]==="session"||p[0]==="library"||p[0]==="culture"){role=r;store("ns_role",r)}
+ var body=p[0]==="home"?landing():p[0]==="track"?track(r):p[0]==="session"?lesson(r,+p[2]||0):p[0]==="case"?caseView(r,+p[2]||1,+p[3]||0):p[0]==="library"?library(r):p[0]==="culture"?culture(r):landing();
+ document.getElementById("root").innerHTML=frame(p,body,p[0]==="home"?"home-view":"content-view");
+ document.title=(p[0]==="case"?"کیس "+fa(+p[2]||1)+" | ":"")+"ناوصنعت مس — یادگیری رفتار سازمانی";
+ window.scrollTo(0,0);
 }
 document.addEventListener("click",function(e){
-var b=e.target.closest("[data-action]");if(!b)return;var a=b.dataset.action;
-if(a==="select-role"){var r=b.dataset.role;state.role=r;put("naav_studio_role",r);route("track/"+r)}
-if(a==="present"){state.presentation=!state.presentation;render()}
-if(a==="filter"){state.group=b.dataset.group;document.querySelectorAll('[data-action="filter"]').forEach(function(el){el.classList.toggle("active",el.dataset.group===state.group)});document.getElementById("library-cases").innerHTML=libraryCards(state.role)}
-if(a==="choice"){var r=b.dataset.role,id=+b.dataset.id,n=+b.dataset.n;put(choiceKey(r,id),n);render()}
-if(a==="save-roleplay"||a==="save-action")saveCase(b.dataset.role,+b.dataset.id,a==="save-roleplay"?"roleplay":"action");
-if(a==="export"){
-var r=b.dataset.role,id=+b.dataset.id,c=CASES[id-1],n=read(noteKey(r,id),{}),choice=read(choiceKey(r,id),-1);
-var t=["ناوصنعت مس | یادداشت آموزشی","گروه: "+names[r],"کیس "+id+": "+c.title,"انتخاب: "+(choice>=0?String.fromCharCode(65+choice):"ثبت نشده"),"بازخورد نقش‌آفرینی: "+(n.roleplay||""),"اقدام: "+(n.action||""),"پیگیری: "+(n.when||""),"شاهد انجام: "+(n.proof||""),"این خروجی، یادداشت شخصی آموزشی است و گزارش رسمی شرکت نیست."].join("\n");
-var blob=new Blob(["\ufeff"+t],{type:"text/plain;charset=utf-8"}),url=URL.createObjectURL(blob),aEl=document.createElement("a");aEl.href=url;aEl.download="naavsanat-case-"+id+"-"+r+".txt";document.body.appendChild(aEl);aEl.click();aEl.remove();URL.revokeObjectURL(url);
-}
+ var roleBtn=e.target.closest("[data-role]");if(roleBtn&&!roleBtn.hasAttribute("data-choice")){var r=roleBtn.getAttribute("data-role");if(roleNames[r]){role=r;store("ns_role",r);go("track/"+r)}return}
+ var choice=e.target.closest("[data-choice]");if(choice){var r=choice.dataset.role,id=+choice.dataset.case,n=+choice.dataset.choice;store(choiceKey(r,id),n);
+ document.querySelectorAll("[data-choice]").forEach(function(x){var sel=x===choice;x.classList.toggle("chosen",sel);x.setAttribute("aria-pressed",String(sel))})}
 });
-document.addEventListener("change",function(e){if(e.target.id==="roleSelect"){var r=safeRole(e.target.value);state.role=r;put("naav_studio_role",r);route("track/"+r)}});
-document.addEventListener("input",function(e){if(e.target.id==="caseSearch"){state.query=e.target.value;var el=document.getElementById("library-cases");if(el)el.innerHTML=libraryCards(state.role)}});
-window.addEventListener("hashchange",render);render();
+window.addEventListener("hashchange",render);
+render();
 })();
