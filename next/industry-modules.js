@@ -5,6 +5,8 @@ var d=window.NAAV_INDUSTRY_DATA||{med:[],behavior:[]};
 var name={medicator:"مدیکاتور",behavior:"هنر رفتار با افراد دشوار"};
 var roleNames={managers:"مدیران ستاد",hq:"کارکنان ستاد",operations:"کارکنان عملیاتی"};
 var stageNames=["موقعیت","انتخاب","تحلیل","تمرین"];
+var stageEmoji=["🧩","🧭","🔎","🎭"];
+function topicSticker(type){return type==="medicator"?"🖼️":"🎭"}
 function e(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function fa(v){return String(v).replace(/\d/g,function(x){return "۰۱۲۳۴۵۶۷۸۹"[+x]})}
 function saved(k,def){try{var a=JSON.parse(localStorage.getItem(k));return a==null?def:a}catch(er){return def}}
@@ -16,14 +18,14 @@ function items(type){
 function a(url,text,cls){return '<a class="'+(cls||"text-link")+'" href="#/'+url+'">'+text+'</a>'}
 function list(type,r,all){
  var selected=items(type).filter(function(x){return all||x.role===r||x.role==="all"});
- return '<div class="crumb">'+a("home","پنج مسیر یادگیری")+'</div><section class="section-intro"><span class="kicker">ماژول مستقل</span><h1>'+name[type]+'</h1><p>'+ (type==="medicator"?"از تصویر و موقعیت تا تصمیم و رفتار حرفه‌ای.":"مهارت گفت‌وگو در موقعیت‌های دشوار کاری.")+'</p></section>'+
+ return '<div class="crumb">'+a("home","پنج مسیر یادگیری")+'</div><section class="section-intro"><span class="kicker">ماژول مستقل</span><h1><span class="heading-sticker" aria-hidden="true">'+topicSticker(type)+'</span>'+name[type]+'</h1><p>'+ (type==="medicator"?"از تصویر و موقعیت تا تصمیم و رفتار حرفه‌ای.":"مهارت گفت‌وگو در موقعیت‌های دشوار کاری.")+'</p></section>'+
  '<div class="module-filter">'+a(type+"/"+r, "مناسب "+roleNames[r],!all?"module-pill active":"module-pill")+
  a(type+"/"+r+"/all","همه موقعیت‌ها",all?"module-pill active":"module-pill")+'</div>'+
- '<div class="case-grid">'+selected.map(function(x){return '<a class="case-tile" href="#/'+type+'/'+r+'/'+x.id+'/0"><span class="tiny-label">'+(type==="medicator"?"تصویر "+fa(x.id):"موقعیت "+fa(x.id))+'</span><strong>'+e(x.title)+'</strong><p>'+e(x.context)+'</p><span class="case-link">بازکردن موقعیت ←</span></a>'}).join("")+'</div>'+
+ '<div class="case-grid">'+selected.map(function(x){return '<a class="case-tile" href="#/'+type+'/'+r+'/'+x.id+'/0"><span class="case-topline"><span class="tiny-label">'+(type==="medicator"?"تصویر "+fa(x.id):"موقعیت "+fa(x.id))+'</span><span class="case-sticker" aria-hidden="true">'+topicSticker(type)+'</span></span><strong>'+e(x.title)+'</strong><p>'+e(x.context)+'</p><span class="case-link">بازکردن موقعیت ←</span></a>'}).join("")+'</div>'+
  (selected.length?"":'<p class="quiet-note">در این دسته موردی تعریف نشده است؛ همه موقعیت‌ها را ببینید.</p>');
 }
 function stageNav(type,r,id,step){
- return '<nav class="case-steps" aria-label="مراحل تمرین" style="grid-template-columns:repeat(4,1fr)">'+stageNames.map(function(t,i){return a(type+"/"+r+"/"+id+"/"+i,'<span>'+fa(i+1)+'</span><strong>'+t+'</strong>',"step "+(step===i?"active":""))}).join("")+'</nav>';
+ return '<nav class="case-steps" aria-label="مراحل تمرین" style="grid-template-columns:repeat(4,1fr)">'+stageNames.map(function(t,i){return a(type+"/"+r+"/"+id+"/"+i,'<span>'+fa(i+1)+'</span><strong><span class="step-emoji" aria-hidden="true">'+stageEmoji[i]+'</span>'+t+'</strong>',"step "+(step===i?"active":""))}).join("")+'</nav>';
 }
 function illustration(x,med){
  var kind=med?x.motif:"conversation";
@@ -63,7 +65,7 @@ function detail(type,r,id,stage){
  '<div class="reflection"><span class="qmark">؟</span><p>چه چیزی در گفت‌وگو باعث شد مسئله روشن‌تر شود و همکاری ادامه پیدا کند؟</p></div>';
  var base=type+"/"+r+"/"+id+"/";
  return '<div class="crumb">'+a("home","پنج مسیر یادگیری")+' <span> / </span> '+a(type+"/"+r,name[type])+'</div>'+
- '<section class="case-heading"><span class="kicker">'+name[type]+'</span><h1>'+e(x.title)+'</h1></section>'+
+ '<section class="case-heading"><span class="kicker">'+name[type]+'</span><h1><span class="heading-sticker" aria-hidden="true">'+topicSticker(type)+'</span>'+e(x.title)+'</h1></section>'+
  stageNav(type,r,id,s)+'<div class="case-content"><section class="content-section">'+content+'</section></div>'+
  '<nav class="stage-foot">'+(s>0?a(base+(s-1),"مرحله قبل","secondary-btn"):a(type+"/"+r,"همه موقعیت‌ها","secondary-btn"))+
  (s<3?a(base+(s+1),"ادامه: "+stageNames[s+1]+" ←","primary-btn"):a(type+"/"+r,"بازگشت به فهرست ←","primary-btn"))+'</nav>';
