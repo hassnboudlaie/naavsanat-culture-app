@@ -108,7 +108,7 @@ function fullCase(id,role,teacher){
  '<div id="nv-analysis" class="nv-analysis"><div class="nv-analysis-heading"><span>🔍 تحلیل هر گزینه</span><small>جواب مطلق وجود ندارد؛ پیامد و محدودیت را ببینید.</small></div>'+
  d.o.map((opt,i)=>'<div class="nv-analysis-item '+(val===i?'chosen':'')+'"><div class="nv-analysis-num">گزینه '+fa14(i+1)+(val===i?' · انتخاب شما':'')+'</div>'+
  '<p><strong>پیامد محتمل:</strong> '+e(opt[1])+'</p><p><strong>گام حرفه‌ای‌تر:</strong> '+e(opt[2])+'</p></div>').join('')+'</div>';
- let out='<div class="nv-case-breadcrumb"><button onclick="goRoute(\''+goBack+'\')">→ کیس‌های جلسه '+fa14(session+1)+'</button><span>کیس '+fa14(id)+' از ۱۵</span></div>'+
+ let out='<div class="nv-case-breadcrumb"><button onclick="goRoute(\''+goBack+'\')">→ کیس‌های جلسه '+fa14(session+1)+'</button><div class="nv-quick-nav"><span>کیس '+fa14(id)+' از ۱۵</span>'+'<button class="nv-quick-next" onclick="goRoute(\''+(next?link(next):goBack)+'\')">'+(next?'کیس بعدی ←':'پایان جلسه ✓')+'</button></div></div>'+
  '<section class="nv-case-head"><div><span class="nv-overline">'+enrole[role]+' · جلسه '+fa14(session+1)+'</span>'+
  '<h1>'+s.i+' '+e(c.title)+'</h1><p>'+e(c.concept)+'</p></div><div class="nv-case-count">'+fa14(id)+'<small>/ ۱۵</small></div></section>'+
  '<div class="nv-case-layout"><article class="nv-case-main">'+
