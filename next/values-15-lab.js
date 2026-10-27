@@ -5,7 +5,7 @@
 var KEY="naav_values15_agreed_v1",index=0,notice="";
 function source(){return window.NAAV_VALUE_CHALLENGES_15||[]}
 function families(){return window.NAAV_VALUES_SOURCE&&window.NAAV_VALUES_SOURCE.pillars||[]}
-function safe(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;":"&#39;"}[c]})}
+function safe(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function fa(v){return String(v).replace(/\d/g,function(c){return "۰۱۲۳۴۵۶۷۸۹"[+c]})}
 function store(){try{var x=JSON.parse(localStorage.getItem(KEY));return x&&typeof x==="object"&&!Array.isArray(x)?x:{}}catch(e){return {}}}
 function persist(x){try{localStorage.setItem(KEY,JSON.stringify(x));return true}catch(e){return false}}
