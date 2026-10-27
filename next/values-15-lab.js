@@ -2,7 +2,7 @@
    Standalone content inside the EXISTING culture tab. No extra route or dashboard. */
 (function(){
 "use strict";
-var KEY="naav_values15_agreed_v1",index=0,notice="";
+var KEY="naav_values15_agreed_v1",index=0,notice="",lastRole=null;
 function source(){return window.NAAV_VALUE_CHALLENGES_15||[]}
 function families(){return window.NAAV_VALUES_SOURCE&&window.NAAV_VALUES_SOURCE.pillars||[]}
 function safe(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
@@ -41,6 +41,7 @@ function results(role){
  '<p class="v15-storage">پاسخ‌ها در مرورگر همین دستگاه ذخیره می‌شوند؛ برای نگهداری از فایل خروجی استفاده کنید.</p></section>';
 }
 function render(role){
+ if(lastRole!==role){lastRole=role;index=0;notice=""}
  var all=source(),q=all[index]||all[0];
  if(!q)return '<p>داده‌های پانزده چالش در دسترس نیست.</p>';
  var r=records(role),sel=selected(q,r[q.id]);
