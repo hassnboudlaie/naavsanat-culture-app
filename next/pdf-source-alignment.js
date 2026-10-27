@@ -454,6 +454,7 @@ function pillTags(c){return c.pillars.map(function(id){return '<span class="sour
 function lawTags(c){return c.laws.map(function(id){return '<span class="source-law-tag">'+fa(id)+' · '+esc(S.laws[id-1].title)+'</span>'}).join("")}
 function renderCase(role,id,stage){
  var c=item(id);if(!c)return "";
+ if(role!=="managers"){if(stage!==4)return "";return '<div class="source-case-prompt" aria-label="پیوند رفتاری با کتابچه ناوصنعت"><span>پیوند با قواعد فرهنگ ناوصنعت · متناسب با مسیر شغلی شما</span><strong>چه رفتاری از این تجربه در کار ما قابل استفاده است؟</strong><div class="source-tag-row">'+lawTags(c)+'</div><p>این پیوند یک کاربرد آموزشی پیشنهادی است؛ روایت کیس مدیریتی کتابچه، گزارش رویداد این گروه نیست.</p></div>'}
  var level=c.level==="expanded"?"تحلیل تفصیلی در کتابچه":"موضوع ثبت‌شده در نقشه کیس‌ها";
  if(stage===0)return '<aside class="source-case-mini" aria-label="پیوند با کتابچه ناوصنعت"><span class="source-case-eyebrow">📖 پیوند با کتابچه ناوصنعت · ص '+esc(c.page)+' · '+level+'</span><strong>'+fa(id)+' · '+esc(c.title)+'</strong><p>'+esc(c.issue)+'</p><small>این موقعیت کلاسی یک بازآفرینی آموزشی است؛ ادعای وقوع عینی در ناوصنعت ندارد.</small></aside>';
  if(stage===3)return '<div class="source-case-prompt"><span>پرسش تکمیلی برای گفت‌وگو</span><strong>'+esc(c.ask)+'</strong><p>جمله پیشنهادی: «'+esc(c.phrase)+'»</p></div>';
@@ -477,6 +478,7 @@ function renderSession(role,index){
  {head:"رفتار مدیر، پیام فرهنگ",id:[11,13],ask:"کدام واکنش مدیران، گزارش نگرانی را آسان یا دشوار می‌کند؟"}][group];
  return '<div class="source-session-strip"><span>مطالعه موردی بر اساس کتابچه ناوصنعت · ص ۱۰–۱۲</span><strong>'+esc(qs.head)+'</strong><p>'+esc(qs.ask)+'</p><small>کیس‌های مرتبط در نقشه مرجع: '+qs.id.map(function(x){return fa(x)}).join(" و ")+' · سناریوهای تمرین، نسخه کلاسی‌اند.</small></div>';
 }
+S.questionLaws={e1:[6],e2:[1],e3:[4],v1:[8],v2:[3],v3:[5,6],c1:[7],c2:[2],c3:[3,7]};
 window.NAAV_PDF_SOURCE=S;
 window.NaavPDFAlignment={renderCase:renderCase,renderCultureMap:renderCultureMap,renderSession:renderSession};
 })();
