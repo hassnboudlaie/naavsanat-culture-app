@@ -111,3 +111,8 @@
 @media(max-width:750px){.cl-hero{min-height:0}.cl-summary{gap:7px}.cl-summary>div{padding:12px;display:grid;gap:3px}.cl-summary span{font-size:12px}.cl-summary strong{font-size:24px}.cl-outcome-layout,.cl-form-grid{grid-template-columns:1fr}.cl-topics{gap:7px}.cl-topic{padding:12px 9px;min-height:126px}.cl-topic strong{font-size:15px}.cl-topic small{font-size:11px}.cl-topic-icon{font-size:22px}.cl-stage-actions{justify-content:stretch}.cl-stage-actions>.cl-save{width:100%}.session-one-steps{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:430px){.cl-hero{padding:24px 17px;border-radius:16px}.cl-hero-orbit span{font-size:11px;padding:4px 8px}.cl-topic{min-height:116px}.cl-topic strong{font-size:14px}.cl-topic small{line-height:1.5}.cl-story{padding:20px 14px}.cl-summary>div{border-right-width:3px}.cl-summary strong{font-size:22px}.cl-chart,.cl-candidates{padding:16px}.session-one-steps{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.cl-topic{transition:none}}
+
+.cl-scope{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:#fff;border:1px solid #dbe5e2;border-radius:13px;padding:12px 17px;margin-bottom:12px;color:#184d56}
+.cl-scope strong{font-size:15px}.cl-scope label{display:flex;align-items:center;gap:10px;color:#456268;font-size:13px}.cl-scope select{width:auto;min-width:160px;padding:7px 12px;font-size:14px}
+.cl-export-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.cl-export-actions button{font-size:12px}
+@media(max-width:450px){.cl-export-actions{width:100%}.cl-export-actions button{flex:1}}
