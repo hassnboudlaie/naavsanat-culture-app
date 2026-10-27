@@ -83,6 +83,8 @@ const server=http.createServer((req,res)=>{
  assert.equal(await page.locator('[data-mod-choice]').count(),3);
  await page.locator('[data-mod-choice]').first().click();
  assert.match(await page.locator('.module-feedback').innerText(),/مرز تخصصی/);
+ await visit('behavior/managers/12/2');assert.equal(await page.locator('.source-case-prompt').count(),1);
+ await visit('medicator/managers/5/2');assert.equal(await page.locator('.source-case-prompt').count(),1);
  await visit('medicator/managers/5/3');
  await page.locator('.stage-foot .primary-btn').click();
  assert.equal(new URL(page.url()).hash,'#/session/managers/0');
