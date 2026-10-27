@@ -145,7 +145,7 @@ function lesson(r,num){
  '<section class="question-box"><span>پرسش محوری</span><strong>'+safe(s.topics[0]||"در این موقعیت چه رفتاری اهمیت دارد؟")+'</strong></section>'+
  (anchor.tension?'<div class="session-dilemma"><strong>چالش واقعی این بحث</strong><p>'+rich(anchor.tension)+'</p></div>':''))+
  '<section class="case-list"><h2>موقعیت‌های این جلسه</h2><div class="case-grid">'+ids.map(function(id){var c=CASES[id-1],d=depth(id);return '<a class="case-tile" href="#/case/'+r+'/'+id+'/0">'+caseTopline(id,'کیس '+fa(id))+'<strong>'+safe(r==="managers"?practical(id).title:c.title)+'</strong><p>'+safe(r==="managers"?practical(id).ask:c.concept)+'</p><span class="case-link">بررسی این موقعیت ←</span></a>'}).join("")+'</div></section>')+
- (mf?'<p class="session-pacing">برنامه پیشنهادی ۱۲۰ دقیقه‌ای: ۱۰ دقیقه شروع · '+(ids.length===3?'۳ کیس، هرکدام ۳۰ دقیقه':'۲ کیس، هرکدام ۴۵ دقیقه')+' · ۲۰ دقیقه جمع‌بندی و تعهد</p>'+sessionClosing(r,num):'')+
+ (mf&&num!==0?'<p class="session-pacing">برنامه پیشنهادی ۱۲۰ دقیقه‌ای: ۱۰ دقیقه شروع · '+(ids.length===3?'۳ کیس، هرکدام ۳۰ دقیقه':'۲ کیس، هرکدام ۴۵ دقیقه')+' · ۲۰ دقیقه جمع‌بندی و تعهد</p>'+sessionClosing(r,num):'')+
  '<div class="page-bottom">'+a("track/"+r,"همه جلسات","text-link")+'</div>';
 }
 function caseStages(r,id,step){
@@ -251,6 +251,7 @@ function library(r){
 }
 function culture(r){
  var model=window.NAAV_STRATEGIC.evc;
+ if(window.NaavCultureLab)return window.NaavCultureLab.render(r,model);
  return '<section class="section-intro"><span class="kicker">قواعد رفتار و فرهنگ</span><h1>'+safe(model.title)+'</h1><p>'+safe(model.purpose)+'</p></section><p class="context-note">'+safe(model.basis)+'</p>'+
  '<div class="evc-map" aria-label="اخلاق، ارزش‌ها و فرهنگ"><div><bdi>E · Ethics</bdi><h2>اخلاق</h2><p>چه مرزی را حتی زیر فشار رد نمی‌کنیم؟</p></div><div><bdi>V · Values</bdi><h2>ارزش‌ها</h2><p>وقتی هدف‌ها تعارض دارند، با چه معیاری انتخاب می‌کنیم؟</p></div><div><bdi>C · Culture</bdi><h2>فرهنگ</h2><p>این انتخاب در رفتار، روال و پاداش روزمره چگونه تکرار می‌شود؟</p></div></div>'+
  '<p class="evc-link">مرز اخلاقی ← معیار تصمیم ← رفتار و روال مشترک ← بازخورد و اصلاح</p>'+
