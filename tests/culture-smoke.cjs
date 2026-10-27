@@ -19,9 +19,33 @@ const server=http.createServer((req,res)=>{
  assert.equal(await page.locator('.session-one-steps a').count(),6);
  assert.equal(await page.locator('.case-list').count(),0);
  assert.equal(await page.locator('#session-close').count(),1);
+
+ assert.equal(await page.locator('.source-session-strip').count(),1);
+ assert.equal(await page.evaluate(()=>window.NAAV_PDF_SOURCE.cases.length),15);
+ assert.equal(await page.evaluate(()=>window.NAAV_PDF_SOURCE.laws.length),8);
+ assert.equal(await page.evaluate(()=>window.NAAV_PDF_SOURCE.pillars.length),5);
+ for(let id=1;id<=15;id++){
+   await visit('case/managers/'+id+'/0');assert.equal(await page.locator('.source-case-mini').count(),1,'booklet case '+id);
+   await visit('case/managers/'+id+'/4');assert.equal(await page.locator('.source-case-learning').count(),1,'booklet reflection '+id);
+ }
+ await visit('case/hq/6/4');assert.equal(await page.locator('.source-case-prompt').count(),1);
+ await visit('case/operations/12/4');assert.equal(await page.locator('.source-case-prompt').count(),1);
+ await visit('case/managers/5/5');assert.equal(await page.locator('.source-action').count(),1);
+ await page.locator('.source-discussion-link').click();
+ await page.locator('#naav-culture-lab').waitFor();
+ assert.equal(await page.locator('.cl-back a').getAttribute('href'),'#/case/managers/5/5');
+ await visit('session/managers/0');
  await page.locator('.session-one-steps a').last().click();
  await page.waitForSelector('#naav-culture-lab');
  assert.equal(await page.locator('[data-cl-group="values"]').getAttribute('aria-pressed'),'true');
+ assert.equal(await page.locator('.source-pillar').count(),5);
+ await page.locator('.source-rule-bank>summary').click();
+ assert.equal(await page.locator('[data-source-question]').count(),8);
+ await page.locator('[data-source-question]').last().click();
+ assert.match(await page.locator('#cl-title').innerText(),/معیار/);
+ assert.match(await page.locator('.cl-source-tags').innerText(),/ستون/);
+ await visit('culture/managers/1');
+
  for(const role of ['managers','hq','operations']){
   await visit('culture/'+role);
   await page.locator('#naav-culture-lab').waitFor();
