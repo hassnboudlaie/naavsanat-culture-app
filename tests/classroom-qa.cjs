@@ -31,7 +31,7 @@ const server=http.createServer((req,res)=>{const file=path.join(root,decodeURICo
   await page.locator('#v15-choice').selectOption('0');
   await page.locator('[data-v15-save]').click();
   assert.match(await page.locator('.v15-result-head').innerText(),/۱ از ۱۵/);
-  await page.reload();await page.waitForSelector('#naav-value15');
+  await page.reload();await page.waitForSelector('#naav-culture-lab');await page.locator('[data-cl-group="values"]').click();await page.waitForSelector('#naav-value15');
   assert.match(await page.locator('.v15-result-head').innerText(),/۱ از ۱۵/);
  }
  await goto('culture/managers/1');assert.equal(await page.locator('[data-cl-group="values"]').getAttribute('aria-pressed'),'true');
