@@ -128,7 +128,7 @@ function valueInsights(role){
   var agree=recordsForPillar.filter(function(x){return x.consensus==="agreed"||x.consensus==="conditional"}).length;
   var open=recordsForPillar.filter(function(x){return x.consensus==="open"||x.consensus==="review"}).length;
   var status=!done?"هنوز بررسی نشده":open?"نیازمند گفت‌وگوی بیشتر":done>=2&&agree>=2?"دو موضوع با توافق آموزشی بررسی شد":"در حال شکل‌گیری";
-  return {pillar:p,index:i,done:done,agree:agree,open:open,status:status};
+  return {pillar:p,index:i,done:done,agree:agree,open:open,status:status,answers:recordsForPillar};
  });
  return '<section class="cl-outcomes" aria-labelledby="cl-results-title">'+
  '<div class="cl-outcomes-head"><div><span class="cl-eyebrow">نتیجه سؤال‌های انتخابی</span><h2 id="cl-results-title">چارچوب پیشنهادی ارزش‌های کسب‌وکار ناوصنعت</h2></div><div class="cl-export-actions">'+
@@ -138,7 +138,8 @@ function valueInsights(role){
  '<div class="cl-value-framework">'+rows.map(function(r){
   var p=r.pillar;
   return '<details class="cl-candidate cl-framework-row"><summary><span class="cl-candidate-mark">'+fa(r.index+1)+'</span><span class="cl-framework-desc"><strong>'+esc(p.title)+'</strong><small>'+esc(r.status)+' · '+fa(r.done)+' از ۲ موضوع بررسی شده</small><span class="cl-mini-meter" aria-hidden="true"><i style="width:'+(r.done*50)+'%"></i></span></span></summary>'+
-  '<p>'+esc(p.definition)+'</p><p><strong>رفتارهای قابل مشاهده:</strong> '+p.behaviors.map(esc).join(" | ")+'</p></details>';
+  '<p>'+esc(p.definition)+'</p><p><strong>رفتارهای قابل مشاهده:</strong> '+p.behaviors.map(esc).join(" | ")+'</p>'+
+ (r.answers.length?'<div class="cl-pillar-evidence"><strong>گزینه‌های منتخب در کلاس:</strong>'+r.answers.map(function(ans){var q=questions.find(function(x){return x.id===ans.q});var selection=q&&q.options[Number(ans.option)]||"نامشخص";return '<p>'+esc(selection)+' <small>('+esc({"agreed":"توافق","conditional":"توافق مشروط","open":"اختلاف‌نظر","review":"نیازمند بررسی"}[ans.consensus]||"نامشخص")+')</small></p>'}).join("")+'</div>':'<p>هنوز انتخابی برای این ارزش ثبت نشده است.</p>')+'</details>';
  }).join("")+'</div>'+
  '<details class="cl-history"><summary>پاسخ‌های ثبت‌شده ('+fa(history.length)+')</summary><div class="cl-history-items">'+history.slice().reverse().slice(0,30).map(function(x){
   var q=questions.find(function(q){return q.id===x.q}),v=q&&q.options[+x.option];
