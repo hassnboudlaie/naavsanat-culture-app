@@ -101,6 +101,10 @@ function detail(type,r,id,stage){
   if(chosen>=0)content+='<div class="module-feedback"><strong>پیامد این انتخاب</strong><p>'+e(x.feedback[chosen])+'</p></div>';
   }else content+='<div class="situation">«'+e(x.quote)+'»</div><div class="reflection"><span class="qmark">؟</span><p>چه پاسخی هم احترام را حفظ می‌کند و هم مسئله واقعی را روشن می‌سازد؟</p></div><details class="fold"><summary>یک پاسخ پیشنهادی</summary><p>«'+e(x.line)+'»</p></details>';
  }
+ if(s===1&&!med&&x.options&&x.feedback){
+  content+='<div class="choices">'+x.options.map(function(o,i){return '<button class="pick '+(chosen===i?"chosen":"")+'" data-mod-choice="'+i+'" data-mod-key="'+key+'" type="button" aria-pressed="'+(chosen===i)+'"><span class="pick-letter">'+["الف","ب","ج"][i]+'</span><span>'+e(o)+'</span></button>'}).join("")+'</div>';
+  if(chosen>=0&&chosen<x.feedback.length)content+='<div class="module-feedback"><strong>پیامد احتمالی این پاسخ</strong><p>'+e(x.feedback[chosen])+'</p></div>';
+ }
  if(s===2)content='<span class="kicker">در عمل چه کمکی می‌کند؟</span><h2>'+e(plainTechnique(type,x))+'</h2>'+
  '<details class="fold discreet-fold"><summary>نام تخصصی این فن</summary><p dir="ltr">'+e(x.technique)+'</p></details>'+
  '<div class="takeaway">'+e(med?x.lens:x.line)+'</div>'+ 
