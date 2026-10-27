@@ -49,6 +49,11 @@ const server=http.createServer((req,res)=>{
   await page.locator('.cl-candidate>summary').first().click();
   assert.equal(await page.locator('[data-cl-status]').first().inputValue(),'needs');
  }
+ await visit('culture/managers');
+ await page.locator('#cl-scope').selectOption('all');
+ assert.match(await page.locator('.cl-summary').innerText(),/۳/);
+ assert.equal(await page.locator('.cl-candidate').count(),1);
+ await page.locator('[data-cl-export-values]').click();
  await page.locator('[data-cl-export]').click();
  await visit('behavior/managers/12/1');
  assert.equal(await page.locator('[data-mod-choice]').count(),3);
