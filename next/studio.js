@@ -49,7 +49,7 @@ function caseExit(r,id){var i=sessionIndex(r,id),ss=sessions(r),ids=i>=0?ss[i].i
 function decisionNotes(id,i){var f=window.NAAV_MANAGER_FOCUS;return f&&f.decisionNotes&&f.decisionNotes[id-1][i]}
 function noteMarkup(id,i){var n=decisionNotes(id,i);return n?'<dl class="decision-notes"><dt>منطق تصمیم</dt><dd>'+safe(n[0])+'</dd><dt>محدودیت</dt><dd>'+safe(n[1])+'</dd><dt>چه زمانی مناسب است؟</dt><dd>'+safe(n[2])+'</dd></dl>':""}
 function techniqueDebrief(id){var f=window.NAAV_MANAGER_FOCUS,lines=f.dialogues[id-1],labels=f.techniques[id-1];return '<details class="fold"><summary>پس از اجرا: یک گفت‌وگوی ممکن و فنون آن</summary><p>این نمونه، پاسخ واحد یا متن حفظ‌کردنی نیست؛ با اجرای خود مقایسه کنید.</p>'+lines.map(function(t,i){return '<div class="voice"><strong>'+ (i===1?'نقش دوم':'نقش اول')+'</strong><p>«'+safe(t)+'»</p></div>'}).join('')+'<h3>چه رفتاری به گفت‌وگو کمک کرد؟</h3><p><strong>'+safe(labels[0])+'</strong> · در جمله اول، مسئله پیش از قضاوت روشن می‌شود.</p><p><strong>'+safe(labels[1])+'</strong> · جمله پایانی بحث را به تصمیم قابل پیگیری می‌رساند.</p><p>در اجرای شما کدام جمله اثر مشابه داشت؟ کجا هنوز توافق مبهم بود؟</p><p class="science-note">برای شنیدن فعال: بازتاب معنا، سؤال روشن‌کننده و بررسی فهم مشترک؛ منبع تکمیلی: فصل ارتباطات کتاب Managing Human Behavior، ویرایش پنجم.</p></details>'}
-function sessionClosing(r,num){var f=window.NAAV_MANAGER_FOCUS.sessionClose[num];return '<details class="fold session-close" id="session-close"><summary>جمع‌بندی و پیگیری جلسه</summary><h2>'+safe(f[0])+'</h2><p><strong>اقدام مدیریتی:</strong> '+safe(f[1])+'</p><p><strong>معیار مرور بعدی:</strong> '+safe(f[2])+'</p><p>هر مدیر یک اقدام از کیس‌های امروز را انتخاب کند؛ مسئول، موعد و نشانه اجرای آن را روشن بگوید.</p>'+sessions(r)[num].ids.map(function(id){var n=selection(actionKey(r,id),3),v=CASES[id-1].variants[r];return '<div class="session-record"><strong>'+safe(practical(id).title)+'</strong><p>'+safe(n>=0?v.solution[n]:'هنوز اقدامی انتخاب نشده است.')+'</p><p>'+safe(saved(proofKey(r,id),''))+'</p>'+a('case/'+r+'/'+id+'/5','ثبت یا مرور اقدام','text-link')+'</div>'}).join('')+'</details>'}
+function sessionClosing(r,num){var f=window.NAAV_MANAGER_FOCUS.sessionClose[num];return '<details class="fold session-close" id="session-close"><summary>جمع‌بندی و پیگیری جلسه</summary><h2>'+safe(f[0])+'</h2><p><strong>اقدام مدیریتی:</strong> '+safe(f[1])+'</p><p><strong>معیار مرور بعدی:</strong> '+safe(f[2])+'</p><p>هر مدیر یک اقدام از کیس‌های امروز را انتخاب کند؛ مسئول، موعد و نشانه اجرای آن را روشن بگوید.</p>'+sessions(r)[num].ids.map(function(id){var n=selection(actionKey(r,id),3),v=CASES[id-1].variants[r];return '<div class="session-record"><strong>'+safe(practical(id).title)+'</strong><p>'+safe(n>=0?actionOptions(r,id)[n]:'هنوز اقدامی انتخاب نشده است.')+'</p><p>'+safe(saved(proofKey(r,id),''))+'</p>'+a('case/'+r+'/'+id+'/5','ثبت یا مرور اقدام','text-link')+'</div>'}).join('')+'</details>'}
 
 function safe(s){return String(s==null?"":s).replace(/[&<>"']/g,function(a){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[a]})}
 function rich(s){return safe(s).replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>")}
@@ -63,7 +63,8 @@ function actionKey(r,id){return "naav_studio_action_"+r+"_"+id}
 function proofKey(r,id){return "naav_studio_proof_"+r+"_"+id}
 function roleOf(p){return roleNames[p[1]]?p[1]:role}
 function currCase(r,id){return CASES[id-1]&&CASES[id-1].variants[r]?CASES[id-1]:null}
-function lab(id,r){return NAV_ROLE_LABS[r]&&NAV_ROLE_LABS[r][String(id)]}
+function lab(id,r){var source=NAV_ROLE_LABS[r]&&NAV_ROLE_LABS[r][String(id)];if(!source||r!=="managers")return source;return Object.assign({},source,{o:source.o.map(function(o,i){return [window.NAAV_MANAGER_FOCUS.plainChoices[id-1][i],o[1],o[2]]})})}
+function actionOptions(r,id){return r==="managers"?window.NAAV_MANAGER_FOCUS.plainActions[id-1]:CASES[id-1].variants[r].solution.slice(0,3)}
 function managerFocus(id){return window.NAAV_MANAGER_FOCUS&&window.NAAV_MANAGER_FOCUS.cases[id-1]}
 function practical(id){return window.NAAV_MANAGER_FOCUS.practical[id-1]}
 function managerSession(i){return window.NAAV_MANAGER_FOCUS&&window.NAAV_MANAGER_FOCUS.sessions[i]}
@@ -208,7 +209,7 @@ function reflect(c,r,v,g){
 }
 function conclude(c,r,v,g){
  var d=depth(c.id),old=selection(actionKey(r,c.id),3),pr=saved(proofKey(r,c.id),"");
- var options=(v.solution||[]).slice(0,3);
+ var options=actionOptions(r,c.id);
  return '<section class="content-section step-action"><span class="kicker">گام ۶ · اقدام</span><h2>از این تجربه، چه رفتاری وارد کار کنیم؟</h2>'+
  '<div class="takeaway action-rule">'+rich(r==="managers"?practical(c.id).lesson:d.shift||g.rule)+'</div>'+
  '<p class="action-prompt">'+(r==="managers"?'این هفته کدام کار را انجام می‌دهید؟':'یک اقدام مشخص برای موقعیت کاری بعدی انتخاب کنیم:')+'</p>'+

@@ -105,3 +105,6 @@ User rejected the previous managers experience as too textbook-like and the typo
 - Scientific analysis remains available behind one optional entry, while the initial reflection view shows a plain takeaway and concrete action.
 - Increased key manager text to 20–23px (19–21px for mobile controls); inherited Persian font in controls and textarea; darker text, clearer borders and white-on-navy emphasis.
 - Regression passed: 270 stages, 135 consequences, 45 persistence checks and five widths. Separate screenshots reviewed for session opening and reflection on desktop/mobile; computed role-play text confirmed white on navy, Vazirmatn, 23px desktop. Physical projector testing remains unperformed.
+
+### Completion pass — 27 October
+All 45 visible manager choice labels and the 45 selectable action labels were rewritten in plain Persian. Option order, underlying consequences and the meaning of saved action selections were retained; session closing uses the same action labels. The prior revision GitHub Classroom QA and Pages deployment both succeeded.
