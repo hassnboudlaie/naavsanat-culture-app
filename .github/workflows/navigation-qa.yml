@@ -23,6 +23,7 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Test this commit before relying on deployed state
         run: |
+          node tests/culture-smoke.cjs
           node tests/classroom-qa.cjs
           node tests/strategic-qa.cjs
         env:
