@@ -1,7 +1,7 @@
 /* NAAVSANAT — participatory culture dialogue. Local, device-bound classroom data. */
 (function(){
 "use strict";
-var KEY="naav_culture_dialogue_v1", REVIEW="naav_culture_review_v1";
+var KEY="naav_culture_dialogue_v1", REVIEW="naav_culture_pdf_review_v1";
 var roles={managers:"مدیران شرکت",hq:"کارکنان ستاد",operations:"کارکنان عملیاتی"};
 var groups=[
  {id:"ethics",icon:"⚖️",name:"اخلاق حرفه‌ای",sub:"زیر فشار، چه مرزی را رعایت کنیم؟"},
@@ -105,18 +105,18 @@ function dialogue(role){
 function insights(role,model){
  var list=visibleRecords(role),counts=groups.map(function(g){return {g:g,count:list.filter(function(x){return x.group===g.id}).length}});
  var max=Math.max(1,counts.reduce(function(a,c){return Math.max(a,c.count)},0));
- var reference=model.values||[],rank={};
- list.forEach(function(x){if(x.consensus==="agreed"||x.consensus==="conditional"){var q=questions.find(function(q){return q.id===x.q});if(q){if(!rank[q.tag])rank[q.tag]={count:0,ids:[]};rank[q.tag].count++;rank[q.tag].ids.push(x.id)}}});
+ var source=window.NAAV_PDF_SOURCE,reference=source?source.pillars.map(function(p){return {value:p.title,culture:p.behavior}}):model.values||[],rank={};
+ list.forEach(function(x){if(x.consensus==="agreed"||x.consensus==="conditional"){var q=questions.find(function(q){return q.id===x.q});if(q){var tag=source&&source.questionPillars[x.q]!==undefined?source.questionPillars[x.q]:q.tag;if(!rank[tag])rank[tag]={count:0,ids:[]};rank[tag].count++;rank[tag].ids.push(x.id)}}});
  var rows=Object.keys(rank).sort(function(a,b){return rank[b].count-rank[a].count}).slice(0,7),rev=reviews();
  return '<section class="cl-outcomes" aria-labelledby="cl-results-title"><div class="cl-outcomes-head"><div><span class="cl-eyebrow">از گفت‌وگو تا ارزش مشترک</span><h2 id="cl-results-title">آنچه از کلاس بیرون آمده</h2></div><div class="cl-export-actions"><button type="button" data-cl-export class="cl-secondary" '+(!list.length?'disabled':'')+'>صورت‌جلسه‌ها CSV</button><button type="button" data-cl-export-values class="cl-secondary" '+(!rows.length?'disabled':'')+'>ارزش‌های پیشنهادی CSV</button></div></div>'+
  (!list.length?'<div class="cl-empty"><span aria-hidden="true">✧</span><strong>هنوز نتیجه‌ای ثبت نشده است</strong><p>پس از اولین گفت‌وگو، شواهد و ارزش‌های پیشنهادی اینجا ظاهر می‌شوند؛ بدون عدد یا نمودار فرضی.</p></div>':
  '<div class="cl-outcome-layout"><div class="cl-chart"><h3>تعداد گفت‌وگوها در هر محور</h3>'+counts.map(function(o){return '<div class="cl-bar-row"><span>'+o.g.name+'</span><div class="cl-bar-track"><i style="width:'+(100*o.count/max)+'%"></i></div><b>'+fa(o.count)+'</b></div>'}).join("")+'<p>این نمودار فقط تعداد ثبت‌ها را نشان می‌دهد، نه میزان موافقت افراد.</p></div>'+
- '<div class="cl-candidates"><h3>ارزش‌های پیشنهادی بر پایه توافق‌های ثبت‌شده</h3>'+
+ '<div class="cl-candidates"><h3>۵ ستون فرهنگ پیشنهادی · شواهد گفت‌وگوها</h3>'+
  (!rows.length?'<p>هنوز توافق قطعی یا مشروط ثبت نشده؛ جمع‌بندی زودهنگام نکنیم.</p>':
  rows.map(function(k){var v=reference[+k]||{},status=rev[k]&&rev[k].status||"draft",name=rev[k]&&rev[k].name||v.value||"ارزش پیشنهادی",definition=rev[k]&&rev[k].definition||v.culture||"";
  return '<details class="cl-candidate"><summary><span class="cl-candidate-mark">◆</span><span><strong>'+esc(name)+'</strong><small>'+fa(rank[k].count)+' گفت‌وگوی دارای توافق · پیش‌نویس آموزشی</small></span></summary>'+
  '<p>'+esc(definition)+'</p><div class="cl-edit"><label>نام پیشنهادی<input data-cl-name="'+k+'" maxlength="120" value="'+esc(name)+'"></label><label>رفتار قابل مشاهده<textarea data-cl-definition="'+k+'" maxlength="600" rows="2">'+esc(definition)+'</textarea></label><label>وضعیت بررسی<select data-cl-status="'+k+'">'+option("پیشنهادی","draft",status)+option("تأیید برای بررسی مدیریتی","reviewed",status)+option("نیازمند گفت‌وگوی بیشتر","needs",status)+option("رد پیشنهاد","rejected",status)+'</select></label><button type="button" data-cl-review="'+k+'" class="cl-secondary">ذخیره بازبینی</button></div></details>'}).join(""))+
- '<p class="cl-small">این ارزش‌ها از برچسب‌گذاری ازپیش‌تعریف‌شده موضوعات استخراج می‌شوند، نه تحلیل هوشمند متن. تأیید آموزشی به معنی تصویب رسمی سازمان نیست.</p></div></div>')+
+ '<p class="cl-small">این پنج ستون از کتابچه ناوصنعت (اسلاید ۴۰) گرفته شده‌اند. شمارش صرفاً نشان‌دهنده تعداد گفت‌وگوهای دارای توافق در هر موضوع است، نه رأی افراد یا تصویب رسمی ارزش‌ها. دسته‌بندی با قواعد مشخص انجام شده است.</p></div></div>')+
  '<details class="cl-history"><summary>صورت‌جلسه‌های ثبت‌شده ('+fa(list.length)+')</summary><div class="cl-history-items">'+list.slice().reverse().slice(0,12).map(function(x){var q=questions.find(function(q){return q.id===x.q}),v=q&&q.options[+x.option];return '<article><div><strong>'+esc(q?q.title:"گفت‌وگو")+'</strong><small>'+esc(roles[x.role]||x.role)+' · '+esc(x.date||"")+' · جلسه '+fa(x.session||1)+'</small></div><p><b>گزینه منتخب:</b> '+esc(v||"ثبت نشده")+'</p><p><b>جمع‌بندی:</b> '+esc(x.note||"بدون توضیح تکمیلی")+'</p><p><b>اقدام:</b> '+esc(x.action||"ثبت نشده")+'</p>'+(x.role===role?'<button type="button" class="cl-secondary" data-cl-edit="'+esc(x.id)+'">ویرایش</button>':'<a class="cl-secondary" href="#/culture/'+esc(x.role)+'">ویرایش در مسیر همان گروه</a>')+' <button type="button" class="cl-delete" data-cl-delete="'+esc(x.id)+'">حذف این ثبت</button></article>'}).join("")+'</div></details>'+
  '<div class="cl-storage-notice">🔒 نتایج فقط در همین مرورگر ذخیره می‌شوند و بین دستگاه‌ها همگام نیستند. برای نگهداری سازمانی، خروجی CSV را ذخیره کنید؛ پاک‌کردن داده مرورگر ممکن است ثبت‌ها را از بین ببرد.</div></section>';
 }
@@ -124,12 +124,12 @@ function references(role,model){
  return '<details class="cl-references"><summary>کتابخانه پیشنهادی ارزش‌ها و قواعد رفتاری ناوصنعت</summary><p>این هفت گزاره، نقطه شروع گفت‌وگو هستند؛ نه ارزش‌های مصوب شرکت یا یافته‌های حاصل از داده کلاسی.</p>'+model.values.map(function(v,i){return '<details><summary>'+fa(i+1)+' · '+esc(v.value)+'</summary><p>'+esc(v.culture)+'</p><p><b>رفتار ناسازگار:</b> '+esc(v.redline)+'</p><p><b>نشانه اجرای واقعی:</b> '+esc(v.evidence)+'</p><p><b>روال پیشنهادی:</b> '+esc(v.ritual)+'</p></details>'}).join("")+'</details>';
 }
 function render(role,model){
- if(location.hash!==lastLocation&&location.hash.indexOf("/culture/managers/1")>=0){state.group="values";state.q="v1"}lastLocation=location.hash;
+ if(location.hash!==lastLocation){var match=location.hash.match(/\/culture\/(?:managers|hq|operations)\/case-(\d+)/),source=window.NAAV_PDF_SOURCE;if(match&&source){var candidate=source.caseQuestions[match[1]],found=questions.find(function(q){return q.id===candidate});if(found){state.group=found.group;state.q=found.id}}else if(location.hash.indexOf("/culture/managers/1")>=0){state.group="values";state.q="v1"}}lastLocation=location.hash;
  role=roles[role]?role:"managers";model=model||window.NAAV_STRATEGIC.evc;
  return '<div id="naav-culture-lab" class="cl-root" data-cl-role="'+role+'" dir="rtl">'+
  '<div class="cl-hero"><span class="cl-kicker">NAAVSANAT · CULTURE DIALOGUE LAB</span><h1>ارزش‌ها را با گفت‌وگو بسازیم.</h1><p>یک موقعیت آشنا، چند انتخاب قابل دفاع، یک جمع‌بندی روشن؛ آنچه توافق می‌کنیم به رفتار روزمره تبدیل شود.</p><div class="cl-hero-orbit" aria-hidden="true"><span>گفت‌وگو</span><span>توافق</span><span>اقدام</span></div></div>'+
- '<div class="cl-back">'+(location.hash.indexOf("/culture/managers/1")>=0?'<a href="#/session/managers/0">← بازگشت به جلسه اول مدیران</a>':'<a href="#/track/'+role+'">← بازگشت به جلسات '+roles[role]+'</a>')+'</div>'+
- '<div class="cl-scope"><strong>مرور نتایج گفت‌وگو</strong><label for="cl-scope">نمایش نتایج <select id="cl-scope">'+option("همین گروه: "+roles[role],"role",state.scope)+option("هر سه گروه با هم","all",state.scope)+'</select></label></div>'+summary(role)+topicTabs()+dialogue(role)+insights(role,model)+references(role,model)+'</div>';
+ '<div class="cl-back">'+(location.hash.match(/\/culture\/(?:managers|hq|operations)\/case-(\d+)/)?'<a href="#/case/'+role+'/'+location.hash.match(/case-(\d+)/)[1]+'/5">← بازگشت به اقدام کیس</a>':location.hash.indexOf("/culture/managers/1")>=0?'<a href="#/session/managers/0">← بازگشت به جلسه اول مدیران</a>':'<a href="#/track/'+role+'">← بازگشت به جلسات '+roles[role]+'</a>')+'</div>'+
+ '<div class="cl-scope"><strong>مرور نتایج گفت‌وگو</strong><label for="cl-scope">نمایش نتایج <select id="cl-scope">'+option("همین گروه: "+roles[role],"role",state.scope)+option("هر سه گروه با هم","all",state.scope)+'</select></label></div>'+summary(role)+topicTabs()+dialogue(role)+insights(role,model)+(window.NaavPDFAlignment?window.NaavPDFAlignment.renderCultureMap():"")+references(role,model)+'</div>';
 }
 function redraw(){var node=document.getElementById("naav-culture-lab");if(node){node.outerHTML=render(node.dataset.clRole,window.NAAV_STRATEGIC.evc)}}
 function say(s){var e=document.getElementById("cl-feedback");if(e)e.textContent=s}
@@ -141,8 +141,8 @@ function download(){
 }
 
 function exportValues(role){
- var model=window.NAAV_STRATEGIC.evc,rev=reviews(),counts={};
- visibleRecords(role).forEach(function(x){if(x.consensus!=="agreed"&&x.consensus!=="conditional")return;var q=questions.find(function(y){return y.id===x.q});if(!q)return;var key=q.tag;if(!counts[key])counts[key]={n:0,groups:[]};counts[key].n++;if(counts[key].groups.indexOf(x.role)<0)counts[key].groups.push(x.role)});
+ var model=window.NAAV_PDF_SOURCE?{values:window.NAAV_PDF_SOURCE.pillars.map(function(p){return {value:p.title,culture:p.behavior}})}:window.NAAV_STRATEGIC.evc,rev=reviews(),counts={},source=window.NAAV_PDF_SOURCE;
+ visibleRecords(role).forEach(function(x){if(x.consensus!=="agreed"&&x.consensus!=="conditional")return;var q=questions.find(function(y){return y.id===x.q});if(!q)return;var key=source&&source.questionPillars[x.q]!==undefined?source.questionPillars[x.q]:q.tag;if(!counts[key])counts[key]={n:0,groups:[]};counts[key].n++;if(counts[key].groups.indexOf(x.role)<0)counts[key].groups.push(x.role)});
  var head=["ارزش پیشنهادی","رفتار قابل مشاهده","تعداد گفت‌وگوهای دارای توافق","گروه‌های دارای شواهد","وضعیت بررسی"];
  var rows=Object.keys(counts).sort(function(a,b){return counts[b].n-counts[a].n}).map(function(k){var v=model.values[+k]||{},r=rev[k]||{};return [r.name||v.value||"",r.definition||v.culture||"",counts[k].n,counts[k].groups.map(function(g){return roles[g]||g}).join(" / "),{draft:"پیشنهادی",reviewed:"بررسی مدیریتی",needs:"نیازمند گفت‌وگو",rejected:"رد پیشنهاد"}[r.status||"draft"]]});
  if(!rows.length)return;
@@ -150,7 +150,8 @@ function exportValues(role){
  a.href=u;a.download="naavsanat-emerging-values.csv";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},1000);
 }
 document.addEventListener("click",function(e){
- var b=e.target.closest("[data-cl-group]");if(b){state.group=b.dataset.clGroup;state.q=groupQuestions(state.group)[0].id;redraw();return}
+ var b=e.target.closest("[data-source-question]");if(b){var requested=questions.find(function(q){return q.id===b.dataset.sourceQuestion});if(requested){state.group=requested.group;state.q=requested.id;redraw();document.getElementById("cl-title").scrollIntoView({block:"center",behavior:"smooth"})}return}
+ b=e.target.closest("[data-cl-group]");if(b){state.group=b.dataset.clGroup;state.q=groupQuestions(state.group)[0].id;redraw();return}
  b=e.target.closest("[data-cl-save]");if(b){
  var root=b.closest("#naav-culture-lab"),c=root.querySelector("#cl-choice"),n=root.querySelector("#cl-note"),a=root.querySelector("#cl-action"),co=root.querySelector("#cl-consensus"),se=root.querySelector("#cl-session");
  if(c.value===""){say("ابتدا گزینه منتخب گروه را مشخص کنید.");c.focus();return}if(co.value===""){say("وضعیت توافق را بعد از گفت‌وگو انتخاب کنید.");co.focus();return}
