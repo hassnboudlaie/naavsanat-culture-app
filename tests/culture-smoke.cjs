@@ -59,7 +59,7 @@ const server=http.createServer((req,res)=>{
    await page.locator('#cl-choice').selectOption('1');
    await page.locator('[data-cl-save]').click();
    await page.locator('.cl-history>summary').click();
-   assert.match(await page.locator('.cl-history').innerText(),/گزینه/);
+   assert.match(await page.locator('.cl-history').innerText(),/انتخاب/);
    await page.locator('[data-cl-next]').click();
    assert.equal(await page.locator('textarea').count(),0);
   }
