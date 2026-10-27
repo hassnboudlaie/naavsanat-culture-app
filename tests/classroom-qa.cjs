@@ -40,6 +40,7 @@ const server=http.createServer((req,res)=>{const file=path.join(root,decodeURICo
   assert.match(await page.locator('#cl-note').inputValue(),/توافق گروه/);
   await page.locator('#cl-note').fill('جمع‌بندی اصلاح‌شده کلاس');
   await page.locator('[data-cl-save]').click();
+  await page.locator('.cl-history>summary').click();
   assert.match(await page.locator('.cl-history').innerText(),/جمع‌بندی اصلاح‌شده/);
  }
  await goto('culture/managers/1');assert.equal(await page.locator('[data-cl-group="values"]').getAttribute('aria-pressed'),'true');
