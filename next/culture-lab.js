@@ -74,7 +74,8 @@ function records(){var v=read(KEY,memory);return Array.isArray(v)?v:[]}
 function reviews(){var v=read(REVIEW,reviewMemory);return v&&typeof v==="object"&&!Array.isArray(v)?v:{}}
 function option(label,value,chosen){return '<option value="'+esc(value)+'"'+(String(value)===String(chosen)?' selected':'')+'>'+esc(label)+'</option>'}
 function listOptions(arr,chosen){return arr.map(function(x,i){return option(x,i,chosen)}).join("")}
-function groupQuestions(group){return questions.filter(function(q){return q.group===group})}
+var valueOrder=["v1","v4","v5","v6","v2","v7","v8","v9","v3","v10"];
+function groupQuestions(group){var list=questions.filter(function(q){return q.group===group});return group==="values"?list.sort(function(a,b){return valueOrder.indexOf(a.id)-valueOrder.indexOf(b.id)}):list}
 
 var pillarsIndex={v1:0,v4:0,v5:1,v6:1,v2:2,v7:2,v8:3,v9:3,v3:4,v10:4};
 function pillarOf(q){return q&&Object.prototype.hasOwnProperty.call(pillarsIndex,q.id)?pillarsIndex[q.id]:-1}
@@ -211,7 +212,7 @@ document.addEventListener("click",function(e){
  b=e.target.closest("[data-cl-save]");if(b){
  var root=b.closest("#naav-culture-lab"),c=root.querySelector("#cl-choice"),n=root.querySelector("#cl-note"),a=root.querySelector("#cl-action"),co=root.querySelector("#cl-consensus"),se=root.querySelector("#cl-session"),oldRecord=state.editId?records().find(function(x){return x.id===state.editId}):null;
  if(c.value===""){say("ابتدا گزینه منتخب گروه را مشخص کنید.");c.focus();return}if(co.value===""){say("وضعیت توافق را بعد از گفت‌وگو انتخاب کنید.");co.focus();return}
- var list=records();var record={id:state.editId||String(Date.now())+"-"+String(Math.random()).slice(2,7),role:root.dataset.clRole,q:state.q,group:state.group,option:+c.value,consensus:co.value,note:n?n.value.trim():oldRecord&&oldRecord.note||"",action:a?a.value.trim():oldRecord&&oldRecord.action||"",session:se.value,date:new Date().toLocaleString("fa-IR")};memory=state.editId?list.map(function(x){return x.id===record.id?record:x}):list.concat([record]);var ok=write(KEY,memory);state.session=se.value;state.editId=null;redraw();var q=document.getElementById("cl-results-title");if(q)q.scrollIntoView({block:"nearest",behavior:"smooth"});say(ok?"نتیجه ثبت شد و در همین مرورگر باقی می‌ماند.":"نتیجه موقت ثبت شد؛ ذخیره مرورگر در دسترس نیست.");return
+ var list=records();var record={id:state.editId||String(Date.now())+"-"+String(Math.random()).slice(2,7),role:root.dataset.clRole,q:state.q,group:state.group,option:+c.value,consensus:co.value,note:n?n.value.trim():oldRecord&&oldRecord.note||"",action:a?a.value.trim():oldRecord&&oldRecord.action||"",session:se.value,date:new Date().toLocaleString("fa-IR")};memory=state.editId?list.map(function(x){return x.id===record.id?record:x}):list.concat([record]);var ok=write(KEY,memory);state.session=se.value;state.editId=null;redraw();var q=document.getElementById("cl-results-title");if(state.group!=="values"&&q)q.scrollIntoView({block:"nearest",behavior:"smooth"});say(ok?"نتیجه ثبت شد و در همین مرورگر باقی می‌ماند.":"نتیجه موقت ثبت شد؛ ذخیره مرورگر در دسترس نیست.");return
  }
  b=e.target.closest("[data-cl-edit]");if(b){var rec=records().find(function(x){return x.id===b.dataset.clEdit});if(rec){state.editId=rec.id;state.group=rec.group;state.q=rec.q;state.session=rec.session;redraw();document.getElementById("cl-title").scrollIntoView({block:"center",behavior:"smooth"})}return}
  b=e.target.closest("[data-cl-export-values]");if(b){exportValues(b.closest("#naav-culture-lab").dataset.clRole);return}
