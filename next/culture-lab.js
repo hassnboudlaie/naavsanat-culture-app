@@ -64,7 +64,7 @@ var questions=[
  feedback:["گزارش‌دهی را حمایت می‌کند؛ رعایت محرمانگی مجاز و اقدام فوری در خطر هم ضروری است.","ممکن است گفت‌وگوی خصوصی لازم باشد، اما پنهان‌سازی خطر یا تأخیر ناموجه قابل دفاع نیست.","برای تشخیص باید بررسی کنیم؛ اما شنیدن و ثبت اولیه نباید مشروط به اثبات از سوی گزارش‌دهنده باشد."],
  insight:"واکنش مدیر به اولین خبر نامطلوب، معیار قدرتمندی برای رفتارهای آینده گروه است."}
 ];
-var state={group:"ethics",q:"e1",session:"1",editId:null},lastLocation=""; memory=[],reviewMemory={},persistent=true;
+var state={group:"ethics",q:"e1",session:"1",editId:null},lastLocation="",memory=[],reviewMemory={},persistent=true;
 function esc(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function fa(v){return String(v).replace(/\d/g,function(d){return "۰۱۲۳۴۵۶۷۸۹"[+d]})}
 function read(key,fallback){try{var v=JSON.parse(localStorage.getItem(key));return v===null?fallback:v}catch(e){return fallback}}
