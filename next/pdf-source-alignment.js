@@ -479,6 +479,14 @@ function renderSession(role,index){
  return '<div class="source-session-strip"><span>مطالعه موردی بر اساس کتابچه ناوصنعت · ص ۱۰–۱۲</span><strong>'+esc(qs.head)+'</strong><p>'+esc(qs.ask)+'</p><small>کیس‌های مرتبط در نقشه مرجع: '+qs.id.map(function(x){return fa(x)}).join(" و ")+' · سناریوهای تمرین، نسخه کلاسی‌اند.</small></div>';
 }
 S.questionLaws={e1:[6],e2:[1],e3:[4],v1:[8],v2:[3],v3:[5,6],c1:[7],c2:[2],c3:[3,7]};
+
+function renderModule(type,role,id,stage){
+ if(role!=="managers"||stage!==2)return "";
+ var isMed=type==="medicator"&&Number(id)===5,isBehavior=type==="behavior"&&Number(id)===12;
+ if(!isMed&&!isBehavior)return "";
+ var rule=isMed?S.laws[7]:S.laws[6],p=S.pillars[0];
+ return '<aside class="source-case-prompt" aria-label="پیوند این تمرین با کتابچه فرهنگ ناوصنعت"><span>از تمرین تا فرهنگ · اسلاید ۳۹ و ۴۰ کتابچه</span><strong>'+esc(rule.title)+'</strong><p>'+esc(isMed?"در گفت‌وگوی پنج مدیر، هر واحد شرط و دغدغه خود را مطرح می‌کند؛ نتیجه باید به هدف مشترک برسد.":"در اختلاف مدیران، نقد را از شخصیت جدا کنیم؛ مخالفت باید محترمانه و با پیشنهاد قابل بررسی باشد.")+'</p><div class="source-tag-row"><span class="source-pillar-tag">'+esc(p.title)+'</span></div></aside>';
+}
 window.NAAV_PDF_SOURCE=S;
-window.NaavPDFAlignment={renderCase:renderCase,renderCultureMap:renderCultureMap,renderSession:renderSession};
+window.NaavPDFAlignment={renderCase:renderCase,renderCultureMap:renderCultureMap,renderSession:renderSession,renderModule:renderModule};
 })();
