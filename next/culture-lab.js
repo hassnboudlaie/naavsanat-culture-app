@@ -173,12 +173,12 @@ function references(role,model){
  return '<details class="cl-references"><summary>آرشیو آموزشی · ۷ گزاره پیشنهادی قبلی (غیررسمی)</summary><p>این هفت گزاره، نقطه شروع گفت‌وگو هستند؛ نه ارزش‌های مصوب شرکت یا یافته‌های حاصل از داده کلاسی.</p>'+model.values.map(function(v,i){return '<details><summary>'+fa(i+1)+' · '+esc(v.value)+'</summary><p>'+esc(v.culture)+'</p><p><b>رفتار ناسازگار:</b> '+esc(v.redline)+'</p><p><b>نشانه اجرای واقعی:</b> '+esc(v.evidence)+'</p><p><b>روال پیشنهادی:</b> '+esc(v.ritual)+'</p></details>'}).join("")+'</details>';
 }
 function render(role,model){
- if(location.hash!==lastLocation){var match=location.hash.match(/\/culture\/(?:managers|hq|operations)\/case-(\d+)/),source=window.NAAV_PDF_SOURCE;if(match&&source){var candidate=source.caseQuestions[match[1]],found=questions.find(function(q){return q.id===candidate});if(found){state.group=found.group;state.q=found.id}}else if(location.hash.indexOf("/culture/managers/1")>=0){state.group="values";state.q="v1"}}lastLocation=location.hash;
+ if(location.hash!==lastLocation&&location.hash.indexOf("/culture/managers/1")>=0){state.group="values";state.q="v1"}lastLocation=location.hash;
  role=roles[role]?role:"managers";model=model||window.NAAV_STRATEGIC.evc;
  return '<div id="naav-culture-lab" class="cl-root" data-cl-role="'+role+'" dir="rtl">'+
  '<div class="cl-hero"><span class="cl-kicker">NAAVSANAT · CULTURE DIALOGUE LAB</span><h1>ارزش‌ها را با گفت‌وگو بسازیم.</h1><p>یک موقعیت آشنا، چند انتخاب قابل دفاع، یک جمع‌بندی روشن؛ آنچه توافق می‌کنیم به رفتار روزمره تبدیل شود.</p><div class="cl-hero-orbit" aria-hidden="true"><span>گفت‌وگو</span><span>توافق</span><span>اقدام</span></div></div>'+
- '<div class="cl-back">'+(location.hash.match(/\/culture\/(?:managers|hq|operations)\/case-(\d+)/)?'<a href="#/case/'+role+'/'+location.hash.match(/case-(\d+)/)[1]+'/5">← بازگشت به اقدام کیس</a>':location.hash.indexOf("/culture/managers/1")>=0?'<a href="#/session/managers/0">← بازگشت به جلسه اول مدیران</a>':'<a href="#/track/'+role+'">← بازگشت به جلسات '+roles[role]+'</a>')+'</div>'+
- '<div class="cl-scope"><strong>مرور نتایج گفت‌وگو</strong><label for="cl-scope">نمایش نتایج <select id="cl-scope">'+option("همین گروه: "+roles[role],"role",state.scope)+option("هر سه گروه با هم","all",state.scope)+'</select></label></div>'+summary(role)+topicTabs()+dialogue(role)+insights(role,model)+(window.NaavPDFAlignment?window.NaavPDFAlignment.renderCultureMap():"")+references(role,model)+'</div>';
+ '<div class="cl-back">'+(location.hash.indexOf("/culture/managers/1")>=0?'<a href="#/session/managers/0">← بازگشت به جلسه اول مدیران</a>':'<a href="#/track/'+role+'">← بازگشت به جلسات '+roles[role]+'</a>')+'</div>'+
+ '<div class="cl-scope"><strong>مرور نتایج گفت‌وگو</strong><label for="cl-scope">نمایش نتایج <select id="cl-scope">'+option("همین گروه: "+roles[role],"role",state.scope)+option("هر سه گروه با هم","all",state.scope)+'</select></label></div>'+summary(role)+topicTabs()+dialogue(role)+insights(role,model)+(state.group==="values"?"":references(role,model))+'</div>';
 }
 function redraw(){var node=document.getElementById("naav-culture-lab");if(node){node.outerHTML=render(node.dataset.clRole,window.NAAV_STRATEGIC.evc)}}
 function say(s){var e=document.getElementById("cl-feedback");if(e)e.textContent=s}
@@ -190,21 +190,27 @@ function download(){
 }
 
 function exportValues(role){
- var model=window.NAAV_PDF_SOURCE?{values:window.NAAV_PDF_SOURCE.pillars.map(function(p){return {value:p.title,culture:p.behavior}})}:window.NAAV_STRATEGIC.evc,rev=reviews(),counts={},source=window.NAAV_PDF_SOURCE;
- visibleRecords(role).forEach(function(x){if(x.consensus!=="agreed"&&x.consensus!=="conditional")return;var q=questions.find(function(y){return y.id===x.q});if(!q)return;var key=source&&source.questionPillars[x.q]!==undefined?source.questionPillars[x.q]:q.tag;if(!counts[key])counts[key]={n:0,groups:[]};counts[key].n++;if(counts[key].groups.indexOf(x.role)<0)counts[key].groups.push(x.role)});
- var head=["ارزش پیشنهادی","رفتار قابل مشاهده","تعداد گفت‌وگوهای دارای توافق","گروه‌های دارای شواهد","وضعیت بررسی"];
- var rows=Object.keys(counts).sort(function(a,b){return counts[b].n-counts[a].n}).map(function(k){var v=model.values[+k]||{},r=rev[k]||{};return [r.name||v.value||"",r.definition||v.culture||"",counts[k].n,counts[k].groups.map(function(g){return roles[g]||g}).join(" / "),{draft:"پیشنهادی",reviewed:"بررسی مدیریتی",needs:"نیازمند گفت‌وگو",rejected:"رد پیشنهاد"}[r.status||"draft"]]});
- if(!rows.length)return;
- var blob=new Blob(["\uFEFF"+[head].concat(rows).map(function(r){return r.map(csvValue).join(",")}).join("\r\n")],{type:"text/csv;charset=utf-8"}),u=URL.createObjectURL(blob),a=document.createElement("a");
- a.href=u;a.download="naavsanat-emerging-values.csv";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},1000);
+ var source=window.NAAV_VALUES_SOURCE;if(!source)return;
+ var list=uniqueValueRecords(visibleRecords(role));
+ var header=["ارزش پیشنهادی","تعریف","رفتارهای قابل مشاهده","موضوعات بررسی‌شده","توافق‌های ثبت‌شده","موضوعات باز","وضعیت","منبع"];
+ var rows=source.pillars.map(function(p,i){
+  var valueRecords=list.filter(function(x){return pillarOf(questions.find(function(q){return q.id===x.q}))===i});
+  var unique={};valueRecords.forEach(function(x){unique[x.q]=true});
+  var done=Object.keys(unique).length,agree=valueRecords.filter(function(x){return x.consensus==="agreed"||x.consensus==="conditional"}).length,open=valueRecords.filter(function(x){return x.consensus==="open"||x.consensus==="review"}).length;
+  var status=!done?"بررسی‌نشده":open?"نیازمند گفت‌وگوی بیشتر":done===2&&agree>=2?"بررسی آموزشی با توافق":"در حال بررسی";
+  return [p.title,p.definition,p.behaviors.join(" / "),done,agree,open,status,"کتابچه ناوصنعت، اسلاید ۴۰؛ پیشنهادی و غیرمصوب"];
+ });
+ var lines=[header].concat(rows).map(function(r){return r.map(csvValue).join(",")}).join("\r\n");
+ var blob=new Blob(["\uFEFF"+lines],{type:"text/csv;charset=utf-8"}),u=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=u;a.download="naavsanat-business-values-framework.csv";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},1000);
 }
 document.addEventListener("click",function(e){
- var b=e.target.closest("[data-source-question]");if(b){var requested=questions.find(function(q){return q.id===b.dataset.sourceQuestion});if(requested){state.group=requested.group;state.q=requested.id;redraw();document.getElementById("cl-title").scrollIntoView({block:"center",behavior:"smooth"})}return}
- b=e.target.closest("[data-cl-group]");if(b){state.group=b.dataset.clGroup;state.q=groupQuestions(state.group)[0].id;redraw();return}
+ var b=e.target.closest("[data-cl-next]");if(b){var ql=groupQuestions(state.group),at=ql.findIndex(function(q){return q.id===state.q});state.q=ql[(at+1)%ql.length].id;state.editId=null;redraw();document.getElementById("cl-question").focus();return}
+ b=e.target.closest("[data-cl-group]");if(b){state.group=b.dataset.clGroup;state.q=groupQuestions(state.group)[0].id;state.editId=null;redraw();return}
  b=e.target.closest("[data-cl-save]");if(b){
- var root=b.closest("#naav-culture-lab"),c=root.querySelector("#cl-choice"),n=root.querySelector("#cl-note"),a=root.querySelector("#cl-action"),co=root.querySelector("#cl-consensus"),se=root.querySelector("#cl-session");
+ var root=b.closest("#naav-culture-lab"),c=root.querySelector("#cl-choice"),n=root.querySelector("#cl-note"),a=root.querySelector("#cl-action"),co=root.querySelector("#cl-consensus"),se=root.querySelector("#cl-session"),oldRecord=state.editId?records().find(function(x){return x.id===state.editId}):null;
  if(c.value===""){say("ابتدا گزینه منتخب گروه را مشخص کنید.");c.focus();return}if(co.value===""){say("وضعیت توافق را بعد از گفت‌وگو انتخاب کنید.");co.focus();return}
- var list=records();var record={id:state.editId||String(Date.now())+"-"+String(Math.random()).slice(2,7),role:root.dataset.clRole,q:state.q,group:state.group,option:+c.value,consensus:co.value,note:n.value.trim(),action:a.value.trim(),session:se.value,date:new Date().toLocaleString("fa-IR")};memory=state.editId?list.map(function(x){return x.id===record.id?record:x}):list.concat([record]);var ok=write(KEY,memory);state.session=se.value;state.editId=null;redraw();var q=document.getElementById("cl-results-title");if(q)q.scrollIntoView({block:"nearest",behavior:"smooth"});say(ok?"نتیجه ثبت شد و در همین مرورگر باقی می‌ماند.":"نتیجه موقت ثبت شد؛ ذخیره مرورگر در دسترس نیست.");return
+ var list=records();var record={id:state.editId||String(Date.now())+"-"+String(Math.random()).slice(2,7),role:root.dataset.clRole,q:state.q,group:state.group,option:+c.value,consensus:co.value,note:n?n.value.trim():oldRecord&&oldRecord.note||"",action:a?a.value.trim():oldRecord&&oldRecord.action||"",session:se.value,date:new Date().toLocaleString("fa-IR")};memory=state.editId?list.map(function(x){return x.id===record.id?record:x}):list.concat([record]);var ok=write(KEY,memory);state.session=se.value;state.editId=null;redraw();var q=document.getElementById("cl-results-title");if(q)q.scrollIntoView({block:"nearest",behavior:"smooth"});say(ok?"نتیجه ثبت شد و در همین مرورگر باقی می‌ماند.":"نتیجه موقت ثبت شد؛ ذخیره مرورگر در دسترس نیست.");return
  }
  b=e.target.closest("[data-cl-edit]");if(b){var rec=records().find(function(x){return x.id===b.dataset.clEdit});if(rec){state.editId=rec.id;state.group=rec.group;state.q=rec.q;state.session=rec.session;redraw();document.getElementById("cl-title").scrollIntoView({block:"center",behavior:"smooth"})}return}
  b=e.target.closest("[data-cl-export-values]");if(b){exportValues(b.closest("#naav-culture-lab").dataset.clRole);return}
@@ -212,6 +218,6 @@ document.addEventListener("click",function(e){
  b=e.target.closest("[data-cl-delete]");if(b){if(!confirm("این نتیجه گفت‌وگو از همین مرورگر حذف شود؟"))return;memory=records().filter(function(x){return x.id!==b.dataset.clDelete});write(KEY,memory);redraw();return}
  b=e.target.closest("[data-cl-review]");if(b){var k=b.dataset.clReview,r=reviews(),root=b.closest("#naav-culture-lab");r[k]={name:root.querySelector('[data-cl-name="'+k+'"]').value.trim(),definition:root.querySelector('[data-cl-definition="'+k+'"]').value.trim(),status:root.querySelector('[data-cl-status="'+k+'"]').value};reviewMemory=r;write(REVIEW,r);redraw();return}
 });
-document.addEventListener("change",function(e){if(e.target.matches("#cl-scope")){state.scope=e.target.value;redraw()}else if(e.target.matches("[data-cl-question]")){state.q=e.target.value;redraw()}else if(e.target.matches("#cl-session"))state.session=e.target.value});
+document.addEventListener("change",function(e){if(e.target.matches("#cl-scope")){state.scope=e.target.value;redraw()}else if(e.target.matches("[data-cl-question]")){state.q=e.target.value;state.editId=null;redraw()}else if(e.target.matches("#cl-session"))state.session=e.target.value});
 window.NaavCultureLab={render:render,questions:questions};
 })();
