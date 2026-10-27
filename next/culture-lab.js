@@ -100,22 +100,58 @@ function topicTabs(){
  return '<nav class="cl-topics" aria-label="انتخاب محور گفت‌وگو">'+groups.map(function(g){return '<button type="button" class="cl-topic '+(g.id===state.group?"active":"")+'" data-cl-group="'+g.id+'" aria-pressed="'+(g.id===state.group)+'"><span class="cl-topic-icon" aria-hidden="true">'+g.icon+'</span><strong>'+g.name+'</strong><small>'+g.sub+'</small></button>'}).join("")+'</nav>';
 }
 function dialogue(role){
- var g=groups.find(function(x){return x.id===state.group}),q=activeQuestion(),editing=state.editId?records().find(function(x){return x.id===state.editId}):null,selected=editing,answer=selected?selected.option:"",cons=selected?selected.consensus:"";
+ var g=groups.find(function(x){return x.id===state.group}),q=activeQuestion(),isValues=state.group==="values";
+ var editing=state.editId?records().find(function(x){return x.id===state.editId}):null,answer=editing?editing.option:"",cons=editing?editing.consensus:"";
+ var pillar=window.NAAV_VALUES_SOURCE&&isValues?window.NAAV_VALUES_SOURCE.pillars[pillarOf(q)]:null;
  return '<section class="cl-stage" aria-labelledby="cl-title">'+
  '<div class="cl-stage-head"><span class="cl-eyebrow">گفت‌وگوی کلاسی · '+esc(g.name)+'</span><span class="cl-index">'+fa(groupQuestions(state.group).findIndex(function(x){return x.id===q.id})+1)+' / '+fa(groupQuestions(state.group).length)+'</span></div>'+
- '<label class="cl-field-label" for="cl-question">موضوع امروز را انتخاب کنیم</label><select id="cl-question" data-cl-question>'+groupQuestions(state.group).map(function(item){return option(item.title,item.id,q.id)}).join("")+'</select>'+
- '<div class="cl-story"><div class="cl-story-eyebrow"><span class="cl-story-mark">؟</span>موقعیت برای گفت‌وگو</div><p>'+esc(q.scene[role])+'</p><h2 id="cl-title">'+esc(q.ask)+'</h2><small>سناریوی آموزشی واقع‌نما؛ نه گزارش یک رویداد تأییدشده در شرکت</small></div>'+
-  (window.NAAV_PDF_SOURCE?'<div class="cl-source-tags"><strong>پیوند به کتابچه ناوصنعت:</strong> '+(window.NAAV_PDF_SOURCE.questionLaws[q.id]||[]).map(function(i){return '<span>قانون '+fa(i)+' · '+esc(window.NAAV_PDF_SOURCE.laws[i-1].title)+'</span>'}).join("")+'<span>ستون: '+esc(window.NAAV_PDF_SOURCE.pillars[window.NAAV_PDF_SOURCE.questionPillars[q.id]].title)+'</span></div>':'')+
-'<div class="cl-form-grid"><div class="cl-field"><label for="cl-choice">پس از بحث، گروه کدام گزینه را انتخاب کرد؟</label><select id="cl-choice"><option value="">انتخاب کنید...</option>'+q.options.map(function(v,i){return option(["الف","ب","ج"][i]+" ـ "+v,i,answer)}).join("")+'</select></div>'+
- '<div class="cl-field"><label for="cl-consensus">وضعیت گفت‌وگو</label><select id="cl-consensus"><option value="">وضعیت توافق را انتخاب کنید...</option>'+option("به توافق رسیدیم","agreed",cons)+option("توافق مشروط","conditional",cons)+option("اختلاف‌نظر باقی ماند","open",cons)+option("نیازمند بررسی بیشتر","review",cons)+'</select></div></div>'+
- '<details class="cl-insight"><summary>پاسخ و نکته · تحلیل انتخاب‌ها</summary><div class="cl-insight-inner">'+q.options.map(function(v,i){return '<div><strong>'+fa(i+1)+' · '+esc(v)+'</strong><p>'+esc(q.feedback[i])+'</p></div>'}).join("")+'<p class="cl-core"><strong>نکته قابل استفاده:</strong> '+esc(q.insight)+'</p></div></details>'+
- '<div class="cl-form-grid cl-notes"><div class="cl-field"><label for="cl-note">جمع‌بندی مدرس <small>اختیاری</small></label><textarea id="cl-note" rows="2" maxlength="900" placeholder="دلیل توافق یا اختلاف را در چند جمله بنویسید...">'+esc(editing?editing.note:"")+'</textarea></div>'+
- '<div class="cl-field"><label for="cl-action">قاعده یا اقدام مورد توافق</label><textarea id="cl-action" rows="2" maxlength="500" placeholder="از فردا چه رفتار مشخصی را تغییر می‌دهیم؟">'+esc(editing?editing.action:"")+'</textarea></div></div>'+
+ (isValues?'<p class="cl-value-guide">در هر ارزش دو موقعیت داریم. سؤال را انتخاب کنید، نظر گروه را بپرسید و فقط گزینه منتخب و وضعیت توافق را ثبت کنید.</p>':'')+
+ '<label class="cl-field-label" for="cl-question">'+(isValues?'کدام سؤال ارزش‌ها را بررسی کنیم؟':'موضوع امروز را انتخاب کنیم')+'</label><select id="cl-question" data-cl-question>'+groupQuestions(state.group).map(function(item){return option(item.title,item.id,q.id)}).join("")+'</select>'+
+ (pillar?'<p class="cl-value-link">ارزش مرتبط: <strong>'+esc(pillar.title)+'</strong></p>':'')+
+ '<div class="cl-story"><div class="cl-story-eyebrow"><span class="cl-story-mark">؟</span>موقعیت برای گفت‌وگو</div><p>'+esc(q.scene[role])+'</p><h2 id="cl-title">'+esc(q.ask)+'</h2><small>موقعیت آموزشی برگرفته از دغدغه‌های سازمان؛ نه نقل یک رویداد قطعی</small></div>'+
+ '<div class="cl-form-grid"><div class="cl-field"><label for="cl-choice">گروه کدام گزینه را انتخاب کرد؟</label><select id="cl-choice"><option value="">انتخاب کنید...</option>'+q.options.map(function(v,i){return option(["الف","ب","ج"][i]+" ـ "+v,i,answer)}).join("")+'</select></div>'+
+ '<div class="cl-field"><label for="cl-consensus">نتیجه گفت‌وگو</label><select id="cl-consensus"><option value="">انتخاب کنید...</option>'+option("به توافق رسیدیم","agreed",cons)+option("توافق مشروط","conditional",cons)+option("اختلاف‌نظر باقی ماند","open",cons)+option("نیازمند بررسی بیشتر","review",cons)+'</select></div></div>'+
+ '<details class="cl-insight"><summary>پاسخ و نکته · تحلیل گزینه‌ها</summary><div class="cl-insight-inner">'+q.options.map(function(v,i){return '<div><strong>'+fa(i+1)+' · '+esc(v)+'</strong><p>'+esc(q.feedback[i])+'</p></div>'}).join("")+'<p class="cl-core"><strong>جمع‌بندی:</strong> '+esc(q.insight)+'</p></div></details>'+
+ (isValues?'':'<div class="cl-form-grid cl-notes"><div class="cl-field"><label for="cl-note">جمع‌بندی مدرس <small>اختیاری</small></label><textarea id="cl-note" rows="2" maxlength="900" placeholder="دلیل توافق یا اختلاف را در چند جمله بنویسید...">'+esc(editing?editing.note:"")+'</textarea></div>'+
+ '<div class="cl-field"><label for="cl-action">قاعده یا اقدام مورد توافق</label><textarea id="cl-action" rows="2" maxlength="500" placeholder="از فردا چه رفتار مشخصی را تغییر می‌دهیم؟">'+esc(editing?editing.action:"")+'</textarea></div></div>')+
  '<div class="cl-stage-actions"><label for="cl-session">جلسه <select id="cl-session">'+[1,2,3,4,5,6].map(function(i){return option("جلسه "+fa(i),i,state.session)}).join("")+'</select></label>'+
- '<button class="cl-save" type="button" data-cl-save>'+(editing?"ذخیره ویرایش ←":"ثبت نتیجه گفت‌وگو ←")+'</button></div>'+
+ '<div class="cl-save-wrap"><button class="cl-save" type="button" data-cl-save>'+(editing?"ذخیره اصلاح ←":"ثبت انتخاب گروه ←")+'</button>'+
+ (isValues?'<button type="button" class="cl-secondary" data-cl-next>سؤال بعدی</button>':'')+'</div></div>'+
  '<p class="cl-feedback" id="cl-feedback" role="status" aria-live="polite"></p></section>';
 }
+function valueInsights(role){
+ var source=window.NAAV_VALUES_SOURCE,pillars=source?source.pillars:[],history=uniqueValueRecords(visibleRecords(role));
+ var rows=pillars.map(function(p,i){
+  var recordsForPillar=history.filter(function(x){return pillarOf(questions.find(function(q){return q.id===x.q}))===i});
+  var covered={};recordsForPillar.forEach(function(x){covered[x.q]=true});
+  var done=Object.keys(covered).length;
+  var agree=recordsForPillar.filter(function(x){return x.consensus==="agreed"||x.consensus==="conditional"}).length;
+  var open=recordsForPillar.filter(function(x){return x.consensus==="open"||x.consensus==="review"}).length;
+  var status=!done?"هنوز بررسی نشده":open?"نیازمند گفت‌وگوی بیشتر":done>=2&&agree>=2?"دو موضوع با توافق آموزشی بررسی شد":"در حال شکل‌گیری";
+  return {pillar:p,index:i,done:done,agree:agree,open:open,status:status};
+ });
+ return '<section class="cl-outcomes" aria-labelledby="cl-results-title">'+
+ '<div class="cl-outcomes-head"><div><span class="cl-eyebrow">نتیجه سؤال‌های انتخابی</span><h2 id="cl-results-title">چارچوب پیشنهادی ارزش‌های کسب‌وکار ناوصنعت</h2></div><div class="cl-export-actions">'+
+ '<button type="button" data-cl-export-values class="cl-secondary" '+(!history.length?'disabled':'')+'>خروجی ارزش‌ها CSV</button>'+
+ '<button type="button" data-cl-export class="cl-secondary" '+(!history.length?'disabled':'')+'>خروجی پاسخ‌ها CSV</button></div></div>'+
+ '<p class="cl-value-framework-note">این پنج ارزش در کتابچه حاصل مصاحبه‌ها و گفت‌وگوهای سازمان معرفی شده‌اند. پاسخ‌های کلاس برای بررسی و تکمیل چارچوب جمع می‌شوند؛ توافق آموزشی به معنی تصویب رسمی شرکت نیست.</p>'+
+ '<div class="cl-value-framework">'+rows.map(function(r){
+  var p=r.pillar;
+  return '<details class="cl-candidate cl-framework-row"><summary><span class="cl-candidate-mark">'+fa(r.index+1)+'</span><span class="cl-framework-desc"><strong>'+esc(p.title)+'</strong><small>'+esc(r.status)+' · '+fa(r.done)+' از ۲ موضوع بررسی شده</small><span class="cl-mini-meter" aria-hidden="true"><i style="width:'+(r.done*50)+'%"></i></span></span></summary>'+
+  '<p>'+esc(p.definition)+'</p><p><strong>رفتارهای قابل مشاهده:</strong> '+p.behaviors.map(esc).join(" | ")+'</p></details>';
+ }).join("")+'</div>'+
+ '<details class="cl-history"><summary>پاسخ‌های ثبت‌شده ('+fa(history.length)+')</summary><div class="cl-history-items">'+history.slice().reverse().slice(0,30).map(function(x){
+  var q=questions.find(function(q){return q.id===x.q}),v=q&&q.options[+x.option];
+  return '<article><div><strong>'+esc(q?q.title:"گفت‌وگو")+'</strong><small>'+esc(roles[x.role]||x.role)+' · جلسه '+fa(x.session||1)+'</small></div>'+
+  '<p><b>انتخاب:</b> '+esc(v||"ثبت نشده")+'</p><p><b>نتیجه:</b> '+esc({"agreed":"توافق","conditional":"توافق مشروط","open":"اختلاف‌نظر","review":"نیازمند بررسی"}[x.consensus]||"نامشخص")+'</p>'+
+  (x.role===role?'<button type="button" class="cl-secondary" data-cl-edit="'+esc(x.id)+'">اصلاح انتخاب</button>':'')+
+  ' <button type="button" class="cl-delete" data-cl-delete="'+esc(x.id)+'">حذف</button></article>';
+ }).join("")+'</div></details>'+
+ '<p class="cl-storage-notice">نتایج فقط در همین مرورگر ذخیره می‌شوند. برای نگهداری یا استفاده در دستگاه دیگر، فایل CSV را بگیرید.</p></section>';
+}
 function insights(role,model){
+ if(state.group==="values"&&window.NAAV_VALUES_SOURCE)return valueInsights(role);
+
  var list=visibleRecords(role),counts=groups.map(function(g){return {g:g,count:list.filter(function(x){return x.group===g.id}).length}});
  var max=Math.max(1,counts.reduce(function(a,c){return Math.max(a,c.count)},0));
  var source=window.NAAV_PDF_SOURCE,reference=source?source.pillars.map(function(p){return {value:p.title,culture:p.behavior}}):model.values||[],rank={};
