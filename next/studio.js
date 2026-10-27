@@ -152,8 +152,8 @@ function lesson(r,num){
  '<a href="#/behavior/managers/12/0"><span>۲۰ دقیقه</span><b>هنر رفتار · موقعیت ۱۲</b><small>مخالفت صریح و محترمانه</small></a>'+
  '<a href="#/culture/managers/1"><span>۱۶ دقیقه</span><b>گفت‌وگوی ارزش‌ها و جمع‌بندی</b><small>انتخاب، توافق، اقدام قابل پیگیری</small></a>'+
  '</div></section>':'')+
- '<section class="case-list"><h2>موقعیت‌های این جلسه</h2><div class="case-grid">'+ids.map(function(id){var c=CASES[id-1],d=depth(id);return '<a class="case-tile" href="#/case/'+r+'/'+id+'/0">'+caseTopline(id,'کیس '+fa(id))+'<strong>'+safe(r==="managers"?practical(id).title:c.title)+'</strong><p>'+safe(r==="managers"?practical(id).ask:c.concept)+'</p><span class="case-link">بررسی این موقعیت ←</span></a>'}).join("")+'</div></section>')+
- (mf&&num!==0?'<p class="session-pacing">برنامه پیشنهادی ۱۲۰ دقیقه‌ای: ۱۰ دقیقه شروع · '+(ids.length===3?'۳ کیس، هرکدام ۳۰ دقیقه':'۲ کیس، هرکدام ۴۵ دقیقه')+' · ۲۰ دقیقه جمع‌بندی و تعهد</p>'+sessionClosing(r,num):'')+
+ (r==="managers"&&num===0?'': '<section class="case-list"><h2>موقعیت‌های این جلسه</h2><div class="case-grid">'+ids.map(function(id){var c=CASES[id-1],d=depth(id);return '<a class="case-tile" href="#/case/'+r+'/'+id+'/0">'+caseTopline(id,'کیس '+fa(id))+'<strong>'+safe(r==="managers"?practical(id).title:c.title)+'</strong><p>'+safe(r==="managers"?practical(id).ask:c.concept)+'</p><span class="case-link">بررسی این موقعیت ←</span></a>'}).join("")+'</div></section>'))+
+ (mf?(num===0?'':'<p class="session-pacing">برنامه پیشنهادی ۱۲۰ دقیقه‌ای: ۱۰ دقیقه شروع · '+(ids.length===3?'۳ کیس، هرکدام ۳۰ دقیقه':'۲ کیس، هرکدام ۴۵ دقیقه')+' · ۲۰ دقیقه جمع‌بندی و تعهد</p>')+sessionClosing(r,num):'')+
  '<div class="page-bottom">'+a("track/"+r,"همه جلسات","text-link")+'</div>';
 }
 function caseStages(r,id,step){
