@@ -108,3 +108,20 @@ User rejected the previous managers experience as too textbook-like and the typo
 
 ### Completion pass — 27 October
 All 45 visible manager choice labels and the 45 selectable action labels were rewritten in plain Persian. Option order, underlying consequences and the meaning of saved action selections were retained; session closing uses the same action labels. The prior revision GitHub Classroom QA and Pages deployment both succeeded.
+
+## Corporate management correction — 27 October
+The user explicitly rejected the operations-heavy framing for a class attended by all company managers. Latest instruction requires challenging, professional, conversational Persian; this overrides the earlier simplification where it flattened strategic dilemmas.
+
+### Evidence and assumptions
+- Current user instruction specifies finance, commerce, operations, financial/administrative deputy and legal managers. Their exact internal decision rights are not known; the deputy chairing the exercise is explicitly a scenario assumption.
+- Personal Context retrieval recovered user context from September 10/13 about growth, dispersed mining/logistics sites and headquarters, workforce diversity, organizational behavior and supporting systems. Prior assistant financial estimates were not treated as verified facts or reused.
+- Existing 15 cases and supplied Medicator slide 5 were read/inspected. The image shows sequential mutual support across a gap; this supports an interdependence discussion, not a claim that cooperation eliminates risk.
+- Lifecycle framing is a testable design hypothesis: transition from personal coordination toward growth-appropriate institutional coordination. No named lifecycle stage is asserted as diagnosed. The EVC is proposed, not an approved policy or a measured description of existing culture.
+
+### Implementation and coverage
+- Medicator 5: corporate contract opportunity with liquidity, capacity, existing obligations and contractual uncertainty. Three defensible options, five role briefs, 15 dialogue turns, information shock, debrief and an explicit decision output.
+- Difficult behavior 12: a manager invoking experience/urgency to bypass specialist review; all five roles speak in 11 turns, with a distinct pressure prompt on blame and minutes. Observable behavior is challenged without personality labeling.
+- Managers cases 1 and 10: corporate growth coordination and governance/delegation. Revised scenes, choices, consequences, role-play, reflection and actions; original IDs and staff/operations variants retained.
+- The existing culture route now renders Ethics–Values–Culture, seven proposed cultural statements, ethical boundaries, observable practices, routines, evidence and proposed accountability. A coverage map links all 15 cases and the available challenge themes, including growth, site/headquarters coordination, fairness, hiring, safety, bad-news reporting, resources, commitments and external disruption. It does not claim exhaustive access to every historical chat.
+- Manager-only new scenarios use versioned storage keys. Earlier answers remain in storage and are not silently mapped to substantively different choices.
+- Regression: 270 case stages, 135 consequences, 45 persistence checks, supplemental modules and five widths passed. Targeted tests check all five council actors, both dialogues, pressure reveal, other-role isolation, new-choice storage isolation and coverage of all 15 cases in EVC. Desktop/mobile screenshots reviewed; no physical classroom/projector test.

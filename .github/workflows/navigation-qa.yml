@@ -22,7 +22,9 @@ jobs:
           npm install --no-save playwright@1.56.1
           npx playwright install --with-deps chromium
       - name: Test this commit before relying on deployed state
-        run: node tests/classroom-qa.cjs
+        run: |
+          node tests/classroom-qa.cjs
+          node tests/strategic-qa.cjs
         env:
           QA_OUTPUT: qa-artifacts
       - uses: actions/upload-artifact@v4

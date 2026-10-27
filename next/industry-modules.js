@@ -3,7 +3,7 @@
 "use strict";
 var d=window.NAAV_INDUSTRY_DATA||{med:[],behavior:[]};
 var name={medicator:"مدیکاتور",behavior:"هنر رفتار با افراد دشوار"};
-var roleNames={managers:"مدیران ستاد",hq:"کارکنان ستاد",operations:"کارکنان عملیاتی"};
+var roleNames={managers:"مدیران شرکت",hq:"کارکنان ستاد",operations:"کارکنان عملیاتی"};
 var stageNames=["موقعیت","انتخاب","تحلیل","تمرین"];
 var stageEmoji=["🧩","🧭","🔎","🎭"];
 /* Plain-language skill headlines; source terminology remains available on demand. */
@@ -45,20 +45,22 @@ var techniqueTitles={
  20:"قبل از «بله»، ظرفیت واقعی را بپرسیم"
  }
 };
-function plainTechnique(type,x){return techniqueTitles[type]&&techniqueTitles[type][x.id]||x.technique}
+function plainTechnique(type,x){if(x.board)return type==="medicator"?"یک تصمیم برای شرکت؛ مسئولیت روشن برای هر مدیر":"احترام به تجربه، بدون حذف نظر تخصصی دیگران";return techniqueTitles[type]&&techniqueTitles[type][x.id]||x.technique}
 
 function topicSticker(type){return type==="medicator"?"🖼️":"🎭"}
 function e(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function fa(v){return String(v).replace(/\d/g,function(x){return "۰۱۲۳۴۵۶۷۸۹"[+x]})}
 function saved(k,def){try{var a=JSON.parse(localStorage.getItem(k));return a==null?def:a}catch(er){return def}}
 function store(k,val){try{localStorage.setItem(k,JSON.stringify(val))}catch(er){}}
-function items(type){
- if(type==="medicator")return d.med||[];
- return (d.behavior||[]).map(function(a,i){return {id:i+1,title:a[0],role:a[1],context:a[2],technique:a[3],quote:a[4],line:a[5],pitfall:a[6],roleplay:a[7],rule:a[8],slide:a[9]}})
+function items(type,r){
+ var override=window.NAAV_STRATEGIC;
+ function adapt(x){if(r!=="managers"||!override)return x;var patch=type==="medicator"&&x.id===5?override.medicator:type==="behavior"&&x.id===12?override.behavior:null;return patch?Object.assign({},x,patch):x}
+ if(type==="medicator")return (d.med||[]).map(adapt);
+ return (d.behavior||[]).map(function(a,i){return {id:i+1,title:a[0],role:a[1],context:a[2],technique:a[3],quote:a[4],line:a[5],pitfall:a[6],roleplay:a[7],rule:a[8],slide:a[9]}}).map(adapt)
 }
 function a(url,text,cls){return '<a class="'+(cls||"text-link")+'" href="#/'+url+'">'+text+'</a>'}
 function list(type,r,all){
- var selected=items(type).filter(function(x){return all||x.role===r||x.role==="all"});
+ var selected=items(type,r).filter(function(x){return all||x.role===r||x.role==="all"});
  return '<div class="crumb">'+a("home","پنج مسیر یادگیری")+'</div><section class="section-intro"><span class="kicker">ماژول مستقل</span><h1><span class="heading-sticker" aria-hidden="true">'+topicSticker(type)+'</span>'+name[type]+'</h1><p>'+ (type==="medicator"?"از یک تصویر شروع می‌کنیم، تصمیم می‌گیریم و اثر آن را می‌بینیم.":"یک موقعیت آشنا را می‌بینیم و پاسخ حرفه‌ای را تمرین می‌کنیم.")+'</p></section>'+
  '<div class="module-filter">'+a(type+"/"+r, "مناسب "+roleNames[r],!all?"module-pill active":"module-pill")+
  a(type+"/"+r+"/all","همه موقعیت‌ها",all?"module-pill active":"module-pill")+'</div>'+
@@ -82,10 +84,13 @@ function illustration(x,med){
  };
  return '<figure class="module-illustration"><svg viewBox="0 0 410 190" role="img" aria-label="تصویر مفهومی مرتبط با موقعیت" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="406" height="186" rx="18" fill="#f1f7f3"/>'+(shapes[kind]||shapes.general)+'</svg><figcaption>'+(med?'استعاره تصویری بازطراحی‌شده · اسلاید '+fa(x.id)+' مدیکاتور':'تصویر مفهومی گفت‌وگوی حرفه‌ای')+'</figcaption></figure>';
 }
+function dialogueMarkup(lines){return '<div class="council-dialogue">'+lines.map(function(line){return '<div class="voice"><strong>'+e(line[0])+'</strong><p>«'+e(line[1])+'»</p></div>'}).join('')+'</div>'}
+function boardExercise(board,task){return '<span class="kicker">تمرین شورای راهبردی</span><h2>یک تصمیم شرکتی؛ پنج مسئولیت متفاوت</h2><p>'+e(task)+'</p><div class="council-roles">'+board.roles.map(function(role){return '<details class="fold"><summary>'+e(role[0])+'</summary><p>'+e(role[1])+'</p></details>'}).join('')+'</div><details class="pressure-reveal"><summary>پس از دور اول: اطلاعات تازه</summary><p>'+e(board.pressure)+'</p></details><div class="manager-role-outcome"><span>خروجی مورد انتظار</span><strong>'+e(board.output)+'</strong></div><details class="fold council-script"><summary>گفت‌وگوی نمونه شورا؛ برای مقایسه پس از اجرا</summary><p>این یک مسیر ممکن است؛ توافق در همه شرایط لازم یا ممکن نیست. روی دلیل تصمیم و اختلاف باقی‌مانده بحث کنید.</p>'+dialogueMarkup(board.dialogue)+'</details><details class="fold"><summary>واکاوی گفت‌وگو: کدام رفتار چه اثری داشت؟</summary>'+board.debrief.map(function(x){return '<h3>'+e(x[0])+'</h3><p>'+e(x[1])+'</p>'}).join('')+'<ul>'+board.questions.map(function(x){return '<li>'+e(x)+'</li>'}).join('')+'</ul></details>'}
 function detail(type,r,id,stage){
- var x=items(type).find(function(y){return y.id===+id});if(!x)return list(type,r,false);
+ var x=items(type,r).find(function(y){return y.id===+id});if(!x)return list(type,r,false);
  var med=type==="medicator",s=Math.max(0,Math.min(3,stage|0));
  var key="naav_industry_"+(med?"med":"behavior")+"_"+id;
+ if(x.board)key+="_strategy_v1";
  var chosen=saved(key,-1);
  var content="";
  if(s===0)content=illustration(x,med)+'<span class="kicker">موقعیت کاری</span><h2>'+e(x.title)+'</h2><div class="situation">'+e(x.context)+'</div>'+
@@ -107,6 +112,8 @@ function detail(type,r,id,stage){
  '<div class="line-example"><span>جمله پیشنهادی برای شروع</span><p>«'+e(x.line)+'»</p></div>'+
  '<div class="role-pressure"><strong>معیار تمرین حرفه‌ای</strong><p>'+(med?'آیا مسئول تصمیم، نقطه وابستگی و زمان بازبینی روشن شد؛ بدون ساده‌سازی مسئله به مقصر فردی؟':'آیا گفت‌وگو هم‌زمان سه کار انجام داد: شنیدن نگرانی، تعیین مرز محترمانه، و رسیدن به تعهد قابل پیگیری؟')+'</p></div>'+
  '<div class="reflection"><span class="qmark">؟</span><p>چه چیزی در گفت‌وگو باعث شد مسئله روشن‌تر شود و همکاری ادامه پیدا کند؟</p></div>';
+ if(s===0&&x.board)content+='<p class="context-note">سناریوی فرضی کلاس؛ ارقام، قرارداد و ساختار اختیار واقعی شرکت را ادعا نمی‌کند.</p>';
+ if(s===3&&x.board)content=boardExercise(x.board,x.roleplay);
  var base=type+"/"+r+"/"+id+"/";
  return '<div class="crumb">'+a("home","پنج مسیر یادگیری")+' <span> / </span> '+a(type+"/"+r,name[type])+'</div>'+
  '<section class="case-heading"><span class="kicker">'+name[type]+'</span><h1><span class="heading-sticker" aria-hidden="true">'+topicSticker(type)+'</span>'+e(x.title)+'</h1></section>'+
@@ -114,7 +121,7 @@ function detail(type,r,id,stage){
  '<nav class="stage-foot">'+(s>0?a(base+(s-1),"مرحله قبل","secondary-btn"):a(type+"/"+r,"همه موقعیت‌ها","secondary-btn"))+
  (s<3?a(base+(s+1),"ادامه: "+stageNames[s+1]+" ←","primary-btn"):a(type+"/"+r,"بازگشت به فهرست ←","primary-btn"))+'</nav>';
 }
-window.NaavIndustryModule={render:function(type,r,id,stage){return id&&id!=="all"?detail(type,r,id,stage):list(type,r,id==="all")}};
+window.NaavIndustryModule={dialogueMarkup:dialogueMarkup,render:function(type,r,id,stage){return id&&id!=="all"?detail(type,r,id,stage):list(type,r,id==="all")}};
 document.addEventListener("click",function(ev){
  var b=ev.target.closest("[data-mod-choice]");if(!b)return;
  store(b.dataset.modKey,+b.dataset.modChoice);
