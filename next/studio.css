@@ -545,3 +545,6 @@ button,input,textarea,select{font-family:inherit}
 .council-roles{display:grid;gap:8px;margin:20px 0}.council-roles .fold{margin:0}
 .council-script>p,.council-roles p{font-size:20px;line-height:1.95}
 @media(max-width:768px){.evc-map{grid-template-columns:1fr}.evc-map>div{padding:18px}.council-dialogue .voice{padding:16px}.council-dialogue .voice p{font-size:19px}.evc-statement{font-size:20px!important}}
+
+/* Session-one practical learning: readable examples without additional navigation. */
+.practical-learning{margin-block:1.5rem}.practical-learning h3{font-size:1.3rem;color:#123844}.practical-learning ul{padding-inline-start:1.4rem}.practical-learning li{padding-block:.7rem;border-bottom:1px solid #cedbdd}.practical-learning li p{margin:.35rem 0;line-height:1.9}.practical-learning dt{font-weight:800;color:#123844;margin-top:1rem}.practical-learning dd{margin:.3rem 0 1rem;line-height:1.9}.practical-learning .check-answer{background:#f3f7f7}
