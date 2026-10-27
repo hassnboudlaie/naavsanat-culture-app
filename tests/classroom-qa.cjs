@@ -20,28 +20,28 @@ const server=http.createServer((req,res)=>{const file=path.join(root,decodeURICo
   await goto(`case/${role}/${id}/5`);await page.locator('[data-action-choice]').nth(1).click();assert(page.url().endsWith(`/case/${role}/${id}/5`));await page.locator('#proof-field').fill(`مرور تصمیم ${role} ${id} در جلسه بعد`);await page.locator('[data-save-proof]').click();assert.match(await page.locator('.proof-status').innerText(),/ثبت شد/);await page.reload();await page.waitForSelector('[data-action-choice]');assert.equal(await page.locator('[data-action-choice]').nth(1).getAttribute('aria-pressed'),'true');assert.equal(await page.locator('#proof-field').inputValue(),`مرور تصمیم ${role} ${id} در جلسه بعد`);results.actions++;
  }
  for(let i=0;i<6;i++){await goto(`session/managers/${i}`);if(i===0){assert.match(await page.locator('.session-one-route').innerText(),/۱۲۰/);assert.equal(await page.locator('.session-one-steps a').count(),6)}else assert.match(await page.locator('.session-pacing').innerText(),/۱۲۰/);await page.locator(i===0?'.session-one-steps a[href*="/case/"]':'.case-tile').first().click();await page.locator('.head-link').first().click();assert(page.url().endsWith(`/session/managers/${i}`));const ids=await page.evaluate(i=>sessionCases.managers[i],i);await goto(`case/managers/${ids.at(-1)}/5`);await page.locator('.stage-foot .primary-btn').click();await page.waitForSelector('#session-close[open]')}
- // Dialogue lab: no artificial results, role-specific situations, save/edit/export/reload.
+ // Values are dropdown-only; other classroom modules stay as they were.
  for(const role of ['managers','hq','operations']){
   await goto('culture/'+role);await page.waitForSelector('#naav-culture-lab');
   assert.equal(await page.locator('.cl-topic').count(),3);
-  assert.equal(await page.locator('.cl-empty').count(),1);
   await page.locator('[data-cl-group="values"]').click();
+  assert.equal(await page.locator('#cl-question option').count(),10);
+  assert.equal(await page.locator('#naav-culture-lab textarea').count(),0);
+  assert.equal(await page.locator('.cl-framework-row').count(),5);
   await page.locator('#cl-choice').selectOption('0');
   await page.locator('#cl-consensus').selectOption('agreed');
-  await page.locator('#cl-note').fill('توافق گروه: پیش از تعهد، وابستگی‌ها را روشن کنیم.');
-  await page.locator('#cl-action').fill('مسئول هر تعهد پیش از جلسه بعد مشخص شود.');
   await page.locator('[data-cl-save]').click();
-  assert.equal(await page.locator('.cl-empty').count(),0);
-  assert.match(await page.locator('.cl-candidate').first().innerText(),/گفت‌وگوی دارای توافق/);
+  assert.match(await page.locator('.cl-framework-row').first().innerText(),/۱ از ۲/);
   await page.reload();await page.waitForSelector('#naav-culture-lab');
   assert.match(await page.locator('.cl-summary').innerText(),/۱/);
-  await page.locator('.cl-history summary').first().click();
+  await page.locator('[data-cl-group="values"]').click();
+  await page.locator('.cl-history>summary').click();
   await page.locator('[data-cl-edit]').first().click();
-  assert.match(await page.locator('#cl-note').inputValue(),/توافق گروه/);
-  await page.locator('#cl-note').fill('جمع‌بندی اصلاح‌شده کلاس');
+  assert.equal(await page.locator('#cl-choice').inputValue(),'0');
+  await page.locator('#cl-choice').selectOption('1');
   await page.locator('[data-cl-save]').click();
   await page.locator('.cl-history>summary').click();
-  assert.match(await page.locator('.cl-history').innerText(),/جمع‌بندی اصلاح‌شده/);
+  assert.match(await page.locator('.cl-history').innerText(),/انتخاب/);
  }
  await goto('culture/managers/1');assert.equal(await page.locator('[data-cl-group="values"]').getAttribute('aria-pressed'),'true');
  await goto('behavior/managers/12/1');assert.equal(await page.locator('[data-mod-choice]').count(),3);
