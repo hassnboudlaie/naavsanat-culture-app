@@ -177,10 +177,13 @@ function references(role,model){
 function render(role,model){
  if(location.hash!==lastLocation&&location.hash.indexOf("/culture/managers/1")>=0){state.group="values";state.q="v1"}lastLocation=location.hash;
  role=roles[role]?role:"managers";model=model||window.NAAV_STRATEGIC.evc;
+ var isValues=state.group==="values"&&window.NaavValues15;
  return '<div id="naav-culture-lab" class="cl-root" data-cl-role="'+role+'" dir="rtl">'+
- '<div class="cl-hero"><span class="cl-kicker">NAAVSANAT · CULTURE DIALOGUE LAB</span><h1>ارزش‌ها را با گفت‌وگو بسازیم.</h1><p>یک موقعیت آشنا، چند انتخاب قابل دفاع، یک جمع‌بندی روشن؛ آنچه توافق می‌کنیم به رفتار روزمره تبدیل شود.</p><div class="cl-hero-orbit" aria-hidden="true"><span>گفت‌وگو</span><span>توافق</span><span>اقدام</span></div></div>'+
+ (isValues?'<div class="cl-hero cl-hero-values"><span class="cl-kicker">ارزش‌های کسب‌وکار ناوصنعت</span><h1>از ۱۵ چالش تا ارزش‌های شرکت</h1><p>هر چالش، یک انتخاب گروهی؛ در پایان، ۱۵ ارزش انتخابی، دسته‌بندی و بیانیه پیشنهادی شرکت.</p></div>':
+ '<div class="cl-hero"><span class="cl-kicker">NAAVSANAT · CULTURE DIALOGUE LAB</span><h1>ارزش‌ها را با گفت‌وگو بسازیم.</h1><p>یک موقعیت آشنا، چند انتخاب قابل دفاع، یک جمع‌بندی روشن؛ آنچه توافق می‌کنیم به رفتار روزمره تبدیل شود.</p><div class="cl-hero-orbit" aria-hidden="true"><span>گفت‌وگو</span><span>توافق</span><span>اقدام</span></div></div>')+
  '<div class="cl-back">'+(location.hash.indexOf("/culture/managers/1")>=0?'<a href="#/session/managers/0">← بازگشت به جلسه اول مدیران</a>':'<a href="#/track/'+role+'">← بازگشت به جلسات '+roles[role]+'</a>')+'</div>'+
- '<div class="cl-scope"><strong>مرور نتایج گفت‌وگو</strong><label for="cl-scope">نمایش نتایج <select id="cl-scope">'+option("همین گروه: "+roles[role],"role",state.scope)+option("هر سه گروه با هم","all",state.scope)+'</select></label></div>'+summary(role)+topicTabs()+dialogue(role)+insights(role,model)+(state.group==="values"?"":references(role,model))+'</div>';
+ (isValues?'':'<div class="cl-scope"><strong>مرور نتایج گفت‌وگو</strong><label for="cl-scope">نمایش نتایج <select id="cl-scope">'+option("همین گروه: "+roles[role],"role",state.scope)+option("هر سه گروه با هم","all",state.scope)+'</select></label></div>'+summary(role))+
+ topicTabs()+(isValues?window.NaavValues15.render(role):dialogue(role)+insights(role,model)+references(role,model))+'</div>';
 }
 function redraw(){var node=document.getElementById("naav-culture-lab");if(node){node.outerHTML=render(node.dataset.clRole,window.NAAV_STRATEGIC.evc)}}
 function say(s){var e=document.getElementById("cl-feedback");if(e)e.textContent=s}
