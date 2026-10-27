@@ -114,12 +114,12 @@ function detail(type,r,id,stage){
  '<div class="reflection"><span class="qmark">؟</span><p>چه چیزی در گفت‌وگو باعث شد مسئله روشن‌تر شود و همکاری ادامه پیدا کند؟</p></div>';
  if(s===0&&x.board)content+='<p class="context-note">سناریوی فرضی کلاس؛ ارقام، قرارداد و ساختار اختیار واقعی شرکت را ادعا نمی‌کند.</p>';
  if(s===3&&x.board)content=boardExercise(x.board,x.roleplay);
- var base=type+"/"+r+"/"+id+"/";
- return '<div class="crumb">'+a("home","پنج مسیر یادگیری")+' <span> / </span> '+a(type+"/"+r,name[type])+'</div>'+
+ var base=type+"/"+r+"/"+id+"/",inSession=r==="managers"&&((type==="medicator"&&+id===5)||(type==="behavior"&&+id===12)),back=inSession?"session/managers/0":type+"/"+r;
+ return '<div class="crumb">'+a("home","پنج مسیر یادگیری")+' <span> / </span> '+a(inSession?"session/managers/0":type+"/"+r,inSession?"جلسه اول مدیران":name[type])+'</div>'+
  '<section class="case-heading"><span class="kicker">'+name[type]+'</span><h1><span class="heading-sticker" aria-hidden="true">'+topicSticker(type)+'</span>'+e(x.title)+'</h1></section>'+
  stageNav(type,r,id,s)+'<div class="case-content"><section class="content-section">'+content+'</section></div>'+
- '<nav class="stage-foot">'+(s>0?a(base+(s-1),"مرحله قبل","secondary-btn"):a(type+"/"+r,"همه موقعیت‌ها","secondary-btn"))+
- (s<3?a(base+(s+1),"ادامه: "+stageNames[s+1]+" ←","primary-btn"):a(type+"/"+r,"بازگشت به فهرست ←","primary-btn"))+'</nav>';
+ '<nav class="stage-foot">'+(s>0?a(base+(s-1),"مرحله قبل","secondary-btn"):a(back,inSession?"بازگشت به جلسه اول":"همه موقعیت‌ها","secondary-btn"))+
+ (s<3?a(base+(s+1),"ادامه: "+stageNames[s+1]+" ←","primary-btn"):a(back,inSession?"بازگشت به جلسه اول ←":"بازگشت به فهرست ←","primary-btn"))+'</nav>';
 }
 window.NaavIndustryModule={dialogueMarkup:dialogueMarkup,render:function(type,r,id,stage){return id&&id!=="all"?detail(type,r,id,stage):list(type,r,id==="all")}};
 document.addEventListener("click",function(ev){
