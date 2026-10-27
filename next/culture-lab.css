@@ -134,3 +134,44 @@
 .cl-mini-meter{background:#e7edeb;height:5px;border-radius:10px;max-width:180px;width:100%;display:block;overflow:hidden;margin-top:4px}
 .cl-mini-meter i{display:block;height:100%;background:#31776e;border-radius:10px}
 @media(max-width:550px){.cl-save-wrap{width:100%}.cl-save-wrap>*{flex:1}.cl-value-framework{padding:3px 12px}}
+
+
+/* Fifteen challenges → one selected value per challenge. No KPIs or parallel navigation. */
+.cl-hero-values{min-height:0;padding:24px 27px}
+.cl-hero-values h1{font-size:clamp(24px,3vw,31px)}
+.cl-hero-values p{font-size:16px;max-width:850px}
+.v15-root{margin-top:0}
+.v15-stage{box-shadow:none}
+.v15-progress{font-size:13px;font-weight:750;color:#52717a}
+.v15-root .cl-story{margin:16px 0 19px}
+.v15-root .cl-story p{margin:10px 0 12px;line-height:1.85}
+.v15-root .cl-story h2{font-size:clamp(19px,2vw,24px)}
+.v15-root #v15-choice{font-size:17px;font-weight:700;min-height:54px;border:2px solid #8da9a7}
+.v15-saved{margin-top:9px;padding:9px 13px;border-right:3px solid #248278;background:#eaf5f2;border-radius:8px;font-size:14px;color:#195a52}
+.v15-controls{display:flex;align-items:center;gap:11px;margin-top:20px;flex-wrap:wrap}
+.v15-controls>button{min-height:44px}
+.v15-controls>.cl-save{font-size:16px}
+.v15-root #v15-message{margin:11px 0 0;color:#16665a;font-size:14px;min-height:1.2em}
+.v15-results{margin-top:24px;background:#fff;border:1px solid #d9e4e1;border-radius:17px;padding:clamp(17px,3vw,28px)}
+.v15-result-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.v15-result-head h2{font-size:21px;margin:0 0 3px;color:#153f4a}
+.v15-result-head p{margin:0;color:#4c686b;font-size:14px}
+.v15-pending{padding:14px 0;color:#586e72;font-size:15px}
+.v15-families{margin-top:18px;border-top:1px solid #dce8e3}
+.v15-family{border-bottom:1px solid #dce8e3}
+.v15-family>summary{cursor:pointer;padding:15px 3px;display:flex;align-items:center;justify-content:space-between;gap:10px;list-style:none}
+.v15-family>summary::-webkit-details-marker{display:none}
+.v15-family>summary strong{font-size:17px;color:#0d4a55}
+.v15-family>summary small{font-size:13px;font-weight:750;color:#536e72}
+.v15-family>div{padding:0 8px 11px}
+.v15-family article{padding:13px 14px;background:#f6faf8;border:1px solid #e0eae5;border-radius:11px;margin:9px 0}
+.v15-family article>small{display:block;color:#6c7e80;font-size:12px;margin-bottom:5px}
+.v15-family article>strong{color:#0a5c5b;font-size:17px}
+.v15-family article p{font-size:14px;line-height:1.85;margin:6px 0;color:#3d575b}
+.v15-family article b{color:#264e55}
+.v15-statement{margin-top:19px;padding:19px 20px;background:#f0f6f3;border-right:5px solid #ad6744;border-radius:13px}
+.v15-statement h3{margin:0 0 11px;font-size:20px;color:#0c4850}
+.v15-statement p{line-height:1.9;margin:9px 0;font-size:15px}
+.v15-disclaimer,.v15-storage{color:#607477;font-size:13px;line-height:1.9;margin:14px 0 5px}
+.v15-statement .v15-disclaimer{margin:16px 0}
+@media(max-width:560px){.cl-hero-values{padding:21px 18px}.v15-controls>button{flex:1}.v15-result-head .cl-secondary{width:100%}.v15-results{padding:15px}.v15-statement{padding:15px}.v15-root .cl-story{padding:20px 16px}}
