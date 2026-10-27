@@ -19,7 +19,33 @@ const server=http.createServer((req,res)=>{const file=path.join(root,decodeURICo
   for(let option=0;option<3;option++){await goto(`case/${role}/${id}/1`);await page.locator('[data-choice]').nth(option).click();await goto(`case/${role}/${id}/2`);const expected=await page.evaluate(({role,id,option})=>(role==='managers'&&window.NAAV_STRATEGIC?.cases[id]?window.NAAV_STRATEGIC.cases[id].choices:NAV_ROLE_LABS[role][id].o)[option][1],{role,id,option});assert.equal(await page.locator('.impact-card p').innerText(),expected);results.choices++}
   await goto(`case/${role}/${id}/5`);await page.locator('[data-action-choice]').nth(1).click();assert(page.url().endsWith(`/case/${role}/${id}/5`));await page.locator('#proof-field').fill(`مرور تصمیم ${role} ${id} در جلسه بعد`);await page.locator('[data-save-proof]').click();assert.match(await page.locator('.proof-status').innerText(),/ثبت شد/);await page.reload();await page.waitForSelector('[data-action-choice]');assert.equal(await page.locator('[data-action-choice]').nth(1).getAttribute('aria-pressed'),'true');assert.equal(await page.locator('#proof-field').inputValue(),`مرور تصمیم ${role} ${id} در جلسه بعد`);results.actions++;
  }
- for(let i=0;i<6;i++){await goto(`session/managers/${i}`);assert.match(await page.locator('.session-pacing').innerText(),/۱۲۰/);await page.locator('.case-tile').first().click();await page.locator('.head-link').first().click();assert(page.url().endsWith(`/session/managers/${i}`));const ids=await page.evaluate(i=>sessionCases.managers[i],i);await goto(`case/managers/${ids.at(-1)}/5`);await page.locator('.stage-foot .primary-btn').click();await page.waitForSelector('#session-close[open]')}
+ for(let i=0;i<6;i++){await goto(`session/managers/${i}`);if(i===0){assert.match(await page.locator('.session-one-route').innerText(),/۱۲۰/);assert.equal(await page.locator('.session-one-steps a').count(),6)}else assert.match(await page.locator('.session-pacing').innerText(),/۱۲۰/);await page.locator('.case-tile').first().click();await page.locator('.head-link').first().click();assert(page.url().endsWith(`/session/managers/${i}`));const ids=await page.evaluate(i=>sessionCases.managers[i],i);await goto(`case/managers/${ids.at(-1)}/5`);await page.locator('.stage-foot .primary-btn').click();await page.waitForSelector('#session-close[open]')}
+ // Dialogue lab: no artificial results, role-specific situations, save/edit/export/reload.
+ for(const role of ['managers','hq','operations']){
+  await goto('culture/'+role);await page.waitForSelector('#naav-culture-lab');
+  assert.equal(await page.locator('.cl-topic').count(),3);
+  assert.equal(await page.locator('.cl-empty').count(),1);
+  await page.locator('[data-cl-group="values"]').click();
+  await page.locator('#cl-choice').selectOption('0');
+  await page.locator('#cl-consensus').selectOption('agreed');
+  await page.locator('#cl-note').fill('توافق گروه: پیش از تعهد، وابستگی‌ها را روشن کنیم.');
+  await page.locator('#cl-action').fill('مسئول هر تعهد پیش از جلسه بعد مشخص شود.');
+  await page.locator('[data-cl-save]').click();
+  assert.equal(await page.locator('.cl-empty').count(),0);
+  assert.match(await page.locator('.cl-candidate').first().innerText(),/گفت‌وگوی دارای توافق/);
+  await page.reload();await page.waitForSelector('#naav-culture-lab');
+  assert.match(await page.locator('.cl-summary').innerText(),/۱/);
+  await page.locator('.cl-history summary').first().click();
+  await page.locator('[data-cl-edit]').first().click();
+  assert.match(await page.locator('#cl-note').inputValue(),/توافق گروه/);
+  await page.locator('#cl-note').fill('جمع‌بندی اصلاح‌شده کلاس');
+  await page.locator('[data-cl-save]').click();
+  assert.match(await page.locator('.cl-history').innerText(),/جمع‌بندی اصلاح‌شده/);
+ }
+ await goto('culture/managers/1');assert.equal(await page.locator('[data-cl-group="values"]').getAttribute('aria-pressed'),'true');
+ await goto('behavior/managers/12/1');assert.equal(await page.locator('[data-mod-choice]').count(),3);
+ await page.locator('[data-mod-choice]').first().click();assert.match(await page.locator('.module-feedback').innerText(),/مرز تخصصی/);
+ await goto('medicator/managers/5/3');await page.locator('.stage-foot .primary-btn').click();assert(page.url().endsWith('/session/managers/0'));
  // All original supplemental exercises, for each role, including filtered lists.
  for(const role of ['managers','hq','operations'])for(const type of ['medicator','behavior']){
   await goto(`${type}/${role}/all`);const links=await page.locator('.case-tile').evaluateAll(els=>els.map(e=>e.getAttribute('href')));
@@ -32,7 +58,7 @@ const server=http.createServer((req,res)=>{const file=path.join(root,decodeURICo
  await page.evaluate(()=>localStorage.setItem('naav_studio_choice_managers_1_strategy_v1','999'));await goto('case/managers/1/2');await page.reload();await page.waitForSelector('.empty-decision');
  for(const width of [360,390,768,1280,1440]){
   await page.setViewportSize({width,height:900});
-  for(const route of ['home','session/managers/0','case/managers/1/1','case/managers/1/3','case/managers/1/5','medicator/managers/5/0','behavior/managers/1/0']){
+  for(const route of ['home','session/managers/0','case/managers/1/1','case/managers/1/3','case/managers/1/5','medicator/managers/5/0','behavior/managers/1/0','culture/managers','culture/hq']){
    await goto(route);assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`overflow ${width} ${route}`);
    if(['session/managers/0','case/managers/1/3','medicator/managers/5/0'].includes(route)){const name=`${width}-${route.replaceAll('/','-')}.png`;await page.screenshot({path:path.join(out,name),fullPage:true});results.screenshots.push(name)}
   }
