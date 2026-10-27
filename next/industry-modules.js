@@ -121,7 +121,7 @@ function detail(type,r,id,stage){
  var base=type+"/"+r+"/"+id+"/",inSession=r==="managers"&&((type==="medicator"&&+id===5)||(type==="behavior"&&+id===12)),back=inSession?"session/managers/0":type+"/"+r;
  return '<div class="crumb">'+a("home","پنج مسیر یادگیری")+' <span> / </span> '+a(inSession?"session/managers/0":type+"/"+r,inSession?"جلسه اول مدیران":name[type])+'</div>'+
  '<section class="case-heading"><span class="kicker">'+name[type]+'</span><h1><span class="heading-sticker" aria-hidden="true">'+topicSticker(type)+'</span>'+e(x.title)+'</h1></section>'+
- stageNav(type,r,id,s)+'<div class="case-content"><section class="content-section">'+content+(window.NaavPDFAlignment?window.NaavPDFAlignment.renderModule(type,r,id,s):'')+'</section></div>'+
+ stageNav(type,r,id,s)+'<div class="case-content"><section class="content-section">'+content+'</section></div>'+
  '<nav class="stage-foot">'+(s>0?a(base+(s-1),"مرحله قبل","secondary-btn"):a(back,inSession?"بازگشت به جلسه اول":"همه موقعیت‌ها","secondary-btn"))+
  (s<3?a(base+(s+1),"ادامه: "+stageNames[s+1]+" ←","primary-btn"):a(back,inSession?"بازگشت به جلسه اول ←":"بازگشت به فهرست ←","primary-btn"))+'</nav>';
 }
