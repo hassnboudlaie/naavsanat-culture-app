@@ -41,6 +41,7 @@ const server=http.createServer((req,res)=>{
   assert.match(await page.locator('#cl-note').inputValue(),/هماهنگی/);
   await page.locator('#cl-note').fill('جمع‌بندی ویرایش‌شده');
   await page.locator('[data-cl-save]').click();
+  await page.locator('.cl-history>summary').click();
   assert.match(await page.locator('.cl-history').innerText(),/ویرایش‌شده/);
   await page.locator('.cl-candidate>summary').first().click();
   await page.locator('[data-cl-status]').first().selectOption('needs');
