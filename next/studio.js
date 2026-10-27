@@ -140,7 +140,6 @@ function lesson(r,num){
  var ids=s.ids||[],anchor=ids.length?depth(ids[0]):{},mf=r==="managers"?managerSession(num):null;
  return '<div class="crumb">'+a("track/"+r,roleNames[r],'text-link')+' <span> / </span> '+fa(num+1)+'</div>'+
  '<section class="section-intro lesson-intro"><div class="kicker">'+safe(s.time)+'</div><h1>'+safe(s.title)+'</h1>'+(mf?'':'<p>'+safe(s.desc)+'</p>')+'</section>'+
- (window.NaavPDFAlignment?window.NaavPDFAlignment.renderSession(r,num):'')+
  (s.final?actionExercise():
  (mf?'<section class="classroom-opening"><span class="kicker">از اینجا شروع کنیم</span><p>'+safe(mf.opening||practical(ids[0]).scene)+'</p><h2>'+safe(mf.ask||practical(ids[0]).ask)+'</h2><span class="opening-instruction">'+safe(mf.output||"اول نظر خودتان را بگویید؛ بعد تصمیم‌ها را مقایسه می‌کنیم.")+'</span></section>':
  '<section class="question-box"><span>پرسش محوری</span><strong>'+safe(s.topics[0]||"در این موقعیت چه رفتاری اهمیت دارد؟")+'</strong></section>'+
@@ -248,7 +247,7 @@ function caseView(r,id,step){
  ];
  return '<div class="crumb">'+a(parent,"جلسه مربوط","text-link")+' <span> / </span> کیس '+fa(id)+'</div>'+
  '<section class="case-heading"><span class="kicker">کیس '+fa(id)+' از ۱۵ · '+safe(roleNames[r])+'</span><h1><span class="heading-sticker" aria-hidden="true">'+caseIcon(id)+'</span>'+safe(r==="managers"?practical(id).title:c.title)+'</h1></section>'+
- caseStages(r,id,s)+'<div class="case-content" data-current-stage="'+s+'">'+screens[s]()+ (window.NaavPDFAlignment?window.NaavPDFAlignment.renderCase(r,id,s):"")+'</div>'+
+ caseStages(r,id,s)+'<div class="case-content" data-current-stage="'+s+'">'+screens[s]()+'</div>'+
  '<nav class="stage-foot" aria-label="حرکت بین مراحل">'+
  (s>0?a("case/"+r+"/"+id+"/"+(s-1),"گام قبل","secondary-btn"):a(parent,"بازگشت به جلسه","secondary-btn"))+
  '<span class="stage-progress">'+fa(s+1)+' / ۶</span>'+
