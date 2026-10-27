@@ -144,6 +144,14 @@ function lesson(r,num){
  (mf?'<section class="classroom-opening"><span class="kicker">از اینجا شروع کنیم</span><p>'+safe(mf.opening||practical(ids[0]).scene)+'</p><h2>'+safe(mf.ask||practical(ids[0]).ask)+'</h2><span class="opening-instruction">'+safe(mf.output||"اول نظر خودتان را بگویید؛ بعد تصمیم‌ها را مقایسه می‌کنیم.")+'</span></section>':
  '<section class="question-box"><span>پرسش محوری</span><strong>'+safe(s.topics[0]||"در این موقعیت چه رفتاری اهمیت دارد؟")+'</strong></section>'+
  (anchor.tension?'<div class="session-dilemma"><strong>چالش واقعی این بحث</strong><p>'+rich(anchor.tension)+'</p></div>':''))+
+ (r==="managers"&&num===0?'<section class="session-one-route"><h2>نقشه جلسه اول · ۱۲۰ دقیقه</h2><p>از تصمیم مشترک شروع می‌کنیم، گفت‌وگو را تمرین می‌کنیم و با یک قاعده رفتاری جمع‌بندی می‌کنیم.</p><div class="session-one-steps">'+
+ '<a href="#/session/managers/0"><span>۸ دقیقه</span><b>شروع و سؤال امروز</b><small>کدام قول به هماهنگی نیاز دارد؟</small></a>'+
+ '<a href="#/case/managers/1/0"><span>۳۰ دقیقه</span><b>کیس ۱ · قول مشترک</b><small>تعارض فرصت و منابع</small></a>'+
+ '<a href="#/medicator/managers/5/0"><span>۱۷ دقیقه</span><b>مدیکاتور ۵</b><small>وابستگی تصمیم پنج مدیر</small></a>'+
+ '<a href="#/case/managers/10/0"><span>۲۹ دقیقه</span><b>کیس ۱۰ · اختیار</b><small>مرز تصمیم و پاسخگویی</small></a>'+
+ '<a href="#/behavior/managers/12/0"><span>۲۰ دقیقه</span><b>هنر رفتار · موقعیت ۱۲</b><small>مخالفت صریح و محترمانه</small></a>'+
+ '<a href="#/culture/managers/1"><span>۱۶ دقیقه</span><b>گفت‌وگوی ارزش‌ها و جمع‌بندی</b><small>انتخاب، توافق، اقدام قابل پیگیری</small></a>'+
+ '</div></section>':'')+
  '<section class="case-list"><h2>موقعیت‌های این جلسه</h2><div class="case-grid">'+ids.map(function(id){var c=CASES[id-1],d=depth(id);return '<a class="case-tile" href="#/case/'+r+'/'+id+'/0">'+caseTopline(id,'کیس '+fa(id))+'<strong>'+safe(r==="managers"?practical(id).title:c.title)+'</strong><p>'+safe(r==="managers"?practical(id).ask:c.concept)+'</p><span class="case-link">بررسی این موقعیت ←</span></a>'}).join("")+'</div></section>')+
  (mf&&num!==0?'<p class="session-pacing">برنامه پیشنهادی ۱۲۰ دقیقه‌ای: ۱۰ دقیقه شروع · '+(ids.length===3?'۳ کیس، هرکدام ۳۰ دقیقه':'۲ کیس، هرکدام ۴۵ دقیقه')+' · ۲۰ دقیقه جمع‌بندی و تعهد</p>'+sessionClosing(r,num):'')+
  '<div class="page-bottom">'+a("track/"+r,"همه جلسات","text-link")+'</div>';
