@@ -9,3 +9,8 @@ body,button,input,textarea,select,summary{font-family:"Vazirmatn",Tahoma,Arial,s
 .load-message{font-size:17px;line-height:1.85}
 @media(max-width:640px){input:not([type=radio]):not([type=checkbox]),textarea,select{font-size:max(16px,1em)}.mast-inner{gap:12px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.role-tile{transition:none!important;transform:none!important}}
+
+/* Deep audit: readable compact labels and high-contrast navigation. */
+.identity small,.mast-caption{font-size:13px;line-height:1.7}
+@media(max-width:420px){.landing-head{padding-block:34px 18px}.role-tile{min-height:0;padding:21px}.head-link{min-height:44px}}
+@media(forced-colors:active){.role-tile,.head-link,.head-link.outline{border:1px solid ButtonText}.role-tile:focus-visible,.head-link:focus-visible{outline:2px solid Highlight}}
