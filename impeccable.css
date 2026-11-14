@@ -1,0 +1,11 @@
+/* NAAVSANAT Impeccable 2026-11-14. Keeps the original industrial identity and learning logic. */
+html{scroll-padding-top:88px}
+body,button,input,textarea,select,summary{font-family:"Vazirmatn",Tahoma,Arial,sans-serif!important}
+:where(a,button,summary,input,textarea,select,[tabindex]):focus-visible{outline:3px solid #cf7b38!important;outline-offset:3px!important}
+:where(a,button,summary,input,textarea,select){-webkit-tap-highlight-color:rgba(10,55,68,.15)}
+:where(h1,h2,h3,p,button,label){overflow-wrap:break-word}
+.head-link{font-size:14px;min-height:44px}
+.site-foot{font-size:13px}
+.load-message{font-size:17px;line-height:1.85}
+@media(max-width:640px){input:not([type=radio]):not([type=checkbox]),textarea,select{font-size:max(16px,1em)}.mast-inner{gap:12px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.role-tile{transition:none!important;transform:none!important}}
