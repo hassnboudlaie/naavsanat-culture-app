@@ -8,7 +8,10 @@ const css=fs.readFileSync(path.join(root,cssFile),"utf8");
 assert.ok(css.includes("Impeccable")&&css.includes("focus-visible"),"Missing accessibility layer");
 assert.ok(html.includes('lang="fa"')&&html.includes('dir="rtl"'),"RTL lost");
 if(repo==="naavsanat-culture-app"){
- assert.ok(html.includes("impeccable.css?v=20261114"));
+ assert.ok(html.includes("impeccable.css?v=20261115"));
+ assert.ok(html.includes('id="naavReload"')===false,"Retry should be created on genuine failure only");
+ assert.ok(html.includes('id=\'naavReload\''),"Missing failure recovery control");
+ assert.ok(html.includes('role="status"'),"Loader state should be announced");
  assert.ok(fs.existsSync(path.join(root,"next/assets/fonts/fonts.css")));
 }else if(repo==="afra-tejarat-mad"){
  assert.ok(fs.statSync(path.join(root,"assets/fonts/Vazirmatn.ttf")).size>100000);
@@ -48,6 +51,16 @@ async function main(){
      assert.equal(high.length,0,"Serious/critical WCAG accessibility defects");
      console.log("PASS",repo,width,"local font; overflow="+metrics.overflow,"axe serious/critical="+high.length,"runtime warnings="+errors.length);
      if(metrics.overflow>20)throw Error("Severe horizontal overflow "+metrics.overflow+"px at "+width+"px");
+     if(width===390){
+      const broken=await context.newPage();
+      try{
+       await broken.route('**/next/studio.js*',route=>route.abort());
+       await broken.goto("http://127.0.0.1:"+server.address().port+"/",{waitUntil:"domcontentloaded"});
+       await broken.locator('#naavReload').waitFor({timeout:15000});
+       assert.match(await broken.locator('.load-message').textContent(),/تلاش کنید/);
+       assert.equal(await broken.locator('#naavReload').isVisible(),true);
+      }finally{await broken.close();}
+     }
     }finally{await context.close()}
    }
   }finally{await browser.close()}

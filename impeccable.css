@@ -14,3 +14,8 @@ body,button,input,textarea,select,summary{font-family:"Vazirmatn",Tahoma,Arial,s
 .identity small,.mast-caption{font-size:13px;line-height:1.7}
 @media(max-width:420px){.landing-head{padding-block:34px 18px}.role-tile{min-height:0;padding:21px}.head-link{min-height:44px}}
 @media(forced-colors:active){.role-tile,.head-link,.head-link.outline{border:1px solid ButtonText}.role-tile:focus-visible,.head-link:focus-visible{outline:2px solid Highlight}}
+
+/* Learning entry recovery: no endless spinner without a meaningful action. */
+.load-recovery{width:min(640px,calc(100% - 32px));margin:32px auto;padding:22px;border:1px solid #b2cad1;border-radius:13px;background:#fff;color:#174453;font-size:17px;line-height:1.9}
+.load-retry{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:10px 22px;margin:18px 0 10px;background:#0a3744;color:#fff;border:1px solid #0a3744;border-radius:12px;font:800 16px Vazirmatn,Tahoma,sans-serif}
+.load-retry:hover{background:#155366}
