@@ -10,11 +10,11 @@
 <link rel="stylesheet" href="./next/studio.css?v=15">
 <link rel="stylesheet" href="./next/industry-modules.css?v=7">
 <link rel="stylesheet" href="./next/culture-lab.css?v=4">
-<link rel="stylesheet" href="./impeccable.css?v=20261114">
+<link rel="stylesheet" href="./impeccable.css?v=20261115">
 </head>
 <body>
 <a class="skip" href="#app">رفتن به محتوای آموزشی</a>
-<div id="root"><main id="app" tabindex="-1"><p class="load-message">در حال آماده‌سازی محیط یادگیری…</p></main></div>
+<div id="root"><main id="app" tabindex="-1"><p class="load-message" role="status" aria-live="polite">در حال آماده‌سازی محیط یادگیری…</p></main></div><noscript><p class="load-recovery">برای استفاده از آزمایشگاه یادگیری، JavaScript مرورگر را فعال کنید و صفحه را دوباره باز کنید.</p></noscript>
 <div id="live" role="status" aria-live="polite" class="sr-only"></div>
 <script src="./next/data.js?v=2"></script>
 <script src="./next/industry-content.js?v=3"></script>
@@ -28,5 +28,18 @@
 <script src="./next/values-15-lab.js?v=2"></script>
 <script src="./next/culture-lab.js?v=9"></script>
 <script src="./next/studio.js?v=22"></script>
+<script>
+/* A slow or failed bundle should never leave learners in an endless loading state. */
+window.setTimeout(function(){
+ const loader=document.querySelector('#root .load-message');
+ if(!loader||!loader.isConnected)return;
+ loader.textContent='بارگذاری محیط یادگیری بیشتر از معمول طول کشیده است. اتصال اینترنت را بررسی کنید و دوباره تلاش کنید.';
+ if(document.getElementById('naavReload'))return;
+ const retry=document.createElement('button');
+ retry.type='button';retry.id='naavReload';retry.className='load-retry';
+ retry.textContent='تلاش دوباره';retry.addEventListener('click',function(){location.reload();});
+ loader.insertAdjacentElement('afterend',retry);
+},10000);
+</script>
 </body>
 </html>
